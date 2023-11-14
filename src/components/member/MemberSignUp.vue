@@ -3,6 +3,7 @@
 </script>
 
 <template>
+    <div class="container">
     <div class="main">
         <div class="form-label">이름</div>
         <div class="text-wrapper"> *</div>
@@ -90,9 +91,24 @@
             <div class="form-label-7"> *</div>
         </div>
     </div>
+</div>
 </template>
   
 <style scoped>
+.container {
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center;     /* 수직 중앙 정렬 */
+    min-height: 100vh;       /* 뷰포트 높이의 100% */
+}
+
+@media (max-width: 768px) {
+    .main {
+        width: 90%;  /* 모바일 화면에 맞게 너비 조정 */
+        /* 필요한 경우 추가 스타일 조정 */
+    }
+}
+
 .main {
     border: 1px solid;
     border-color: #dee2e6;

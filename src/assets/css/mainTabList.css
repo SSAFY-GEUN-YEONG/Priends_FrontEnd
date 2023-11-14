@@ -1,0 +1,139 @@
+.main-tablist {
+  position: relative;
+  width: 1920px;
+  height: 46px;
+  overflow: hidden;
+}
+
+.main-tablist .tab-link {
+  width: 40px;
+  height: 20px;
+  top: 44px;
+  left: 1194px;
+  font-family: "Inter-Regular", Helvetica;
+  font-weight: 400;
+  font-size: 9px;
+  position: absolute;
+  color: #333333;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 22px;
+  white-space: nowrap;
+}
+
+.main-tablist .group {
+  position: absolute;
+  width: 648px;
+  height: 26px;
+  top: 0;
+  left: 636px;
+}
+
+.main-tablist .div {
+  position: absolute;
+  width: 88px;
+  height: 24px;
+  top: 2px;
+  left: 0;
+}
+
+.main-tablist .img {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 0;
+  left: 0;
+}
+
+.main-tablist .tab {
+  left: 27px;
+  color: #000000;
+  position: absolute;
+  height: 22px;
+  top: 2px;
+  font-family: "Inter-Bold", Helvetica;
+  font-weight: 700;
+  font-size: 15px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 22px;
+  white-space: nowrap;
+}
+
+.main-tablist .group-2 {
+  position: absolute;
+  width: 56px;
+  height: 24px;
+  top: 2px;
+  left: 114px;
+}
+
+.main-tablist .text-wrapper {
+  left: 26px;
+  color: #333333;
+  position: absolute;
+  height: 22px;
+  top: 2px;
+  font-family: "Inter-Bold", Helvetica;
+  font-weight: 700;
+  font-size: 15px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 22px;
+  white-space: nowrap;
+}
+
+.main-tablist .group-3 {
+  position: absolute;
+  width: 84px;
+  height: 24px;
+  top: 2px;
+  left: 196px;
+}
+
+.main-tablist .group-4 {
+  position: absolute;
+  width: 70px;
+  height: 25px;
+  top: 0;
+  left: 306px;
+}
+
+.main-tablist .tab-link-2 {
+  height: 22px;
+  top: 3px;
+  left: 26px;
+  font-family: "Inter-Bold", Helvetica;
+  font-weight: 700;
+  font-size: 15px;
+  position: absolute;
+  color: #333333;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 22px;
+  white-space: nowrap;
+}
+
+.main-tablist .group-5 {
+  position: absolute;
+  width: 56px;
+  height: 24px;
+  top: 0;
+  left: 402px;
+}
+
+.main-tablist .group-6 {
+  position: absolute;
+  width: 84px;
+  height: 24px;
+  top: 0;
+  left: 484px;
+}
+
+.main-tablist .group-7 {
+  position: absolute;
+  width: 56px;
+  height: 24px;
+  top: 0;
+  left: 594px;
+}
