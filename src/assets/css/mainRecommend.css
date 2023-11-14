@@ -1,0 +1,260 @@
+.screen {
+  position: relative;
+  width: 1920px;
+  height: 802px;
+}
+
+.screen .view {
+  position: absolute;
+  width: 1156px;
+  height: 312px;
+  top: 401px;
+  left: 392px;
+}
+
+.screen .overlap {
+  position: relative;
+  height: 303px;
+  top: 9px;
+}
+
+.screen .group {
+  position: absolute;
+  width: 157px;
+  height: 29px;
+  top: 0;
+  left: 4px;
+}
+
+.screen .heading {
+  height: 29px;
+  left: 0;
+  font-family: "Inter-Bold", Helvetica;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 29px;
+  position: absolute;
+  top: 0;
+  color: #000000;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.screen .div-hbqoi {
+  position: absolute;
+  width: 1136px;
+  height: 278px;
+  top: 25px;
+  left: 0;
+}
+
+.screen .list-item-link {
+  top: 8px;
+  left: 4px;
+  position: absolute;
+  width: 270px;
+  height: 270px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.screen .overlap-group {
+  height: 270px;
+  background-image: url(./img/picture-2.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.screen .div-maelv {
+  position: relative;
+  width: 270px;
+  height: 76px;
+  top: 194px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.6) 57.89%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.screen .div-bigqs {
+  position: relative;
+  width: 238px;
+  height: 28px;
+  top: 32px;
+  left: 16px;
+}
+
+.screen .text-wrapper {
+  position: absolute;
+  height: 28px;
+  top: -2px;
+  left: 0;
+  font-family: "Inter-ExtraBold", Helvetica;
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 14px;
+  letter-spacing: 0.56px;
+  line-height: 28px;
+  white-space: nowrap;
+}
+
+.screen .overlap-wrapper {
+  position: absolute;
+  width: 270px;
+  height: 270px;
+  top: 4px;
+  left: 290px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.screen .div-maelv-wrapper {
+  height: 270px;
+  background-image: url(./img/picture-3.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.screen .overlap-group-wrapper {
+  top: 4px;
+  left: 576px;
+  position: absolute;
+  width: 270px;
+  height: 270px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.screen .div-wrapper {
+  height: 270px;
+  background-image: url(./img/image.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.screen .div {
+  top: 4px;
+  left: 862px;
+  position: absolute;
+  width: 270px;
+  height: 270px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.screen .overlap-2 {
+  height: 270px;
+  background-image: url(./img/picture.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.screen .button {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 144px;
+  left: 1116px;
+}
+
+.screen .group-2 {
+  position: absolute;
+  width: 1162px;
+  height: 310px;
+  top: 15px;
+  left: 388px;
+}
+
+.screen .overlap-3 {
+  position: relative;
+  width: 1160px;
+  height: 310px;
+}
+
+.screen .p {
+  height: 34px;
+  left: 4px;
+  font-family: "Inter-ExtraBold", Helvetica;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 34px;
+  position: absolute;
+  top: 0;
+  color: #000000;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.screen .view-2 {
+  position: absolute;
+  width: 1160px;
+  height: 280px;
+  top: 30px;
+  left: 0;
+}
+
+.screen .overlap-4 {
+  position: relative;
+  height: 280px;
+}
+
+.screen .div-hbqoi-2 {
+  position: absolute;
+  width: 1136px;
+  height: 280px;
+  top: 0;
+  left: 0;
+}
+
+.screen .list-item-link-2 {
+  top: 4px;
+  left: 4px;
+  position: absolute;
+  width: 270px;
+  height: 270px;
+  background-color: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.screen .overlap-group-2 {
+  height: 270px;
+  background-image: url(./img/picture-4.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.screen .overlap-5 {
+  height: 270px;
+  background-image: url(./img/picture-5.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.screen .overlap-6 {
+  height: 270px;
+  background-image: url(./img/picture-7.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.screen .overlap-7 {
+  height: 270px;
+  background-image: url(./img/picture-6.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.screen .img {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 120px;
+  left: 1120px;
+}
