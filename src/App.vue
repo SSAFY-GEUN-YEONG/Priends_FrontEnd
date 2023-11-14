@@ -1,17 +1,12 @@
 <script setup>
-import { RouterView } from 'vue-router';
-import TheHeaderNavbar from './components/layout/TheHeaderNavbar.vue';
-import TheFooterNavbar from './components/layout/TheFooterNavbar.vue';
+import AttractionMain from "./components/attractions/AttractionMain.vue";
+import PathList from "./components/path/PathList.vue";
+import PathListItem from "./components/path/item/PathListItem.vue";
 </script>
 
 <template>
-  <div>
-    <TheHeaderNavbar></TheHeaderNavbar>
-    <router-view></router-view>    
-    <TheFooterNavbar></TheFooterNavbar>
-  </div>
+  <PathList></PathList>
+  <!-- <AttractionMain /> -->
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
