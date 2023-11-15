@@ -1,10 +1,12 @@
 <script setup>
 import PathListItem from "./item/PathListItem.vue";
+import TheHeaderNavbar from "../layout/TheHeaderNavbar.vue";
+import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
 </script>
 
 <template>
+  <TheHeaderNavbar />
   <div class="screen">
-    <!-- <Header />  -->
     <div class="search-area">
       <div class="text-wrapper">Priends의 여행 계획을 살펴보세요!</div>
       <div class="div-search-area">
@@ -58,12 +60,20 @@ import PathListItem from "./item/PathListItem.vue";
     </div>
 
     <div class="plan-list">
-      <div class="plan-change-btn">
-        <button class="btn">인기</button> | <button class="btn">신규</button>
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="plan-change-btn">
+          <button class="btn me-2">인기</button> |
+          <button class="btn">신규</button>
+        </div>
+        <p class="plan-count mb-0 me-2">총 1234개의 계획</p>
       </div>
-      <p class="plan-count">총 1234개의 계획</p>
+      <PathListItem />
+
+      <PathListItem />
+
       <PathListItem />
     </div>
+    <TheFooterNavBar />
   </div>
 </template>
 
@@ -74,6 +84,7 @@ import PathListItem from "./item/PathListItem.vue";
   flex-direction: row;
   justify-content: center;
   width: 100%;
+  padding-top: 50px; /* 헤더의 높이만큼 여백 추가 */
 }
 
 .search-area {
