@@ -49,7 +49,11 @@ import AttractionRecomandPathItem from "./item/AttractionRecommandPathItem.vue";
     </div>
     <div class="city-recommand-path">
       <h4>추천 여행 계획</h4>
-      <div class="city-recommand-path-item"><AttractionRecomandPathItem /></div>
+      <div class="city-recommand-path-item">
+        <AttractionRecomandPathItem />
+        <AttractionRecomandPathItem />
+        <AttractionRecomandPathItem />
+      </div>
       <button type="button" class="btn btn-outline-secondary">
         여행 계획 모두보기
       </button>
@@ -86,6 +90,8 @@ import AttractionRecomandPathItem from "./item/AttractionRecommandPathItem.vue";
   margin-top: 20px; /* 각 섹션 위에 여백 추가 */
   width: 80%; /* 각 섹션의 너비 설정 */
   max-width: 1092px; /* 최대 너비 설정 */
+
+  margin-bottom: 100px;
 }
 .city-home > h3 {
   margin-left: 20px;
@@ -120,8 +126,15 @@ import AttractionRecomandPathItem from "./item/AttractionRecommandPathItem.vue";
 
 .city-recommand-path {
   text-align: center;
+
+  margin-top: 100px;
 }
 .city-recommand-path > h4 {
   text-align: center;
+}
+.city-recommand-path-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 50px 0;
 }
 </style>
