@@ -84,7 +84,10 @@ import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  padding-top: 50px; /* 헤더의 높이만큼 여백 추가 */
+
+  position: -webkit-sticky;
+  position: sticky;
+  top: 50px; /* 헤더의 높이만큼 여백 추가 */
 }
 
 .search-area {
@@ -92,7 +95,7 @@ import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
   position: relative;
   width: 1920px;
   height: 407px;
-  background: url(../../assets/field.jpg) center/cover;
+  background: url(@/assets/img/field.jpg) center/cover;
   justify-content: center;
   margin: 0 auto;
 }

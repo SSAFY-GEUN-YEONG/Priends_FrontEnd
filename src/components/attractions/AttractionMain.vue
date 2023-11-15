@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup>
+import TheHeaderNavbar from "../layout/TheHeaderNavbar.vue";
+import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
+</script>
 
 <template>
+  <TheHeaderNavbar />
   <div class="screen">
-    <!-- <Header />
-        <SearchArea /> -->
     <div class="search-area">
       <div class="text-wrapper">어디로 여행을 가시나요?</div>
       <div class="div-search-area">
@@ -220,7 +222,7 @@
         <p>통영</p>
       </div>
     </div>
-    <!-- <Footer /> -->
+    <TheFooterNavBar />
   </div>
 </template>
 
@@ -231,6 +233,10 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
+
+  position: -webkit-sticky;
+  position: sticky;
+  top: 50px; /* 헤더의 높이만큼 여백 추가 */
 }
 
 .search-area {
@@ -238,8 +244,9 @@
   position: relative;
   width: 1920px;
   height: 407px;
-  background: url(../../assets/windmill.jpg) center/cover;
+  background: url(@/assets/img/windmill.jpg) center/cover;
   justify-content: center;
+  margin: 0 auto;
 }
 
 .search-area .text-wrapper {
