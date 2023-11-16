@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div class="attraction-recommand-path-item">
+  <div class="attraction-recommand-path-item m-4">
     <div class="recommand-path-map"></div>
     <div class="recommand-path-info">
       <div class="recommand-path-info-text">

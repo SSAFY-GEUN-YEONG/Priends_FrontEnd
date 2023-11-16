@@ -8,6 +8,7 @@ import TheFooterNavbar from "./components/layout/TheFooterNavbar.vue";
   <div>
     <TheHeaderNavbar />
     <router-view></router-view>
+
     <TheFooterNavbar />
   </div>
 </template>

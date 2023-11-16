@@ -39,8 +39,6 @@ footer {
   position: relative;
   bottom: 0;
   left: 0;
-  width: 100%;
-  z-index: 1000; /* 원하는 값으로 조절하세요 */
 
   margin-top: 20px;
 }

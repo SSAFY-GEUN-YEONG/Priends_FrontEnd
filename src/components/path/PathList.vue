@@ -1,19 +1,18 @@
 <script setup>
 import PathListItem from "./item/PathListItem.vue";
-import TheHeaderNavbar from "../layout/TheHeaderNavbar.vue";
-import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
 </script>
 
 <template>
   <div class="screen">
     <div class="search-area">
-      <div class="text-wrapper">Priends의 여행 계획을 살펴보세요!</div>
+      <div class="text-wrapper text-center pt-5">
+        Priends의 여행 계획을 살펴보세요!
+      </div>
       <div class="div-search-area">
         <input
           type="text"
           class="input"
-          value="계획 하고싶은 도시를 입력하세요."
-        />
+          placeholder="계획하고 싶은 도시를 입력하세요." />
         <div class="recommand_city">추천도시 : 제주, 부산, 서울</div>
       </div>
     </div>
@@ -76,37 +75,17 @@ import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
 </template>
 
 <style scoped>
-.screen {
-  background-color: transparent;
-  display: block;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-
-  position: -webkit-sticky;
-  position: sticky;
-  top: 50px; /* 헤더의 높이만큼 여백 추가 */
-}
-
 .search-area {
   display: block;
   position: relative;
-  width: 1920px;
-  height: 407px;
+  width: 100%;
+  height: 400px;
   background: url(@/assets/img/field.jpg) center/cover;
-  justify-content: center;
-  margin: 0 auto;
 }
 
 .search-area .text-wrapper {
-  position: absolute;
-  top: 56px;
-  left: 779px;
-  width: 400px;
-  height: 42px;
   font: 700 34.6px/36px "Inter-Bold", Helvetica;
   color: #ffffff;
-  text-align: center;
   text-shadow: 0px 0px 5px #00000080;
 }
 

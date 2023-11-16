@@ -78,6 +78,20 @@ const router = createRouter({
         },
       ],
     },
+     {
+      path: "/path",
+      name: "path",
+      component: () => import("../views/ThePathView.vue"),
+      redirect: { name: "path-list" },
+      children: [
+        {
+          path: "list",
+          name: "path-list",
+          component: () =>
+            import("@/components/path/PathList.vue"),
+        },
+      ],
+    },
   ],
 });
 

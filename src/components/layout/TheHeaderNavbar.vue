@@ -4,8 +4,6 @@ import { storeToRefs } from "pinia";
 
 const menuStore = useMenuStore();
 
-// 반응형을 유지하면서 스토어에서 속성을 추출하려면, storeToRefs()를 사용
-// https://pinia.vuejs.kr/core-concepts/
 const { menuList } = storeToRefs(menuStore);
 const { changeMenuState } = menuStore;
 
@@ -18,13 +16,8 @@ const logout = () => {
 <template>
   <nav
     class="navbar mb-5 sticky-top navbar-expand-lg"
-    style="background-color: white"
-  >
+    style="background-color: white">
     <div class="container-fluid">
-      <!-- <a class="navbar-brand ms-2" href="#">
-        <img src="@/assets/img/2x.png" width="180" height="30" />
-      </a> -->
-      <!--라우터 링크 연결할 버전-->
       <router-link :to="{ name: 'main' }" class="navbar-brand">
         <img src="@/assets/img/2x.png" width="180" height="30" />
       </router-link>
@@ -35,8 +28,7 @@ const logout = () => {
         data-bs-target="#navbarNavAltMarkup"
         aria-controls="navbarNavAltMarkup"
         aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+        aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -51,13 +43,18 @@ const logout = () => {
               href="#"
               role="button"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+              aria-expanded="false">
               여행계획
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">여행계획 세우기</a></li>
-              <li><a class="dropdown-item" href="#">Priends' 여행계획</a></li>
+              <li>
+                <router-link
+                  :to="{ name: 'path' }"
+                  class="nav-link px-1 mx-0 text-start"
+                  >Priends' 여행계획</router-link
+                >
+              </li>
             </ul>
           </li>
           <router-link :to="{ name: 'board' }" class="nav-link"
@@ -69,8 +66,7 @@ const logout = () => {
               href="#"
               role="button"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+              aria-expanded="false">
               동행
             </a>
             <ul class="dropdown-menu">
@@ -83,8 +79,7 @@ const logout = () => {
         <div class="d-flex">
           <ul
             class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll"
-            style="--bs-scroll-height: 100px"
-          >
+            style="--bs-scroll-height: 100px">
             <template v-for="menu in menuList" :key="menu.routeName">
               <template v-if="menu.show">
                 <template v-if="menu.routeName === 'member-logout'">
