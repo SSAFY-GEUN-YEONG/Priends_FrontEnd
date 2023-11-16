@@ -1,18 +1,124 @@
 <script setup>
-import "@/assets/css/header.css";
+import { useMenuStore } from "@/stores/menu";
+import { storeToRefs } from "pinia";
+
+const menuStore = useMenuStore();
+
+// 반응형을 유지하면서 스토어에서 속성을 추출하려면, storeToRefs()를 사용
+// https://pinia.vuejs.kr/core-concepts/
+const { menuList } = storeToRefs(menuStore);
+const { changeMenuState } = menuStore;
+
+const logout = () => {
+  console.log("로그아웃!!!!");
+  changeMenuState();
+};
 </script>
 
 <template>
-  <header class="header">
-    <div class="navbar">
-      <img class="image" src="@/assets/img/2x.png" />
-      <p class="introduce">여행지</p>
-      <p class="introduce">여행 계획</p>
-      <p class="introduce">커뮤니티</p>
-      <p class="introduce">동행</p>
-      <p class="login">로그인</p>
+  <nav
+    class="navbar mb-5 sticky-top navbar-expand-lg"
+    style="background-color: white"
+  >
+    <div class="container-fluid">
+      <!-- <a class="navbar-brand ms-2" href="#">
+        <img src="@/assets/img/2x.png" width="180" height="30" />
+      </a> -->
+      <!--라우터 링크 연결할 버전-->
+      <router-link :to="{ name: 'main' }" class="navbar-brand">
+        <img src="@/assets/img/2x.png" width="180" height="30" />
+      </router-link>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav me-auto">
+          <!-- <a class="nav-link" href="#">여행지</a> -->
+          <router-link :to="{ name: 'attraction' }" class="nav-link"
+            >여행지</router-link
+          >
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              여행계획
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">여행계획 세우기</a></li>
+              <li><a class="dropdown-item" href="#">Priends' 여행계획</a></li>
+            </ul>
+          </li>
+          <router-link :to="{ name: 'board' }" class="nav-link"
+            >커뮤니티</router-link
+          >
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              동행
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">동행구하기</a></li>
+              <li><a class="dropdown-item" href="#">실시간 동행 찾기</a></li>
+            </ul>
+          </li>
+        </div>
+
+        <div class="d-flex">
+          <ul
+            class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll"
+            style="--bs-scroll-height: 100px"
+          >
+            <template v-for="menu in menuList" :key="menu.routeName">
+              <template v-if="menu.show">
+                <template v-if="menu.routeName === 'member-logout'">
+                  <li class="nav-item">
+                    <router-link
+                      to="/"
+                      @click.prevent="logout"
+                      class="nav-link"
+                      >{{ menu.name }}</router-link
+                    >
+                  </li>
+                </template>
+                <template v-else>
+                  <li class="nav-item">
+                    <router-link
+                      :to="{ name: menu.routeName }"
+                      class="nav-link"
+                      >{{ menu.name }}</router-link
+                    >
+                  </li>
+                </template>
+              </template>
+            </template>
+          </ul>
+          <!-- <button class="btn btn-outline-success me-2">로그인</button>
+          <button class="btn btn-outline-success me-2">회원가입</button> -->
+        </div>
+      </div>
     </div>
-  </header>
+  </nav>
 </template>
 
-<style scoped></style>
+<style scoped>
+.nav-link {
+  margin-right: 20px; /* 오른쪽 여백 */
+}
+</style>

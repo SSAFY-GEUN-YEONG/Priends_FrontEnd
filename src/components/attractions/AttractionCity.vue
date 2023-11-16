@@ -1,12 +1,9 @@
 <script setup>
-import TheHeaderNavbar from "../layout/TheHeaderNavbar.vue";
-import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
 import AttractionCityItem from "./item/AttractionCityItem.vue";
 import AttractionRecomandPathItem from "./item/AttractionRecommandPathItem.vue";
 </script>
 
 <template>
-  <TheHeaderNavbar />
   <div class="screen">
     <div class="city-home">
       <h3>부산</h3>
@@ -58,7 +55,6 @@ import AttractionRecomandPathItem from "./item/AttractionRecommandPathItem.vue";
         여행 계획 모두보기
       </button>
     </div>
-    <TheFooterNavBar />
   </div>
 </template>
 

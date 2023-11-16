@@ -4,41 +4,41 @@ import { createRouter, createWebHistory } from "vue-router";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: HomeView
-    // },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // }
     {
       path: "/",
       name: "main",
       component: () => import("@/views/MainView.vue"),
     },
     {
-      path: "/member/login",
-      name: "member-login",
-      component: () => import("@/components/member/MemberLogin.vue"),
-    },
-    {
-      path: "/member/signup",
-      name: "member-signup",
-      component: () => import("@/components/member/MemberSignUp.vue"),
+      path: "/member",
+      name: "member",
+      component: () => import("@/views/TheMemberView.vue"),
+      children: [
+        {
+          path: "login",
+          name: "member-login",
+          component: () => import("@/components/member/MemberLogin.vue"),
+        },
+        {
+          path: "join",
+          name: "member-signup",
+          component: () => import("@/components/member/MemberSignUp.vue"),
+        },
+        {
+          path: "mypage",
+          name: "member-mypage",
+          component: () => import("@/components/member/MemberMyPage.vue"),
+        },
+        // {
+        //   path: "modify/:userid",
+        //   name: "user-modify",
+        //   component: () => import("@/components/users/UserModify.vue"),
+        // },
+      ],
     },
     {
       path: "/board",
       name: "board",
-      // component: TheBoardView,
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("../views/TheBoardView.vue"),
       redirect: { name: "article-list" },
       children: [
@@ -61,6 +61,20 @@ const router = createRouter({
           path: "modify/:articleno",
           name: "article-modify",
           component: () => import("@/components/board/BoardModify.vue"),
+        },
+      ],
+    },
+    {
+      path: "/attraction",
+      name: "attraction",
+      component: () => import("../views/TheAttractionView.vue"),
+      redirect: { name: "attraction-main" },
+      children: [
+        {
+          path: "main",
+          name: "attraction-main",
+          component: () =>
+            import("@/components/attractions/AttractionMain.vue"),
         },
       ],
     },

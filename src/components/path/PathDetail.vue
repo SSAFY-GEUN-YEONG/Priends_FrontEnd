@@ -1,6 +1,4 @@
 <script setup>
-import TheHeaderNavbar from "../layout/TheHeaderNavbar.vue";
-import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
 import PathDetailItem from "./item/PathDetailItem.vue";
 //아이콘
 import { PhLightNumberCircleOne } from "@kalimahapps/vue-icons";
@@ -15,7 +13,6 @@ import { PhLightNumberCircleNine } from "@kalimahapps/vue-icons";
 </script>
 
 <template>
-  <TheHeaderNavbar />
   <div class="container">
     <div class="content justify-content-center">
       <div class="main-img">
@@ -56,7 +53,6 @@ import { PhLightNumberCircleNine } from "@kalimahapps/vue-icons";
       </div>
     </div>
   </div>
-  <TheFooterNavBar />
 </template>
 
 <style scoped>

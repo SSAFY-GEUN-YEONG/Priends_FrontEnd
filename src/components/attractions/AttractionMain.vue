@@ -1,10 +1,8 @@
 <script setup>
-import TheHeaderNavbar from "../layout/TheHeaderNavbar.vue";
 import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
 </script>
 
 <template>
-  <TheHeaderNavbar />
   <div class="screen">
     <div class="search-area">
       <div class="text-wrapper">어디로 여행을 가시나요?</div>
@@ -222,7 +220,6 @@ import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
         <p>통영</p>
       </div>
     </div>
-    <TheFooterNavBar />
   </div>
 </template>
 

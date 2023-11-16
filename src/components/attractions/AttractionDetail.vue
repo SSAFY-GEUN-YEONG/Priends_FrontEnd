@@ -1,10 +1,6 @@
-<script setup>
-import TheHeaderNavbar from "../layout/TheHeaderNavbar.vue";
-import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
-</script>
+<script setup></script>
 
 <template>
-  <TheHeaderNavbar />
   <div class="screen">
     <div class="detail-info">
       <div class="detail-category">여행지 > 부산 > 자연</div>
@@ -74,25 +70,28 @@ import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
         </button>
       </div>
       <div class="mx-4 p-3 d-flex flex-column border border-dark-subtle">
-          <div class="card" style="width: 18rem;">
-          <img src="@/assets/img/building.jpg" class="card-img-top"  >
+        <div class="card" style="width: 18rem">
+          <img src="@/assets/img/building.jpg" class="card-img-top" />
           <div class="card-body">
             <h5 class="card-title">어쩌고 다리</h5>
             <div class="d-flex flex-row justify-content-start">
-              <font-awesome-icon :icon="['far', 'eye']" style="height: 15px " class="align-bottom pt-1"/>
-              <div class="ms-2  align-top ">874</div>
-              <button type="button" class="btn btn-secondary ms-auto">음식점</button>
+              <font-awesome-icon
+                :icon="['far', 'eye']"
+                style="height: 15px"
+                class="align-bottom pt-1"
+              />
+              <div class="ms-2 align-top">874</div>
+              <button type="button" class="btn btn-secondary ms-auto">
+                음식점
+              </button>
             </div>
           </div>
         </div>
-
       </div>
       <div class="mx-4 p-3 d-flex flex-column border border-dark-subtle">
         map
       </div>
-    
-    </div>  
-    <TheFooterNavBar />
+    </div>
   </div>
 </template>
 

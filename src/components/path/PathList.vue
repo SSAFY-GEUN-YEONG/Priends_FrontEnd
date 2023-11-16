@@ -5,7 +5,6 @@ import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
 </script>
 
 <template>
-  <TheHeaderNavbar />
   <div class="screen">
     <div class="search-area">
       <div class="text-wrapper">Priends의 여행 계획을 살펴보세요!</div>
@@ -73,7 +72,6 @@ import TheFooterNavBar from "../layout/TheFooterNavbar.vue";
 
       <PathListItem />
     </div>
-    <TheFooterNavBar />
   </div>
 </template>
 
