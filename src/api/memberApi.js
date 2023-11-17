@@ -22,4 +22,3 @@ async function memberGetApi(success, fail) {
 }
 
 export { memberLoginApi, memberLogoutApi, tokenRegeneration, memberGetApi };
-export { memberLoginApi, memberLogoutApi, tokenRegeneration };

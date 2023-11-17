@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useCookies } from "vue3-cookies";
 import { httpStatusCode } from "./http-status";
-import { useCookies } from "vue3-cookies";
 
 export default {
   setup() {
@@ -27,7 +26,6 @@ function stationAxios() {
 // local vue api axios instance
 function localAxios() {
   const { cookies } = useCookies();
-
 
   const instance = axios.create({
     withCredentials: true,

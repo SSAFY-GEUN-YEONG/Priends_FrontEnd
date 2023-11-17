@@ -1,7 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { useMemberStore } from "@/stores/memberStore";
-import { useMemberStore } from "@/stores/member";
 import VueCookies from "vue3-cookies";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
