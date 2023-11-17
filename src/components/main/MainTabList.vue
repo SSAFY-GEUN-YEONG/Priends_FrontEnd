@@ -1,42 +1,51 @@
-<script setup>
-import '@/assets/css/mainTabList.css';
-</script>
+<script setup></script>
 
 <template>
-    <div class="main-tablist">
-      <div class="group">
-        <div class="div">
-          <img class="img" src="img/tab-SVG.svg" />
-          <div class="tab">전체 검색</div>
-        </div>
-        <div class="group-2">
-          <img class="img" src="img/tab-link-SVG-4.svg" />
-          <div class="text-wrapper">호텔</div>
-        </div>
-        <div class="group-3">
-          <img class="img" src="img/tab-link-SVG-2.svg" />
-          <div class="text-wrapper">문화생활</div>
-        </div>
-        <div class="group-4">
-          <img class="img" src="img/tab-link-SVG.svg" />
-          <div class="tab-link-2">음식점</div>
-        </div>
-        <div class="group-5">
-          <img class="img" src="img/tab-link-SVG-5.svg" />
-          <div class="text-wrapper">마켓</div>
-        </div>
-        <div class="group-6">
-          <img class="img" src="img/tab-link-SVG-3.svg" />
-          <div class="text-wrapper">액티비티</div>
-        </div>
-        <div class="group-7">
-          <img class="img" src="img/image.svg" />
-          <div class="text-wrapper">자연</div>
-        </div>
-      </div>
+  <nav class="container navbar navbar-expand-lg pt-0">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mx-auto fw-bold">
+        <li class="nav-item mx-2">
+          <router-link :to="{ name: 'attraction' }" class="nav-link"
+            ><i class="bi bi-moon-stars me-1"></i>호텔</router-link
+          >
+        </li>
+        <li class="nav-item mx-2">
+          <router-link :to="{ name: 'attraction' }" class="nav-link"
+            ><i class="bi bi-ticket-perforated me-1"></i>문화생활</router-link
+          >
+        </li>
+        <li class="nav-item mx-2">
+          <router-link :to="{ name: 'attraction' }" class="nav-link">
+            <img
+              class="icon-svg me-1"
+              src="@/assets/img/utensils.svg"
+            />음식점</router-link
+          >
+        </li>
+        <li class="nav-item mx-2">
+          <router-link :to="{ name: 'attraction' }" class="nav-link"
+            ><i class="bi bi-shop-window me-1"></i>마켓</router-link
+          >
+        </li>
+        <li class="nav-item mx-2">
+          <router-link :to="{ name: 'attraction' }" class="nav-link"
+            ><i class="bi bi-tsunami me-1"></i>액티비티</router-link
+          >
+        </li>
+        <li class="nav-item mx-2">
+          <router-link :to="{ name: 'attraction' }" class="nav-link"
+            ><i class="bi bi-tree me-1"></i>자연</router-link
+          >
+        </li>
+      </ul>
     </div>
+  </nav>
 </template>
 
 <style scoped>
-
+.icon-svg {
+  width: 16px;
+  height: 16px;
+  margin-top: -2px;
+}
 </style>

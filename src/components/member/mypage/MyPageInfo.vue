@@ -1,9 +1,7 @@
 <script setup></script>
 
 <template>
-  <div>
-    <router-view></router-view>
-  </div>
+  <div>회원정보 수정</div>
 </template>
 
 <style scoped></style>

@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import { useMenuStore } from "@/stores/menuStore";
 import { useMemberStore } from "@/stores/memberStore";
+import { useMenuStore } from "@/stores/menu";
+import { useMemberStore } from "@/stores/member";
 import { storeToRefs } from 'pinia';
 
 const router = useRouter();

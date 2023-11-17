@@ -3,17 +3,24 @@ import PathListItem from "./item/PathListItem.vue";
 </script>
 
 <template>
-  <div class="screen">
-    <div class="search-area">
-      <div class="text-wrapper text-center pt-5">
+  <div class="d-flex flex-column align-items-center">
+    <div
+      class="search-area d-flex flex-column align-items-center justify-content-center"
+    >
+      <div class="text-wrapper text-center pb-5">
         Priends의 여행 계획을 살펴보세요!
       </div>
-      <div class="div-search-area">
-        <input
-          type="text"
-          class="input"
-          placeholder="계획하고 싶은 도시를 입력하세요." />
-        <div class="recommand_city">추천도시 : 제주, 부산, 서울</div>
+      <div
+        class="div-search-area d-flex flex-column justify-content-center align-items-center"
+      >
+        <div>
+          <input
+            type="text"
+            class="input"
+            placeholder="계획하고 싶은 도시를 입력하세요."
+          />
+          <p class="recommend_city pt-3 mb-0">추천도시 : 제주, 부산, 서울</p>
+        </div>
       </div>
     </div>
 
@@ -57,27 +64,27 @@ import PathListItem from "./item/PathListItem.vue";
       </table>
     </div>
 
-    <div class="plan-list">
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <div class="plan-change-btn">
-          <button class="btn me-2">인기</button> |
+    <div class="d-flex flex-column">
+      <div
+        class="d-flex justify-content-between align-items-center mb-2 path-list-item"
+      >
+        <div class="">
+          <button class="btn">인기</button> |
           <button class="btn">신규</button>
         </div>
-        <p class="plan-count mb-0 me-2">총 1234개의 계획</p>
+        <p class="plan-count mb-0 me-1">총 1234개의 계획</p>
       </div>
-      <PathListItem />
-
-      <PathListItem />
-
-      <PathListItem />
+      <div class="d-flex flex-row justify-content-between mb-5">
+        <PathListItem />
+        <PathListItem />
+        <PathListItem />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .search-area {
-  display: block;
-  position: relative;
   width: 100%;
   height: 400px;
   background: url(@/assets/img/field.jpg) center/cover;
@@ -90,10 +97,6 @@ import PathListItem from "./item/PathListItem.vue";
 }
 
 .div-search-area {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* 가운데 정렬을 위한 트랜스폼 */
   width: 698px;
   height: 138px;
   background-color: #363636b2;
@@ -101,19 +104,12 @@ import PathListItem from "./item/PathListItem.vue";
 }
 
 .search-area .input {
-  position: absolute;
-  top: 20px;
-  left: 20px;
   width: 650px;
   height: 50px;
   background-color: white;
 }
 
-.search-area .recommand_city {
-  position: absolute;
-  top: 90px;
-  left: 20px;
-  height: 14px;
+.search-area .recommend_city {
   font: 400 14px/14px "Inter-Regular", Helvetica;
   color: #ffffff;
 }
@@ -150,6 +146,10 @@ th {
 td {
   text-align: center;
   width: 100px;
+}
+
+.path-list-item {
+  width: 1200px;
 }
 
 .plan-count {

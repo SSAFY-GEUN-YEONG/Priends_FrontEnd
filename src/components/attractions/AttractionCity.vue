@@ -76,7 +76,8 @@ import AttractionRecomandPathItem from "./item/AttractionRecommandPathItem.vue";
 
     <div
       class="my-5 d-flex flex-column align-items-center"
-      style="max-width: 1092px; width: 100%">
+      style="max-width: 1092px; width: 100%"
+    >
       <h4 class="text-center mb-2">추천 여행 계획</h4>
       <div class="d-flex">
         <AttractionRecomandPathItem />

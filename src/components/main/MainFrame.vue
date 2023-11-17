@@ -1,116 +1,55 @@
 <script setup>
-import '@/assets/css/mainFrame.css';
+import MainRecommendPathItem from "./item/MainRecommendPathItem.vue";
 </script>
 
 <template>
-    <div class="main">
-      <div class="div-idadx">
-        <div class="overlap-group">
-          <p class="section-heading">올해 최고의 추억을 함께 만들어요</p>
-          <p class="section">연말연시 최고의 추천 여행지를 확인하세요</p>
-          <div class="section-link"><div class="text-wrapper">여행 계획 세우기</div></div>
-        </div>
+  <div class="container d-flex flex-column align-items-center">
+    <div class="my-5 main-cover d-flex align-items-end">
+      <div class="p-5">
+        <p class="fs-3 fw-bold text-white">
+          소중한 사람들과 함께 여행을 떠나요!
+        </p>
+        <p class="fw-bold text-white">Priend가 여러분과 함께합니다</p>
+        <button type="button" class="btn btn-login my-1">
+          여행 계획 세우기
+        </button>
       </div>
-      <div class="view">
-        <div class="link">
-          <div class="div-wrapper">
-            <div class="div">
-              <img class="i-fa-map" src="img/i-fa-map-2.png" />
-              <div class="text-wrapper-2">루트맵</div>
-            </div>
-          </div>
-          <div class="text-wrapper-3">7일간</div>
-          <div class="text-wrapper-4">2023년 12월 출발</div>
-          <div class="link-2">17 view</div>
-          <div class="group">
-            <div class="link-3">5</div>
-            <img class="icon-heart" src="img/icon-heart-2.png" />
-          </div>
-        </div>
-        <div class="link-4">
-          <div class="overlap">
-            <div class="div-2">
-              <img class="i-fa-map" src="img/image.png" />
-              <div class="text-wrapper-2">루트맵</div>
-            </div>
-            <div class="div-3"><div class="text-wrapper-5">남자혼자</div></div>
-          </div>
-          <div class="text-wrapper-6">16일간</div>
-          <div class="text-wrapper-4">2024년 1월 출발</div>
-          <div class="group-2">
-            <div class="link-5">17 view</div>
-            <div class="group-3">
-              <div class="link-3">5</div>
-              <img class="icon-heart" src="img/icon-heart.png" />
-            </div>
-          </div>
-        </div>
-        <div class="link-6">
-          <div class="overlap-2">
-            <div class="div">
-              <img class="i-fa-map" src="img/i-fa-map-3.png" />
-              <div class="text-wrapper-2">루트맵</div>
-            </div>
-          </div>
-          <div class="text-wrapper-6">53일간</div>
-          <div class="text-wrapper-4">2025년 4월 출발</div>
-          <div class="group-4">
-            <div class="link-5">17 view</div>
-            <div class="group-3">
-              <div class="link-3">5</div>
-              <img class="icon-heart" src="img/icon-heart-3.png" />
-            </div>
-          </div>
-        </div>
-        <div class="link-7">
-          <div class="overlap-3">
-            <div class="overlap-4">
-              <div class="element"></div>
-              <div class="div-4">
-                <img class="i-fa-map" src="img/i-fa-map.png" />
-                <div class="text-wrapper-2">루트맵</div>
-              </div>
-              <div class="text-wrapper-7">20일간</div>
-            </div>
-            <div class="text-wrapper-4">2023년 11월 출발</div>
-          </div>
-          <div class="group-5">
-            <div class="link-5">17 view</div>
-            <div class="group-3">
-              <div class="link-3">5</div>
-              <img class="icon-heart" src="img/icon-heart-4.png" />
-            </div>
-          </div>
-        </div>
-        <div class="link-8">
-          <div class="text-wrapper-8">항공</div>
-          <div class="text-wrapper-9">156.0</div>
-          <div class="text-wrapper-10">만원</div>
-          <div class="text-wrapper-11">숙박</div>
-          <div class="overlap-5">
-            <div class="text-wrapper-12">312.0</div>
-            <div class="text-wrapper-13">만원</div>
-            <div class="text-wrapper-14">133.0</div>
-            <div class="text-wrapper-15">만원</div>
-            <div class="text-wrapper-16">288.0</div>
-            <div class="text-wrapper-17">만원</div>
-          </div>
-          <div class="text-wrapper-18">교통</div>
-          <div class="text-wrapper-19">투어</div>
-          <div class="overlap-group-wrapper">
-            <div class="overlap-group-2">
-              <div class="text-wrapper-12">889.0</div>
-              <div class="text-wrapper-13">만원</div>
-            </div>
-          </div>
-          <div class="text-wrapper-20">예약비용</div>
-        </div>
-      </div>
-      <div class="text-wrapper-21">Priends’s 여행 계획</div>
     </div>
-
+    <div class="my-5">
+      <p class="px-3 fs-3 fw-bold">Priends' 여행 계획</p>
+      <div class="recommend-path d-flex flex-row justify-content-between">
+        <MainRecommendPathItem />
+        <MainRecommendPathItem />
+        <MainRecommendPathItem />
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
+.main-cover {
+  width: 1092px;
+  height: 500px;
+  background-image: url("@/assets/img/field.jpg");
+  background-size: cover;
+}
 
+.btn-login {
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: #dac3e8;
+  --bs-btn-border-color: #dac3e8;
+
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg: #c19ee0;
+  --bs-btn-hover-border-color: #c19ee0;
+
+  --bs-btn-focus-shadow-rgb: #a06cd5;
+  --bs-btn-active-color: var(--bs-white);
+  --bs-btn-active-bg: #a06cd5;
+  --bs-btn-active-border-color: #a06cd5;
+}
+
+.recommend-path {
+  width: 1092px;
+}
 </style>
