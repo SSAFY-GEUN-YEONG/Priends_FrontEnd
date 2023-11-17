@@ -100,8 +100,7 @@ const router = createRouter({
         {
           path: "main",
           name: "attraction-main",
-          component: () =>
-            import("@/components/attractions/AttractionMain.vue"),
+          component: () => import("@/components/attractions/AttractionMain.vue"),
         },
       ],
     },
