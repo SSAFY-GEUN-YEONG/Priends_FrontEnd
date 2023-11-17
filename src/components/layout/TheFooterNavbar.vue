@@ -3,8 +3,8 @@ import "@/assets/css/footer.css";
 </script>
 
 <template>
-  <footer class="footer">
-    <div class="row mx-auto justify-content-center">
+  <footer class="navbar-fixed-bottom mt-5">
+    <div class="row justify-content-center">
       <div class="footer-content col-md-2">
         <div class="footer-title">Priends</div>
         <p>여행지</p>
@@ -35,12 +35,11 @@ import "@/assets/css/footer.css";
 </template>
 
 <style scoped>
-footer {
+/* 스타일 수정 */
+.navbar-fixed-bottom {
   position: relative;
   bottom: 0;
-  left: 0;
-
-  margin-top: 20px;
+  width: 100%;
 }
 * {
   font-size: 10px;
@@ -64,8 +63,6 @@ footer {
 .div-footer-bottom {
   background-color: #2e333d;
   color: #c9c9c9;
-  text-align: center;
-  justify-content: center;
 }
 
 .div-footer-bottom > p {
