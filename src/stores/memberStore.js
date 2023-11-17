@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { useMenuStore } from "@/stores/menu";
+import { useMenuStore } from "@/stores/menuStore";
 import { useCookies } from "vue3-cookies";
 
 import { memberLoginApi, memberLogoutApi, memberGetApi } from "@/api/memberApi";
@@ -67,6 +67,7 @@ export const useMemberStore = defineStore("memberStore", () => {
       }
     );
     // 여기에 필요한 로그아웃 로직 추가 (API 호출 및 라우터 변경 해주면 된다)
+    router.push("/"); // 메인 페이지로 가기
   };
 
   const memberGet = async () => {

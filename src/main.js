@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import { useMemberStore } from "@/stores/member";
+import { useMemberStore } from "@/stores/memberStore";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 import App from "./App.vue";
@@ -26,10 +26,7 @@ pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 
 const memberStore = useMemberStore();
-memberStore.memberCheckLoginStatus();
-
-// const memberStore = useMemberStore();
-// memberStore.initializeLoginStatus(); // 로그인 상태 초기화
+memberStore.memberCheckLoginStatus(); // 애플리케이션 시작 시 로그인 상태 확인
 
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.use(router);
