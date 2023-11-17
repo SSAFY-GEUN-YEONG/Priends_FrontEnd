@@ -28,6 +28,33 @@ const router = createRouter({
           path: "mypage",
           name: "member-mypage",
           component: () => import("@/components/member/MemberMyPage.vue"),
+          redirect: { name: "mypage-alarm" },
+          children: [
+            {
+              path: "alarm",
+              name: "mypage-alarm",
+              component: () =>
+                import("@/components/member/mypage/MyPageAlarm.vue"),
+            },
+            {
+              path: "myboard",
+              name: "mypage-myboard",
+              component: () =>
+                import("@/components/member/mypage/MyPageBoard.vue"),
+            },
+            {
+              path: "mypath",
+              name: "mypage-mypath",
+              component: () =>
+                import("@/components/member/mypage/MyPagePath.vue"),
+            },
+            {
+              path: "info",
+              name: "mypage-info",
+              component: () =>
+                import("@/components/member/mypage/MyPageInfo.vue"),
+            },
+          ],
         },
         // {
         //   path: "modify/:userid",
@@ -78,7 +105,7 @@ const router = createRouter({
         },
       ],
     },
-     {
+    {
       path: "/path",
       name: "path",
       component: () => import("../views/ThePathView.vue"),
@@ -87,8 +114,7 @@ const router = createRouter({
         {
           path: "list",
           name: "path-list",
-          component: () =>
-            import("@/components/path/PathList.vue"),
+          component: () => import("@/components/path/PathList.vue"),
         },
       ],
     },
