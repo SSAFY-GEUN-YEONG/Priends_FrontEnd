@@ -73,12 +73,11 @@ const router = createRouter({
         {
           path: "main",
           name: "attraction-main",
-          component: () =>
-            import("@/components/attractions/AttractionMain.vue"),
+          component: () => import("@/components/attractions/AttractionMain.vue"),
         },
       ],
     },
-     {
+    {
       path: "/path",
       name: "path",
       component: () => import("../views/ThePathView.vue"),
@@ -87,8 +86,7 @@ const router = createRouter({
         {
           path: "list",
           name: "path-list",
-          component: () =>
-            import("@/components/path/PathList.vue"),
+          component: () => import("@/components/path/PathList.vue"),
         },
       ],
     },

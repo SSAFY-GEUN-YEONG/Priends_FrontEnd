@@ -1,15 +1,26 @@
 <script setup>
+import { watch } from 'vue';
 import { useMenuStore } from "@/stores/menu";
 import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/member";
 
 const menuStore = useMenuStore();
+const memberStore = useMemberStore();
+const { isLogin } = storeToRefs(memberStore);
 
+const { memberLogout } = memberStore;
 const { menuList } = storeToRefs(menuStore);
 const { changeMenuState } = menuStore;
 
-const logout = () => {
-  console.log("로그아웃!!!!");
-  changeMenuState();
+watch(isLogin, (newValue, oldValue) => {
+  // 로그인 상태가 변경될 때 메뉴 상태를 업데이트
+  if (newValue !== oldValue) {
+    changeMenuState();  
+  }
+});
+
+const logout = async () => {
+  await memberLogout(); // 로그아웃 처리
 };
 </script>
 

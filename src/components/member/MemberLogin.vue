@@ -1,11 +1,30 @@
 <script setup>
+import { ref } from 'vue';
+import { useRouter } from "vue-router";
 import { useMenuStore } from "@/stores/menu";
+import { useMemberStore } from "@/stores/member";
+import { storeToRefs } from 'pinia';
+
+const router = useRouter();
+const memberStore = useMemberStore();
+
+const { isLogin } = storeToRefs(memberStore);
+const { memberLogin } = memberStore;  // 멤버관련 저장소에서 함수들 사용할 함수들
 const { changeMenuState } = useMenuStore();
 
-const login = () => {
-  console.log("login successful !!!");
-  changeMenuState();
-};
+const loginMember = ref({
+  email: "",
+  password: "",
+});
+
+const login = async () => {
+  await memberLogin(loginMember.value);
+  if (isLogin.value) {
+    changeMenuState();  // 메뉴 상태 바꾸기
+    router.push("/");   // 메인 페이지로 가기
+  }
+}
+
 </script>
 
 <template>
@@ -18,6 +37,7 @@ const login = () => {
       <p class="me-auto mb-0">이메일</p>
       <div class="form-floating mb-3" style="width: 400px">
         <input
+          v-model="loginMember.email"
           type="email"
           class="form-control"
           id="floatingInput"
@@ -31,6 +51,7 @@ const login = () => {
       <p class="me-auto mb-0">비밀번호</p>
       <div class="form-floating mb-3">
         <input
+          v-model="loginMember.password"
           style="width: 400px"
           type="password"
           class="form-control"
