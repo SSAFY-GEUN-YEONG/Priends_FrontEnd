@@ -19,7 +19,7 @@ import PathListItem from "./item/PathListItem.vue";
             class="input"
             placeholder="계획하고 싶은 도시를 입력하세요."
           />
-          <p class="recommand_city pt-3 mb-0">추천도시 : 제주, 부산, 서울</p>
+          <p class="recommend_city pt-3 mb-0">추천도시 : 제주, 부산, 서울</p>
         </div>
       </div>
     </div>
@@ -109,7 +109,7 @@ import PathListItem from "./item/PathListItem.vue";
   background-color: white;
 }
 
-.search-area .recommand_city {
+.search-area .recommend_city {
   font: 400 14px/14px "Inter-Regular", Helvetica;
   color: #ffffff;
 }
