@@ -1,23 +1,16 @@
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
 import { useMenuStore } from "@/stores/menu";
+import { useCookies } from "vue3-cookies";
 
-import { memberLoginApi, memberLogoutApi } from "@/api/memberApi";
-import { httpStatusCode } from "@/util/http-status";
+import { memberLoginApi, memberLogoutApi, memberGetApi } from "@/api/memberApi";
 
 export const useMemberStore = defineStore("memberStore", () => {
   const isLogin = ref(false);
-  const memberInfo = ref(null); // 사용자 정보를 저장할 ref
-
-  // // 초기화 함수
-  // const initializeLoginStatus = () => {
-  //   const accessToken = sessionStorage.getItem("accessToken");
-  //   if (accessToken) {
-  //     isLogin.value = true;
-  //     // 필요한 경우, accessToken을 사용하여 추가 사용자 정보를 로드할 수 있음
-  //   }
-  // };
+  const { cookies } = useCookies(); // 쿠키를 사용하기 위해 가져오기
+  const accessToken = ref(null); // accessToken을 저장할 ref
+  // 내정보를 저장할 ref 추가
+  const memberInfo = ref(null);
 
   const memberLogin = async (loginMember) => {
     await memberLoginApi(
@@ -26,12 +19,8 @@ export const useMemberStore = defineStore("memberStore", () => {
         // 서버에서 성공적인 응답을 받았을 때
         if (response.data.dataHeader.successCode === 0) {
           // 로그인 성공 처리
-          memberInfo.value = response.data.dataBody.memberInfo; // 스토어에 사용자 정보 저장
           isLogin.value = true; // 로그인 상태 업데이트
-
-          // 서버로부터 받은 accessToken을 세션 스토리지에 저장
-          const accessToken = response.data.dataBody.token.accessToken;
-          sessionStorage.setItem("accessToken", accessToken); // 세션스토리지에 Access 토큰 저장
+          accessToken.value = response.data.dataBody.token.accessToken;
 
           const menuStore = useMenuStore(); // 메뉴 스토어 인스턴스 가져오기
           menuStore.changeMenuState(); // 메뉴 상태 변경
@@ -56,34 +45,65 @@ export const useMemberStore = defineStore("memberStore", () => {
       (response) => {
         // 서버에서 성공적인 응답을 받았을 때
         if (response.data.dataHeader.successCode === 0) {
-          // 세션 스토리지에서 accessToken 제거
-          sessionStorage.removeItem("accessToken");
-          // 로그아웃 후 추가 처리 (예: 라우터 변경, 메뉴 상태 변경 등)
+          // 로그아웃 처리
+          isLogin.value = false;
+          accessToken.value = null; // accessToken 제거
         }
         // 서버에서 실패 응답 받았을 경우 (즉, redis에 저장된 refresh 토큰 만료돼서 삭제 된 경우인데 이럴 일 사실상 거의 없음)
         else {
-          // 세션 스토리지에서 accessToken 제거
-          sessionStorage.removeItem("accessToken");
+          // 로그아웃 처리
+          isLogin.value = false;
+          accessToken.value = null; // accessToken 제거
         }
       },
       (error) => {
         // 실패 콜백
         console.log("Logout failed: ", error);
 
-        // 실패시에도 세션 스토리지에서 accessToken 제거
-        sessionStorage.removeItem("accessToken");
+        // 실패시에도 로그아웃 처리
+        // 로그아웃 처리
+        isLogin.value = false;
+        accessToken.value = null; // accessToken 제거
       }
     );
-    // 로그아웃 처리
-    memberInfo.value = null;
-    isLogin.value = false;
     // 여기에 필요한 로그아웃 로직 추가 (API 호출 및 라우터 변경 해주면 된다)
+  };
+
+  const memberGet = async () => {
+    await memberGetApi(
+      (response) => {
+        memberInfo.value = response.data.dataBody;
+      },
+      (error) => {
+        // 오류가 발생한 경우
+        console.error("Failed to fetch member info: ", error);
+      }
+    );
+  };
+
+  // 로그인 상태 확인 메서드
+  const memberCheckLoginStatus = () => {
+    // 쿠키에서 accessToken 확인
+    const accessTokenFromCookie = cookies.get("accessToken");
+    if (accessTokenFromCookie) {
+      isLogin.value = true;
+      accessToken.value = accessTokenFromCookie;
+    } else {
+      isLogin.value = false;
+    }
+
+    // 메뉴 상태 초기화를 위한 메서드 호출 이용
+    const menuStore = useMenuStore();
+    menuStore.initializeMenuState(isLogin.value);
   };
 
   return {
     isLogin,
+    accessToken,
+    memberInfo,
     memberLogin,
     memberLogout,
-    // initializeLoginStatus, // 초기화 함수 내보내기
+    memberGet,
+    memberCheckLoginStatus,
   };
 });

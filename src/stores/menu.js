@@ -15,8 +15,20 @@ export const useMenuStore = defineStore("menuStore", () => {
       show: !item.show,
     }));
   };
+
+  const initializeMenuState = (isAuthenticated) => {
+    menuList.value.forEach((item) => {
+      if (item.routeName === "member-login" || item.routeName === "member-signup") {
+        item.show = !isAuthenticated;
+      } else if (item.routeName === "member-mypage" || item.routeName === "member-logout") {
+        item.show = isAuthenticated;
+      }
+    });
+  };
+
   return {
     menuList,
     changeMenuState,
+    initializeMenuState,
   };
 });
