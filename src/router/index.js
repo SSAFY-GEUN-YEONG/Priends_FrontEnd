@@ -101,6 +101,21 @@ const router = createRouter({
           path: "main",
           name: "attraction-main",
           component: () => import("@/components/attractions/AttractionMain.vue"),
+        }, 
+        {
+          path: "area/:areaname",
+          name: "attraction-area",
+          component: () => import("@/components/attractions/AttractionCity.vue"),
+        },
+        {
+          path: "area/:areaname/:category",
+          name: "attraction-area-category",
+          component: () => import("@/components/attractions/AttractionList.vue"),
+        },
+        {
+          path: "area/:areaname/:attractionid",
+          name: "attraction-area-detail",
+          component: () => import("@/components/attractions/AttractionDetail.vue"),
         },
       ],
     },

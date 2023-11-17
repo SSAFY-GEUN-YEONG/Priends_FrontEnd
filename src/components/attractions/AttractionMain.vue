@@ -1,15 +1,53 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted } from "vue";
+
+import { useRouter } from "vue-router";
+import { listArea } from "@/api/attractionApi.js";
+
+const router = useRouter();
+
+const areas = ref([]);
+const param = ref({
+  word: "",
+});
+
+onMounted(() => {
+  getListArea();
+});
+
+const getListArea = () => {
+  console.log("서버에서 시도 목록 얻어오자!!!", param.value);
+  listArea(
+    param.value,
+    ({ data }) => {
+      areas.value = data.dataBody.map((value) => value.gugun_name);
+      console.log(areas.value);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+</script>
 
 <template>
   <div class="screen">
     <div class="search-area">
       <div class="text-wrapper text-center pt-5">어디로 여행을 가시나요?</div>
       <div class="div-search-area">
-        <input
-          type="text"
-          class="input"
-          placeholder="여행하고 싶은 도시를 입력하세요." />
-        <div class="recommand_city">추천도시 : 제주, 부산, 서울</div>
+        <form @submit.prevent="onSubmit" class="mx-5 mt-4">
+          <div class="input-group input-group-sm">
+            <input
+              type="text"
+              class="form-control"
+              v-model="param.word"
+              placeholder="여행하고 싶은 도시를 입력하세요." />
+            <button class="btn btn-dark" type="button" @click="getListArea">
+              검색
+            </button>
+          </div>
+          <div class="recommand_city mt-3">추천도시 : 제주, 부산, 서울</div>
+        </form>
       </div>
     </div>
 
@@ -18,36 +56,237 @@
         <tbody>
           <tr>
             <th scope="row">주요도시</th>
-            <td>서울</td>
-            <td>제주</td>
-            <td>부산</td>
-            <td>대구</td>
-            <td>인천</td>
-            <td>광주</td>
-            <td>울산</td>
-            <td>대전</td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{ name: 'attraction-area', params: { areaname: '서울' } }"
+                >서울</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{ name: 'attraction-area', params: { areaname: '제주' } }"
+                >제주</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{ name: 'attraction-area', params: { areaname: '부산' } }"
+                >부산</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{ name: 'attraction-area', params: { areaname: '대구' } }"
+                >대구</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{ name: 'attraction-area', params: { areaname: '인천' } }"
+                >인천</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{ name: 'attraction-area', params: { areaname: '광주' } }"
+                >광주</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{ name: 'attraction-area', params: { areaname: '울산' } }"
+                >울산</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{ name: 'attraction-area', params: { areaname: '대전' } }"
+                >대전</router-link
+              >
+            </td>
           </tr>
           <tr>
             <th scope="row" rowspan="2">주요지역</th>
-            <td>강원도</td>
-            <td>경기도</td>
-            <td>경상북도</td>
-            <td>전라남도</td>
-            <td>전라북도</td>
-            <td>충청남도</td>
-            <td>충청북도</td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '강원도' },
+                }"
+                >강원도</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '경기도' },
+                }"
+                >경기도</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '경상북도' },
+                }"
+                >경상북도</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '전라남도' },
+                }"
+                >전라남도</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '전라북도' },
+                }"
+                >전라북도</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '충청남도' },
+                }"
+                >충청남도</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '충청북도' },
+                }"
+                >충청북도</router-link
+              >
+            </td>
           </tr>
           <tr>
-            <td>가평</td>
-            <td>강릉</td>
-            <td>경주</td>
-            <td>목포</td>
-            <td>속초</td>
-            <td>양양</td>
-            <td>여수</td>
-            <td>전주</td>
-            <td>춘천</td>
-            <td>포항</td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '가평' },
+                }"
+                >가평</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '강릉' },
+                }"
+                >강릉</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '경주' },
+                }"
+                >경주</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '목포' },
+                }"
+                >목포</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '속초' },
+                }"
+                >속초</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '양양' },
+                }"
+                >양양</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '여수' },
+                }"
+                >여수</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '전주' },
+                }"
+                >전주</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '춘천' },
+                }"
+                >춘천</router-link
+              >
+            </td>
+            <td>
+              <router-link
+                class="text-dark"
+                :to="{
+                  name: 'attraction-area',
+                  params: { areaname: '포항' },
+                }"
+                >포항</router-link
+              >
+            </td>
           </tr>
         </tbody>
       </table>
@@ -57,7 +296,18 @@
       <hr />
       <br /><br />
       <div class="city">
-        <p>강릉</p>
+        <router-link
+          v-for="area in areas"
+          :key="area"
+          class="text-dark"
+          :to="{
+            name: 'attraction-area',
+            params: { areaname: area },
+          }"
+          >{{ area }}</router-link
+        >
+        <!-- <p v-for="area in areas" :key="area">{{ area }}</p> -->
+        <!-- <p>강릉</p>
         <p>구례</p>
         <p>대전광역시</p>
         <p>서귀포</p>
@@ -214,7 +464,7 @@
         <p>양산</p>
         <p>울릉</p>
         <p>제주</p>
-        <p>통영</p>
+        <p>통영</p> -->
       </div>
     </div>
   </div>
@@ -267,9 +517,6 @@
 }
 
 .search-area .recommand_city {
-  position: absolute;
-  top: 90px;
-  left: 20px;
   height: 14px;
   font: 400 14px/14px "Inter-Regular", Helvetica;
   color: #ffffff;
