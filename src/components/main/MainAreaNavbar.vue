@@ -1,115 +1,157 @@
 <script setup>
-import '@/assets/css/mainAreaNavbar.css';
+import "@/assets/css/mainAreaNavbar.css";
 </script>
 
 <template>
-    <div class="box">
-      <div class="view">
-        <div class="overlap">
-          <div class="group">
-            <div class="overlap-group-wrapper">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">서울</div>
-              </div>
-            </div>
-            <div class="overlap-wrapper">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">부산</div>
-              </div>
-            </div>
-            <div class="div-wrapper">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">대구</div>
-              </div>
-            </div>
-            <div class="group-2">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">세종</div>
-              </div>
-            </div>
-            <div class="group-3">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">경기</div>
-              </div>
-            </div>
-            <div class="group-4">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">강원</div>
-              </div>
-            </div>
-            <div class="group-5">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">인천</div>
-              </div>
-            </div>
-            <div class="group-6">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">광주</div>
-              </div>
-            </div>
-            <div class="group-7">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">울산</div>
-              </div>
-            </div>
-            <div class="group-8">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">충북</div>
-              </div>
-            </div>
-            <div class="group-9">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">충남</div>
-              </div>
-            </div>
-            <div class="group-10">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">전북</div>
-              </div>
-            </div>
-            <div class="group-11">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">제주</div>
-              </div>
-            </div>
-            <div class="group-12">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">전남</div>
-              </div>
-            </div>
-            <div class="group-13">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">경북</div>
-              </div>
-            </div>
-            <div class="group-14">
-              <div class="overlap-group">
-                <div class="div"></div>
-                <div class="text-wrapper">경남</div>
-              </div>
-            </div>
-          </div>
-          <div class="rectangle"></div>
-        </div>
+  <div class="container">
+    <nav
+      class="container d-flex flex-column align-items-center navbar navbar-expand-lg"
+    >
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav p-3 ul-border">
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >서울</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >부산</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >대구</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >인천</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >광주</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >울산</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >세종</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >경기</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >강원</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >충북</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >충남</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >전북</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >전남</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >경북</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >경남</router-link
+            >
+          </li>
+          <li class="nav-item mx-2 rounded-pill li-back">
+            <router-link
+              :to="{ name: 'attraction' }"
+              class="nav-link text-dark bg-opacity-25"
+              >제주</router-link
+            >
+          </li>
+        </ul>
       </div>
-    </div>
+      <div class="test input-group my-3 px-5">
+        <span class="input-group-text" style="background-color: transparent">
+          <i class="bi bi-search my-auto mx-2"></i>
+        </span>
+        <input type="text" class="form-control" />
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          id="button-addon2"
+        >
+          검색
+        </button>
+      </div>
+    </nav>
+  </div>
 </template>
 
 <style scoped>
+.ul-border {
+  border-radius: 10px;
+  border: 1px solid #b185db;
+}
+.li-back {
+  background-color: #d2b7e5;
+  padding: 0 1px;
+  font-size: 12px;
+}
 
+.test {
+  width: 81.5%;
+}
 </style>
