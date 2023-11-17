@@ -1,41 +1,27 @@
 <script setup>
-import MyPageHeader from "../layout/MyPageHeader.vue";
+import { onMounted } from 'vue';
+import { useMemberStore } from "@/stores/memberStore";
+import { storeToRefs } from 'pinia';
+
+const memberStore = useMemberStore();
+const { memberInfo } = storeToRefs(memberStore);
+
+onMounted(() => {
+  memberStore.memberGet();
+});
 </script>
 
 <template>
-  <MyPageHeader />
-  <div class="d-flex">
-    <div class="">
-      <ul class="flex-fill p-5 nav d-flex flex-column border-end">
-        <li class="nav-item py-3">
-          <!-- <a class="nav-link active" aria-current="page" href="#">알림</a> -->
-          <router-link :to="{ name: 'mypage-alarm' }" class="nav-link"
-            >알림</router-link
-          >
-        </li>
-
-        <li class="nav-item py-3">
-          <!-- <a class="nav-link" href/="#">내가 쓴 글</a> -->
-          <router-link :to="{ name: 'mypage-myboard' }" class="nav-link"
-            >내가 쓴 글</router-link
-          >
-        </li>
-        <li class="nav-item py-3">
-          <!-- <a class="nav-link" href="#">나의 여행 계획</a> -->
-          <router-link :to="{ name: 'mypage-mypath' }" class="nav-link"
-            >나의 여행 계획</router-link
-          >
-        </li>
-        <li class="nav-item py-3">
-          <!-- <a class="nav-link" href="#">회원 정보 수정</a> -->
-          <router-link :to="{ name: 'mypage-info' }" class="nav-link"
-            >회원 정보 수정</router-link
-          >
-        </li>
-      </ul>
+  <div>
+    MyPage
+    <!-- 내정보 표시 -->
+    <div v-if="memberInfo">
+      <!-- memberInfo 객체의 속성을 사용하여 정보를 표시합니다. -->
+      <p>이메일: {{ memberInfo.email }}</p>
+      <p>닉네임: {{ memberInfo.nickname }}</p>
+      <!-- <p>이미지 url: {{ memberInfo.image }}</p> -->
+      <p>알람여부: {{ memberInfo.alarm }}</p>
+      <!-- 기타 필요한 정보를 여기에 추가합니다. -->
     </div>
-    <router-view></router-view>
   </div>
 </template>
-
-<style scoped></style>

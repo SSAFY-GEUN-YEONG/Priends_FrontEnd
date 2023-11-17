@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { useMemberStore } from "@/stores/memberStore";
 import { useMemberStore } from "@/stores/member";
 import VueCookies from "vue3-cookies";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
@@ -26,6 +27,8 @@ pinia.use(piniaPluginPersistedstate);
 
 app.use(pinia);
 
+const memberStore = useMemberStore();
+memberStore.memberCheckLoginStatus(); // 애플리케이션 시작 시 로그인 상태 확인
 // 라우터 가드에서 호출할 로그인 상태 초기화 함수
 const initializeLoginStatus = () => {
   const memberStore = useMemberStore();

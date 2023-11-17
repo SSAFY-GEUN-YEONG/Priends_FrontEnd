@@ -17,4 +17,9 @@ async function memberLogoutApi(success, fail) {
   await local.get(`/member/logout`).then(success).catch(fail);
 }
 
+async function memberGetApi(success, fail) {
+  await local.get(`/member/get`).then(success).catch(fail);
+}
+
+export { memberLoginApi, memberLogoutApi, tokenRegeneration, memberGetApi };
 export { memberLoginApi, memberLogoutApi, tokenRegeneration };

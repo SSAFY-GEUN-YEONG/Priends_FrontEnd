@@ -1,5 +1,8 @@
 <script setup>
 import { watch } from 'vue';
+import { useMenuStore } from "@/stores/menuStore";
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/memberStore";
 import { useMenuStore } from "@/stores/menu";
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/member";
