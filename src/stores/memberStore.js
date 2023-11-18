@@ -3,7 +3,13 @@ import { defineStore } from "pinia";
 import { useMenuStore } from "@/stores/menuStore";
 import { useCookies } from "vue3-cookies";
 
-import { memberLoginApi, memberLogoutApi, memberGetApi } from "@/api/memberApi";
+import {
+  memberLoginApi,
+  memberLogoutApi,
+  memberGetApi,
+  memberSignupApi,
+  memberEmailCheckApi,
+} from "@/api/memberApi";
 
 export const useMemberStore = defineStore("memberStore", () => {
   const isLogin = ref(false);
@@ -82,6 +88,54 @@ export const useMemberStore = defineStore("memberStore", () => {
     );
   };
 
+  // 이메일 중복 체크 메서드
+  //  JavaScript에서 await 키워드는 비동기 함수 내에서만 동기적으로 동작
+  // 그러나 await로 받은 값은 함수 외부에서는 여전히 비동기적으로 처리되므로
+  // 함수 외부에서 해당 값을 바로 사용하려고 할 때 문제가 발생
+  // 이를 해결하기 위해, memberEmailCheck 함수가 Promise를 반환하게 하고
+  // 해당 Promise를 emailDuplicateCheck 함수에서 처리하는 방식으로 수정
+  const memberEmailCheck = async (email) => {
+    return new Promise((resolve, reject) => {
+      memberEmailCheckApi(
+        email,
+        (response) => {
+          if (response.data.dataHeader.successCode === 0) {
+            resolve(true); // 사용 가능한 이메일
+            console.log("사용 가능한 이메일 입니다!");
+          } else {
+            resolve(false); // 이미 사용중인 이메일
+            console.log(response.data.dataHeader.resultMessage);
+          }
+        },
+        (error) => {
+          reject(error);
+          console.log("이메일 중복 체크 실패: ", error);
+        }
+      );
+    });
+  };
+
+  // 회원가입 메서드
+  const memberSignup = async (signupData) => {
+    await memberSignupApi(
+      signupData,
+      (response) => {
+        // 서버에서 성공적인 응답을 받았을 때
+        if (response.data.dataHeader.successCode === 0) {
+          console.log("회원가입이 정상적으로 처리 되었습니다!");
+        }
+        // 서버에서 실패 응답 받았을 경우
+        else {
+          console.log(response.data.dataHeader.resultMessage);
+        }
+      },
+      (error) => {
+        // 오류가 발생한 경우
+        console.log("signup failed: ", error);
+      }
+    );
+  };
+
   // 로그인 상태 확인 메서드
   const memberCheckLoginStatus = () => {
     // 쿠키에서 accessToken 확인
@@ -106,5 +160,7 @@ export const useMemberStore = defineStore("memberStore", () => {
     memberLogout,
     memberGet,
     memberCheckLoginStatus,
+    memberSignup,
+    memberEmailCheck,
   };
 });
