@@ -74,7 +74,10 @@ const moveWrite = () => {
       <div class="col-lg-10">
         <div class="row align-self-center mb-2">
           <div class="col-md-2 text-start">
-            <button type="button" class="btn btn-outline-primary btn-sm" @click="moveWrite">
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              @click="moveWrite">
               글쓰기
             </button>
           </div>
@@ -86,9 +89,13 @@ const moveWrite = () => {
                   type="text"
                   class="form-control"
                   v-model="param.word"
-                  placeholder="검색어..."
-                />
-                <button class="btn btn-dark" type="button" @click="getArticleList">검색</button>
+                  placeholder="검색어..." />
+                <button
+                  class="btn btn-dark"
+                  type="button"
+                  @click="getArticleList">
+                  검색
+                </button>
               </div>
             </form>
           </div>
@@ -107,16 +114,14 @@ const moveWrite = () => {
             <BoardListItem
               v-for="article in articles"
               :key="article.articleNo"
-              :article="article"
-            ></BoardListItem>
+              :article="article"></BoardListItem>
           </tbody>
         </table>
       </div>
       <VPageNavigation
         :current-page="currentPage"
         :total-page="totalPage"
-        @pageChange="onPageChange"
-      ></VPageNavigation>
+        @pageChange="onPageChange"></VPageNavigation>
     </div>
   </div>
 </template>

@@ -44,7 +44,7 @@ function localAxios() {
     // vue3-cookies를 사용하여 쿠키에서 accessToken 가져오기
 
     // 'this.$cookies'를 사용하여 쿠키에 접근
-    // const accessToken = cookies.get("accessToken");
+    const accessToken = cookies.get("accessToken");
 
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
