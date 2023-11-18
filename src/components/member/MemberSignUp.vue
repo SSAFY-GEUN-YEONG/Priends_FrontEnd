@@ -1,5 +1,129 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/memberStore";
+
+
+const memberStore = useMemberStore();
+const { memberSignup, memberEmailCheck } = memberStore;  // 멤버관련 저장소에서 함수들 사용할 함수들
+const router = useRouter();
+
+const email = ref('');
+const password = ref('');
+const passwordCheck = ref('');
+const nickname = ref('');
+const alarm = ref(false);
+const termsAgreement = ref({
+  overFourteen: false,
+  termsOfService: false,
+  privacyPolicy: false,
+  locationTerms: false
+});
+const allAgreed = ref(false);
+
+// 이메일 입력 비어있는지 확인
+const isEmailEmpty = computed(() => 
+  email.value.trim().length === 0
+);
+
+// 비빌번호가 비어있는지 확인
+const isPasswordEmpty = computed(() => 
+  password.value.trim().length === 0
+);
+
+// 비빌번호 확인이 비어있는지 확인
+const isPasswordCheckEmpty = computed(() => 
+  passwordCheck.value.trim().length === 0
+);
+
+// 비밀번호가 비어 있지 않고 일치하는지 확인
+const isPasswordNotEmptyAndMatch = computed(() => 
+  !isPasswordEmpty.value && !isPasswordCheckEmpty.value && passwordsMatch.value
+);
+
+// 닉네임이 비어있는지 확인
+const isNicknameEmpty = computed(() =>
+  nickname.value.trim().length === 0
+);
+
+// 이메일 유효성 검사
+const isEmailValid  = computed(() => {
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  return emailRegex.test(email.value);
+})
+
+// 필수 약관 동의 했는지 검사
+const allTermsAgreed = computed(() => {
+  return Object.values(termsAgreement.value).every(v => v);
+});
+
+// 입력 폼 다 입력됐는지 여부 및 비밀번호, 비밀번호 확인도 일치했는지 확인
+const isSignupFormValid = computed(() => {
+  return email.value.trim() &&
+    password.value.trim() &&
+    nickname.value.trim() &&
+    allTermsAgreed.value &&
+    passwordsMatch.value;
+})
+
+// 비밀번호와 비밀번호 확인 일치 여부 검사
+const passwordsMatch = computed(() => password.value === passwordCheck.value);
+
+// 약관 전체 동의 버튼 체크 여부에 따른 전체값 바뀌기
+watch(allAgreed, (newValue) => {
+  termsAgreement.value = {
+    overFourteen: newValue,
+    termsOfService: newValue,
+    privacyPolicy: newValue,
+    locationTerms: newValue
+  };
+  alarm.value = newValue; // 동행 알람 서비스 수신 동의도 포함
+});
+
+// 이메일 중복체크 메서드 
+const emailDuplicateCheck = async () => {
+  if (isEmailEmpty.value) {
+    alert("이메일을 입력해주세요.");
+    return;
+  }
+
+  if (!isEmailValid.value) {
+    alert("유효한 이메일 주소를 입력해주세요.");
+    return;
+  }
+
+  const isAvailable = await memberEmailCheck(email.value);
+  if (isAvailable) {
+    alert("사용 가능한 이메일입니다.");
+  }
+  else {
+    alert("이미 사용 중인 이메일입니다.");
+  }
+};
+
+// 회원가입 메서드 
+const signup = async () => {
+  if (!allTermsAgreed.value) {
+    alert("필수 약관에 동의해주세요.");
+    return;
+  }
+
+  if (!passwordsMatch.value) {
+    alert("비밀번호가 일치하지 않습니다.");
+    return;
+  }
+
+  const signupData = {
+    email: email.value,
+    password: password.value,
+    nickname: nickname.value,
+    alarm: alarm.value
+  }
+
+  await memberSignup(signupData);
+  router.push("/"); // 메인 페이지로 이동
+}
+
 </script>
 
 <template>
@@ -8,61 +132,82 @@ import { ref } from "vue";
   >
     <h3 class="my-4">회원가입</h3>
     <p class="ms-2 me-auto mb-0">이메일 *</p>
+    <!-- 이메일 입력 필드 -->
     <div class="form-floating mb-3" style="width: 400px">
       <input
+        v-model="email"
         type="email"
         class="form-control"
         id="floatingInput"
         placeholder="name@example.com"
       />
       <label for="floatingInput">Email address</label>
+      <p v-if="isEmailEmpty" class="text-danger">이메일을 입력해주세요.</p>
+      <p v-else-if="!isEmailValid" class="text-danger">이메일 형식이 아닙니다.</p>
+      <button @click="emailDuplicateCheck">이메일 중복 체크</button>
     </div>
+    
+
     <p class="ms-2 me-auto mb-0">비밀번호 *</p>
+    <!-- 비밀번호 입력 필드 -->
     <div class="form-floating mb-3">
       <input
+        v-model="password"
         style="width: 400px"
         type="password"
         class="form-control"
         id="floatingPassword"
         placeholder="Password"
       />
+      <p v-if="isPasswordEmpty" class="text-danger">비밀번호를 입력해주세요.</p>
       <label for="floatingPassword mb-3">비밀번호 </label>
     </div>
     <p class="ms-2 me-auto mb-0">비밀번호 확인 *</p>
+    <!-- 비밀번호 확인 입력 필드 -->
     <div class="form-floating mb-3">
       <input
+        v-model="passwordCheck"
         style="width: 400px"
         type="password"
         class="form-control"
         id="floatingPasswordCheck"
         placeholder="Password"
       />
-      <label for="floatingPasswordCheck">비밀번호 확인</label>
-    </div>
+    <p v-if="isPasswordCheckEmpty" class="text-danger">비밀번호 확인을 입력해주세요.</p>
+  
+    <p v-if="isPasswordNotEmptyAndMatch" class="text-success">비밀번호가 일치합니다.</p>
+    <p v-else-if="!passwordsMatch && !isPasswordCheckEmpty" class="text-danger">비밀번호가 맞지 않습니다.</p>
+    
+  </div>
     <p class="ms-2 me-auto mb-0">닉네임 *</p>
+    <!-- 닉네임 입력 필드 -->
     <div class="form-floating">
       <input
+        v-model="nickname"
         style="width: 400px"
-        type="password"
+        type="text"
         class="form-control"
         id="floatingPassword"
         placeholder="Password"
       />
+      <p v-if="isNicknameEmpty" class="text-danger">닉네임을 입력해주세요.</p>
       <label for="floatingPassword">닉네임</label>
     </div>
 
+    <!-- 약관 동의 부분 -->
     <div class="py-4" style="width: 400px">
       <div class="form-check d-flex align-items-start">
         <input
+          v-model="allAgreed"
           class="form-check-input"
           type="checkbox"
           value=""
-          id="flexCheckDefault"
+          id="allAgreedCheck"
         />
         <label
           style="font-size: 12px"
           class="text-start form-check-label text-body-secondary ps-2"
-          for="flexCheckDefault"
+          for="allAgreedCheck"
         >
           <strong>전체 약관 동의</strong>
           <p
@@ -83,12 +228,13 @@ import { ref } from "vue";
         >
           <div>
             <input
+              v-model="termsAgreement.overFourteen"
               class="form-check-input"
               type="checkbox"
               value=""
-              id="flexCheckDefault"
+              id="overFourteenCheck"
             />
-            <label class="form-check-label" for="flexCheckDefault">
+            <label class="form-check-label" for="overFourteenCheck">
               [필수] 만 14세 이상입니다.
             </label>
           </div>
@@ -99,12 +245,13 @@ import { ref } from "vue";
         >
           <div>
             <input
+              v-model="termsAgreement.termsOfService"
               class="form-check-input"
               type="checkbox"
               value=""
-              id="flexCheckDefault"
+              id="termsOfServiceCheck"
             />
-            <label class="form-check-label" for="flexCheckDefault">
+            <label class="form-check-label" for="termsOfServiceCheck">
               [필수] 회원가입 및 운영약관 동의
             </label>
           </div>
@@ -118,12 +265,13 @@ import { ref } from "vue";
         >
           <div>
             <input
+              v-model="termsAgreement.privacyPolicy"
               class="form-check-input"
               type="checkbox"
               value=""
-              id="flexCheckDefault"
+              id="privacyPolicyCheck"
             />
-            <label class="form-check-label" for="flexCheckDefault">
+            <label class="form-check-label" for="privacyPolicyCheck">
               [필수] 개인정보 수집 및 이용 동의
             </label>
           </div>
@@ -137,12 +285,13 @@ import { ref } from "vue";
         >
           <div>
             <input
+              v-model="termsAgreement.locationTerms"
               class="form-check-input"
               type="checkbox"
               value=""
-              id="flexCheckDefault"
+              id="locationTermsCheck"
             />
-            <label class="form-check-label" for="flexCheckDefault">
+            <label class="form-check-label" for="locationTermsCheck">
               [필수] 위치 정보 이용약관 동의
             </label>
           </div>
@@ -156,12 +305,13 @@ import { ref } from "vue";
         >
           <div>
             <input
+              v-model="alarm"
               class="form-check-input"
               type="checkbox"
               value=""
-              id="flexCheckDefault"
+              id="alarmCheck"
             />
-            <label class="form-check-label" for="flexCheckDefault">
+            <label class="form-check-label" for="alarmCheck">
               [선택] 동행 알림 서비스 수신 동의
             </label>
           </div>
@@ -171,7 +321,7 @@ import { ref } from "vue";
         </div>
       </div>
     </div>
-    <button type="button" class="btn btn-signup my-1">회원가입</button>
+    <button type="button" class="btn btn-signup my-1" @click="signup" :disabled="!isSignupFormValid">회원가입</button>
   </div>
 </template>
 
