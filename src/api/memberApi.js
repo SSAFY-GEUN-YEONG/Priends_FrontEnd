@@ -5,7 +5,15 @@ const local = localAxios();
 async function memberLoginApi(param, success, fail) {
   console.log("param", param);
   await local.post(`/member/login`, param).then(success).catch(fail);
-  console.log("meberConfirm ok");
+}
+
+async function memberEmailCheckApi(email, success, fail) {
+  await local.get(`member/${email}/check`).then(success).catch(fail);
+}
+
+async function memberSignupApi(param, success, fail) {
+  console.log("param", param);
+  await local.post(`/member/signup`, param).then(success).catch(fail);
 }
 
 async function tokenRegeneration(user, success, fail) {
@@ -21,4 +29,11 @@ async function memberGetApi(success, fail) {
   await local.get(`/member/get`).then(success).catch(fail);
 }
 
-export { memberLoginApi, memberLogoutApi, tokenRegeneration, memberGetApi };
+export {
+  memberLoginApi,
+  memberEmailCheckApi,
+  memberLogoutApi,
+  tokenRegeneration,
+  memberGetApi,
+  memberSignupApi,
+};
