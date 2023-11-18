@@ -1,25 +1,51 @@
-<script setup></script>
+<script setup>
+import { ref, computed, defineProps } from "vue";
+const props = defineProps(["attraction"]);
+
+const truncatedOverview = computed(() => {
+  const MAX_LENGTH = 100;
+  // console.log(props.attraction.overview);
+  if (props.attraction.overview.length <= MAX_LENGTH) {
+    return props.attraction.overview;
+  } else {
+    return `${props.attraction.overview.substring(0, MAX_LENGTH)}...`;
+  }
+});
+</script>
 
 <template>
   <div class="d-flex align-items-center border">
     <div class="flex-shrink-0">
       <img
-        class="object-fit-fill ps-2"
-        src="@/assets/img/field.jpg"
-        style="height: 150px" />
+        class="object-fit-fill ms-2"
+        v-if="attraction.first_image"
+        :src="attraction.first_image"
+        style="height: 150px; width: 220px" />
+
+      <img
+        class="object-fit-fill ms-2 border"
+        v-else
+        src="@/assets/img/defaultImg.png"
+        style="height: 150px; width: 220px" />
     </div>
     <div class="flex-grow-1 m-3">
-      <h5>지앤지 모텔</h5>
+      <h5>{{ attraction.title }}</h5>
       <div>
         <i class="bi bi-geo-alt"></i>
-        대한민국 부산광역시 사하구 감천2동 10-58
+        {{ attraction.addr1 }}
       </div>
       <p class="bg-body-secondary p-2 m-1">
-        부산의 최고 위치에 있는 지앤지 모텔에서 도시의 모든 것을 맛볼 수
-        있습니다. 호텔에서 투숙객들이 쾌적한 환경을 누릴 수 있도록 다양한...
+        {{ truncatedOverview }}
       </p>
       <div class="float-end pt-1">
-        <button class="btn btn-outline-info">자세히 보기</button>
+        <router-link
+          class="text-dark"
+          :to="{
+            name: 'attraction-area-detail',
+            params: { attractionid: attraction.content_id },
+          }">
+          <button class="btn btn-outline-info">자세히 보기</button>
+        </router-link>
       </div>
     </div>
   </div>

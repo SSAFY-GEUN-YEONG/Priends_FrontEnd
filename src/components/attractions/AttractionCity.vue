@@ -7,7 +7,7 @@ import { storeToRefs } from "pinia";
 
 import { getAreaInfo } from "@/api/attractionApi.js";
 const attractionStore = useAttractionStore();
-const { areainfo, cityname } = storeToRefs(attractionStore);
+const { areainfo, cityname, category } = storeToRefs(attractionStore);
 
 // const areainfo = ref({
 //   img: "",
@@ -70,6 +70,11 @@ function getSelectedAttractions() {
       return areainfo.value.natureAttractions;
   }
 }
+
+function setCategory(value) {
+  category.value = value;
+  console.log("category :", category.value);
+}
 </script>
 
 <template>
@@ -87,9 +92,9 @@ function getSelectedAttractions() {
               class="nav-link border border-secondary text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: '서울', category: 'hotel' },
+                params: { areaname: cityname, category: 'hotel' },
               }"
-              @click="() => setCityName('서울')"
+              @click="() => setCategory('hotel')"
               >호텔</router-link
             >
             <!-- <a class="nav-link border border-secondary text-dark" href="#"

@@ -8,14 +8,21 @@ const local = localAxios();
 	local.get(`/attraction/main`, { params: param }).then(success).catch(fail);
   }
 
-// 특정 지역 정보 가져오기
+// 특정 지역 정보 home 가져오기
 function getAreaInfo(param,success, fail) {
+	console.log("area : ", `${param.city} ${param.category}`);
+	local.get(`/attraction/area/${param.city}/home`, { params: param }).then(success).catch(fail);
+}
+
+// 특정 지역 정보 category별 list 가져오기
+function getAreaListByCategory(param,success, fail) {
 	console.log("area : ", `${param.city} ${param.category}`);
 	local.get(`/attraction/area/${param.city}/${param.category}`, { params: param }).then(success).catch(fail);
 }
 
 export { 
 	listArea,
-	getAreaInfo
+	getAreaInfo,
+	getAreaListByCategory
   };
   
