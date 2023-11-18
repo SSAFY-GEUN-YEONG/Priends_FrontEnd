@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import { useMemberStore } from "@/stores/member";
+import { useMemberStore } from "@/stores/memberStore";
 import VueCookies from "vue3-cookies";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
@@ -26,26 +26,8 @@ pinia.use(piniaPluginPersistedstate);
 
 app.use(pinia);
 
-// 라우터 가드에서 호출할 로그인 상태 초기화 함수
-const initializeLoginStatus = () => {
-  const memberStore = useMemberStore();
-  const accessToken = sessionStorage.getItem("accessToken");
-  //   const menuStore = useMenuStore();
-
-  if (accessToken) {
-    memberStore.isLogin = true;
-    // menuStore.changeMenuState();
-    // 필요하다면 여기에서 accessToken을 사용하여 사용자 정보를 가져오는 로직 추가
-  }
-};
-
-router.beforeEach((to, from, next) => {
-  initializeLoginStatus(); // 라우팅 전 로그인 상태 확인
-  next();
-});
-
-// const memberStore = useMemberStore();
-// memberStore.initializeLoginStatus(); // 로그인 상태 초기화
+const memberStore = useMemberStore();
+memberStore.memberCheckLoginStatus(); // 애플리케이션 시작 시 로그인 상태 확인
 
 app.component("font-awesome-icon", FontAwesomeIcon);
 
