@@ -1,7 +1,7 @@
 <script setup>
 import AttractionCityItem from "./item/AttractionCityItem.vue";
 import AttractionRecomandPathItem from "./item/AttractionRecommandPathItem.vue";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onBeforeMount } from "vue";
 import { useAttractionStore } from "@/stores/attractionStore";
 import { storeToRefs } from "pinia";
 
@@ -20,7 +20,7 @@ const param = ref({
   city: cityname.value,
   category: "home",
 });
-onMounted(() => {
+onBeforeMount(() => {
   getAreaInfo1();
 });
 

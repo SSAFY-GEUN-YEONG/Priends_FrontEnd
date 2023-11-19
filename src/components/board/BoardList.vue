@@ -11,9 +11,9 @@ const router = useRouter();
 
 const selectOption = ref([
   { text: "검색조건", value: "" },
-  { text: "글번호", value: "article_no" },
-  { text: "제목", value: "subject" },
-  { text: "작성자아이디", value: "user_id" },
+  { text: "글번호", value: "id" },
+  { text: "제목", value: "title" },
+  { text: "작성자아이디", value: "member_id" },
 ]);
 
 const articles = ref([]);
@@ -25,6 +25,7 @@ const param = ref({
   spp: VITE_ARTICLE_LIST_SIZE,
   key: "",
   word: "",
+  category: "FREE",
 });
 
 onMounted(() => {
@@ -41,9 +42,10 @@ const getArticleList = () => {
   listArticle(
     param.value,
     ({ data }) => {
-      articles.value = data.articles;
-      currentPage.value = data.currentPage;
-      totalPage.value = data.totalPageCount;
+      console.log(data);
+      articles.value = data.dataBody.articles;
+      currentPage.value = data.dataBody.currentPage;
+      totalPage.value = data.dataBody.totalPageCount;
     },
     (error) => {
       console.log(error);
@@ -113,7 +115,7 @@ const moveWrite = () => {
           <tbody>
             <BoardListItem
               v-for="article in articles"
-              :key="article.articleNo"
+              :key="article.id"
               :article="article"></BoardListItem>
           </tbody>
         </table>

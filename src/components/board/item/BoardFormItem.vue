@@ -1,23 +1,27 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { registArticle, getModifyArticle, modifyArticle } from "@/api/board";
 
+import { useMemberStore } from "@/stores/memberStore";
+import { storeToRefs } from "pinia";
+
 const router = useRouter();
 const route = useRoute();
+const memberStore = useMemberStore();
+const { memberInfo } = storeToRefs(memberStore);
 
 const props = defineProps({ type: String });
 
 const isUseId = ref(false);
 
 const article = ref({
-  articleNo: 0,
-  subject: "",
+  title: "",
   content: "",
-  userId: "",
-  userName: "",
-  hit: 0,
-  registerTime: "",
+  id: "",
+  category: "FREE",
+  nickname: memberInfo.value.nickname,
+  member_id: memberInfo.value.id,
 });
 
 if (props.type === "modify") {
@@ -36,15 +40,15 @@ if (props.type === "modify") {
   isUseId.value = true;
 }
 
-const subjectErrMsg = ref("");
+const titleErrMsg = ref("");
 const contentErrMsg = ref("");
 watch(
-  () => article.value.subject,
+  () => article.value.title,
   (value) => {
     let len = value.length;
-    if (len == 0 || len > 30) {
-      subjectErrMsg.value = "제목을 확인해 주세요!!!";
-    } else subjectErrMsg.value = "";
+    if (len == 0 || len > 50) {
+      titleErrMsg.value = "제목을 확인해 주세요!!!";
+    } else titleErrMsg.value = "";
   },
   { immediate: true }
 );
@@ -62,8 +66,8 @@ watch(
 function onSubmit() {
   // event.preventDefault();
 
-  if (subjectErrMsg.value) {
-    alert(subjectErrMsg.value);
+  if (titleErrMsg.value) {
+    alert(titleErrMsg.value);
   } else if (contentErrMsg.value) {
     alert(contentErrMsg.value);
   } else {
@@ -76,10 +80,14 @@ function writeArticle() {
   registArticle(
     article.value,
     (response) => {
-      let msg = "글등록 처리시 문제 발생했습니다.";
-      if (response.status == 201) msg = "글등록이 완료되었습니다.";
-      alert(msg);
-      moveList();
+      if (response.data.dataHeader.successCode === 0) {
+        //글 등록 성공 처리
+        moveList();
+      } else {
+        //글 등록 실패 처리
+        let msg = "글등록 처리시 문제 발생했습니다.";
+        alert(msg);
+      }
     },
     (error) => console.log(error)
   );
@@ -109,29 +117,43 @@ function moveList() {
 <template>
   <form @submit.prevent="onSubmit">
     <div class="mb-3">
-      <label for="userid" class="form-label">작성자 ID : </label>
+      <label for="userid" class="form-label">작성자 : </label>
       <input
         type="text"
         class="form-control"
-        v-model="article.userId"
         :disabled="isUseId"
-        placeholder="작성자ID..."
-      />
+        v-model="memberInfo.nickname"
+        placeholder="작성자..." />
     </div>
     <div class="mb-3">
-      <label for="subject" class="form-label">제목 : </label>
-      <input type="text" class="form-control" v-model="article.subject" placeholder="제목..." />
+      <label for="title" class="form-label">제목 : </label>
+      <input
+        type="text"
+        class="form-control"
+        v-model="article.title"
+        placeholder="제목..." />
     </div>
     <div class="mb-3">
       <label for="content" class="form-label">내용 : </label>
-      <textarea class="form-control" v-model="article.content" rows="10"></textarea>
+      <textarea
+        class="form-control"
+        v-model="article.content"
+        rows="10"></textarea>
     </div>
     <div class="col-auto text-center">
-      <button type="submit" class="btn btn-outline-primary mb-3" v-if="type === 'regist'">
+      <button
+        type="submit"
+        class="btn btn-outline-primary mb-3"
+        v-if="type === 'regist'">
         글작성
       </button>
-      <button type="submit" class="btn btn-outline-success mb-3" v-else>글수정</button>
-      <button type="button" class="btn btn-outline-danger mb-3 ms-1" @click="moveList">
+      <button type="submit" class="btn btn-outline-success mb-3" v-else>
+        글수정
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-danger mb-3 ms-1"
+        @click="moveList">
         목록으로이동...
       </button>
     </div>
