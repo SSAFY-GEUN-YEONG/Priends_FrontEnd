@@ -35,6 +35,12 @@ function setCityName(area) {
   cityname.value = area;
   console.log("cityname" + cityname.value);
 }
+function clickDoEvent(value) {
+  param.value.word = value;
+  console.log("setParamWord", param.value);
+  getListArea();
+  setCityName(value);
+}
 </script>
 
 <template>
@@ -94,7 +100,7 @@ function setCityName(area) {
               <router-link
                 class="text-dark"
                 :to="{ name: 'attraction-area', params: { areaname: '대구' } }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('대구')"
                 >대구</router-link
               >
             </td>
@@ -102,7 +108,7 @@ function setCityName(area) {
               <router-link
                 class="text-dark"
                 :to="{ name: 'attraction-area', params: { areaname: '인천' } }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('인천')"
                 >인천</router-link
               >
             </td>
@@ -110,7 +116,7 @@ function setCityName(area) {
               <router-link
                 class="text-dark"
                 :to="{ name: 'attraction-area', params: { areaname: '광주' } }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('광주')"
                 >광주</router-link
               >
             </td>
@@ -118,7 +124,7 @@ function setCityName(area) {
               <router-link
                 class="text-dark"
                 :to="{ name: 'attraction-area', params: { areaname: '울산' } }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('울산')"
                 >울산</router-link
               >
             </td>
@@ -126,89 +132,36 @@ function setCityName(area) {
               <router-link
                 class="text-dark"
                 :to="{ name: 'attraction-area', params: { areaname: '대전' } }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('대전')"
                 >대전</router-link
               >
             </td>
           </tr>
           <tr>
             <th scope="row" rowspan="2">주요지역</th>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '강원도' },
-                }"
-                @click="() => setCityName('')"
-                >강원도</router-link
-              >
+            <td @click="clickDoEvent('강원도')">
+              <a>강원도</a>
             </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '경기도' },
-                }"
-                @click="() => setCityName('')"
-                >경기도</router-link
-              >
+            <td @click="clickDoEvent('경기도')">
+              <a>경기도</a>
             </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '경상북도' },
-                }"
-                @click="() => setCityName('')"
-                >경상북도</router-link
-              >
+            <td @click="clickDoEvent('경상남도')">
+              <a>경상남도</a>
             </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '전라남도' },
-                }"
-                @click="() => setCityName('')"
-                >전라남도</router-link
-              >
+            <td @click="clickDoEvent('경상북도')">
+              <a>경상북도</a>
             </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '전라북도' },
-                }"
-                @click="() => setCityName('')"
-                >전라북도</router-link
-              >
+            <td @click="clickDoEvent('전라남도')">
+              <a>전라남도</a>
             </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '충청남도' },
-                }"
-                @click="() => setCityName('')"
-                >충청남도</router-link
-              >
+            <td @click="clickDoEvent('전라북도')">
+              <a>전라북도</a>
             </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '충청북도' },
-                }"
-                @click="() => setCityName('')"
-                >충청북도</router-link
-              >
+            <td @click="clickDoEvent('충청남도')">
+              <a>충청남도</a>
+            </td>
+            <td @click="clickDoEvent('충청북도')">
+              <a>충청북도</a>
             </td>
           </tr>
           <tr>
@@ -219,7 +172,7 @@ function setCityName(area) {
                   name: 'attraction-area',
                   params: { areaname: '가평' },
                 }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('가평')"
                 >가평</router-link
               >
             </td>
@@ -230,7 +183,7 @@ function setCityName(area) {
                   name: 'attraction-area',
                   params: { areaname: '강릉' },
                 }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('강릉')"
                 >강릉</router-link
               >
             </td>
@@ -241,7 +194,7 @@ function setCityName(area) {
                   name: 'attraction-area',
                   params: { areaname: '경주' },
                 }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('경주')"
                 >경주</router-link
               >
             </td>
@@ -252,7 +205,7 @@ function setCityName(area) {
                   name: 'attraction-area',
                   params: { areaname: '목포' },
                 }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('목포')"
                 >목포</router-link
               >
             </td>
@@ -263,7 +216,7 @@ function setCityName(area) {
                   name: 'attraction-area',
                   params: { areaname: '속초' },
                 }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('속초')"
                 >속초</router-link
               >
             </td>
@@ -274,7 +227,7 @@ function setCityName(area) {
                   name: 'attraction-area',
                   params: { areaname: '양양' },
                 }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('양양')"
                 >양양</router-link
               >
             </td>
@@ -285,7 +238,7 @@ function setCityName(area) {
                   name: 'attraction-area',
                   params: { areaname: '여수' },
                 }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('여수')"
                 >여수</router-link
               >
             </td>
@@ -296,7 +249,7 @@ function setCityName(area) {
                   name: 'attraction-area',
                   params: { areaname: '전주' },
                 }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('전주')"
                 >전주</router-link
               >
             </td>
@@ -307,7 +260,7 @@ function setCityName(area) {
                   name: 'attraction-area',
                   params: { areaname: '춘천' },
                 }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('춘천')"
                 >춘천</router-link
               >
             </td>
@@ -318,7 +271,7 @@ function setCityName(area) {
                   name: 'attraction-area',
                   params: { areaname: '포항' },
                 }"
-                @click="() => setCityName('')"
+                @click="() => setCityName('포항')"
                 >포항</router-link
               >
             </td>
