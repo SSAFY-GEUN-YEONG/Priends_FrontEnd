@@ -33,22 +33,26 @@ const router = createRouter({
             {
               path: "alarm",
               name: "mypage-alarm",
-              component: () => import("@/components/member/mypage/MyPageAlarm.vue"),
+              component: () =>
+                import("@/components/member/mypage/MyPageAlarm.vue"),
             },
             {
               path: "myboard",
               name: "mypage-myboard",
-              component: () => import("@/components/member/mypage/MyPageBoard.vue"),
+              component: () =>
+                import("@/components/member/mypage/MyPageBoard.vue"),
             },
             {
               path: "mypath",
               name: "mypage-mypath",
-              component: () => import("@/components/member/mypage/MyPagePath.vue"),
+              component: () =>
+                import("@/components/member/mypage/MyPagePath.vue"),
             },
             {
               path: "info",
               name: "mypage-info",
-              component: () => import("@/components/member/mypage/MyPageInfo.vue"),
+              component: () =>
+                import("@/components/member/mypage/MyPageInfo.vue"),
             },
           ],
         },
@@ -131,9 +135,14 @@ const router = createRouter({
           component: () => import("@/components/path/PathList.vue"),
         },
         {
-          path: "make",
-          name: "path-make",
-          component: () => import("@/components/path/PathMake.vue"),
+          path: "make/step1",
+          name: "make-step1",
+          component: () => import("@/components/path/PathMakeStep1.vue"),
+        },
+        {
+          path: "make/step2",
+          name: "make-step2",
+          component: () => import("@/components/path/PathMakeStep2.vue"),
         },
       ],
     },

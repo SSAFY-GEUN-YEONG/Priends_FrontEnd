@@ -1,5 +1,5 @@
 <script setup>
-import { watch } from 'vue';
+import { watch } from "vue";
 import { useRouter } from "vue-router";
 import { useMenuStore } from "@/stores/menuStore";
 import { storeToRefs } from "pinia";
@@ -17,7 +17,7 @@ const { changeMenuState } = menuStore;
 watch(isLogin, (newValue, oldValue) => {
   // 로그인 상태가 변경될 때 메뉴 상태를 업데이트
   if (newValue !== oldValue) {
-    changeMenuState();  
+    changeMenuState();
   }
 });
 
@@ -61,7 +61,13 @@ const logout = async () => {
               여행계획
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">여행계획 세우기</a></li>
+              <li>
+                <router-link
+                  :to="{ name: 'make-step1' }"
+                  class="nav-link px-1 mx-0 text-start"
+                  >여행계획 세우기</router-link
+                >
+              </li>
               <li>
                 <router-link
                   :to="{ name: 'path' }"
