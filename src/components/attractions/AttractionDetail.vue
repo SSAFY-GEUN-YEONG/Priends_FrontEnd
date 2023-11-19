@@ -1,57 +1,79 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useAttractionStore } from '@/stores/attractionStore';
+import VKakaoMap from '@/components/common/VKakaoMap.vue';
+import { storeToRefs } from 'pinia';
+
+
+const route = useRoute();
+const attractionStore = useAttractionStore();
+
+const { attractionDetail } = storeToRefs(attractionStore);  // 관광지 관련 저장소에 저장되어 있는 변수
+const { getAttractionDetail } = attractionStore;  // 관광지 관련 저장소에 저장되어 있는 함수
+
+
+// 맵에 전달할 데이터 집어넣기
+const selectedStation = ref({
+  lat: 0, // 위도
+  lng: 0,  // 경도
+  title: null,
+  addr1: null,
+  first_image: null
+});
+
+onMounted(() => {
+  const attractionId = route.params.attractionid; // 라우터에서 해당 param값 받아오기 (url)
+  getAttractionDetail(attractionId);  // attractionStore에서 가져온 해당 메서드 호출
+});
+
+
+watch(attractionDetail, (newDetail) => {
+  if (newDetail) {
+    selectedStation.value.lat = newDetail.latitude;
+    selectedStation.value.lng = newDetail.longitude;
+    selectedStation.value.title = newDetail.title;
+    selectedStation.value.addr1 = newDetail.addr1;
+    selectedStation.value.first_image = newDetail.first_image;
+  }
+});
+
+</script>
 
 <template>
   <div class="screen">
-    <div class="detail-info">
+    <!-- attractionDetail이 있는 경우에 렌더링 -->
+    <div class="detail-info" v-if="attractionDetail">
       <div class="detail-category">여행지 > 부산 > 자연</div>
       <div class="detail-info-title">
-        <h3>해운대</h3>
+        <h3>{{ attractionDetail.title }}</h3>
         <div class="icon-text">
           <div>
             <font-awesome-icon :icon="['fas', 'location-dot']" />
-            <div>대한민국 부산광역시 해운대구 중1동 1415</div>
+            <div>{{ attractionDetail.addr1 }}</div>
           </div>
           <div>
             <font-awesome-icon :icon="['far', 'eye']" style="height: 15px" />
-            <div>874</div>
+            <div>874 (조회수 받아오는거 현영이랑 얘기해봐야함)</div>
           </div>
         </div>
       </div>
       <div class="detail-content flex-column align-items-center">
         <div class="">
           <img
-            src="@/assets/img/building.jpg"
+            :src="attractionDetail.first_image"
             class="px-4"
             alt="..."
             style="width: 500px"
           />
-          <img
+          <!-- <img
             src="@/assets/img/building.jpg"
             class="px-4"
             alt="..."
             style="width: 500px"
-          />
+          /> -->
         </div>
-        <div class="mt-5 px-4">
-          * 부산 대표 해수욕장, 해운대해수욕장 부산의 대표 해수욕장인
-          해운대해수욕장. 백사장의 길이 1.5km, 너비 30~50m, 평균수심 1m, 면적
-          58,400㎥의 규모로 넓은 백사장과 아름다운 해안선을 자랑하고 있으며 얕은
-          수심과 잔잔한 물결로 해수욕장의 최적 조건을 갖추고 있다.'부산' 하면
-          제일 먼저 떠올리는 곳이 해운대 해수욕장이라고 할 만큼 부산을 대표하는
-          명소이며, 해마다 여름철 피서객을 가늠하는 척도로 이용될 만큼 국내 최대
-          인파가 몰리는 곳이기도 하다. 특히, 해안선 주변에 크고 작은 빌딩들과
-          고급 호텔들이 우뚝 솟아있어 현대적이고 세련된 분위기의 해수욕장으로
-          유명하기 때문에 여름 휴가철뿐만 아니라 사시사철 젊은 열기로 붐비고
-          해외 관광객들에게도 잘 알려져 있어 외국인들이 많이 찾는 곳이다. *
-          해운대해수욕장의 다양한 축제와 즐길거리 해운대해수욕장에서는 매년 정월
-          대보름날의 달맞이 축제를 진행하고 있다. 또한, 매년 겨울 주최하고 있는
-          북극곰수영대회는 이미 겨울철 대표 축제로 자리잡았다. 이외에도 모래
-          작품전, 부산 바다 축제 등 각종 크고 작은 행사들이 열리고 있다. 또한,
-          해수욕장 주변에 동백섬, 오륙도, 아쿠아리움 , 요트경기장, 벡스코
-          달맞이고개, 드라이브코스 등 볼거리가 많으며, 국내 1급 해수욕장답게
-          주변에는 일급 호텔을 비롯한 숙박, 오락시설 및 유흥 시설들이 잘
-          정비되어 있어 편안한 휴식을 즐길 수 있다.
-        </div>
+        <div class="mt-5 px-4">{{ attractionDetail.overview }}</div>
       </div>
       <div class="mt-4 mx-4 p-3 d-flex flex-column border border-dark-subtle">
         <div class="d-flex flex-column mt-3">
@@ -88,9 +110,16 @@
           </div>
         </div>
       </div>
-      <div class="mx-4 p-3 d-flex flex-column border border-dark-subtle">
-        map
+      <!-- <div class="mx-4 p-3 d-flex flex-column border border-dark-subtle"> -->
+      <div class="mx-4 d-flex flex-column border border-dark-subtle">
+        <!--맵 부분 -->
+        <!-- 여기에 VKakaoMap 컴포넌트 추가 -->
+        <!-- <div class="map-container"> -->
+          <VKakaoMap :selectStation="selectedStation"></VKakaoMap>
+        <!-- </div> -->
       </div>
+
+      
     </div>
   </div>
 </template>
@@ -156,4 +185,5 @@
 .icon-text > * {
   margin-left: 5px;
 }
+
 </style>

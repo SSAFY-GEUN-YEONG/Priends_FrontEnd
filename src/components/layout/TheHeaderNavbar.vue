@@ -1,11 +1,13 @@
 <script setup>
 import { watch } from 'vue';
+import { useRouter } from "vue-router";
 import { useMenuStore } from "@/stores/menuStore";
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/memberStore";
 
 const menuStore = useMenuStore();
 const memberStore = useMemberStore();
+const router = useRouter();
 const { isLogin } = storeToRefs(memberStore);
 
 const { memberLogout } = memberStore;
@@ -21,6 +23,7 @@ watch(isLogin, (newValue, oldValue) => {
 
 const logout = async () => {
   await memberLogout(); // 로그아웃 처리
+  router.push("/");
 };
 </script>
 
