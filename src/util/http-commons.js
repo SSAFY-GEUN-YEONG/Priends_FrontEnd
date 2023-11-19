@@ -2,13 +2,6 @@ import axios from "axios";
 import { useCookies } from "vue3-cookies";
 import { httpStatusCode } from "./http-status";
 
-export default {
-  setup() {
-    const { cookies } = useCookies();
-    // 쿠키 사용
-  },
-};
-
 const { VITE_VUE_API_URL, VITE_ELECTRIC_CHARGING_STATION_URL } = import.meta.env;
 
 // station vue api axios instance

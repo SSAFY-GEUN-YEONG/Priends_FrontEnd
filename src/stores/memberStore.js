@@ -73,8 +73,6 @@ export const useMemberStore = defineStore("memberStore", () => {
         accessToken.value = null; // accessToken 제거
       }
     );
-    // 여기에 필요한 로그아웃 로직 추가 (API 호출 및 라우터 변경 해주면 된다)
-    router.push("/"); // 메인 페이지로 가기
   };
 
   const memberGet = async () => {
