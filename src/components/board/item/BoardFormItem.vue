@@ -11,7 +11,7 @@ const route = useRoute();
 const memberStore = useMemberStore();
 const { memberInfo } = storeToRefs(memberStore);
 
-const props = defineProps({ type: String });
+const props = defineProps({ type: String, category: String });
 
 const isUseId = ref(false);
 
@@ -19,19 +19,20 @@ const article = ref({
   title: "",
   content: "",
   id: "",
-  category: "FREE",
+  category: props.category,
   nickname: memberInfo.value.nickname,
   member_id: memberInfo.value.id,
 });
 
 if (props.type === "modify") {
-  let { articleno } = route.params;
-  console.log(articleno + "번글 얻어와서 수정할거야");
+  let { id } = route.params;
+  console.log(id + "번글 얻어와서 수정할거야");
   getModifyArticle(
-    articleno,
+    id,
     ({ data }) => {
-      article.value = data;
-      isUseId.value = true;
+      console.log("modify data", data);
+      article.value = data.dataBody;
+      // isUseId.value = true;
     },
     (error) => {
       console.log(error);
@@ -94,16 +95,18 @@ function writeArticle() {
 }
 
 function updateArticle() {
-  console.log(article.value.articleNo + "번글 수정하자!!", article.value);
+  console.log(article.value.id + "번글 수정하자!!", article.value);
   modifyArticle(
     article.value,
     (response) => {
-      let msg = "글수정 처리시 문제 발생했습니다.";
-      if (response.status == 200) msg = "글정보 수정이 완료되었습니다.";
-      alert(msg);
-      moveList();
-      // router.push({ name: "article-view" });
-      // router.push(`/board/view/${article.value.articleNo}`);
+      if (response.data.dataHeader.successCode === 0) {
+        //글 수정 성공 처리
+        moveList();
+      } else {
+        //글 수정 실패 처리
+        let msg = "글수정 처리시 문제 발생했습니다.";
+        alert(msg);
+      }
     },
     (error) => console.log(error)
   );

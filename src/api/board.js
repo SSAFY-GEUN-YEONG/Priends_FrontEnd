@@ -8,7 +8,7 @@ function listArticle(param, success, fail) {
 }
 
 function detailArticle(id, success, fail) {
-  local.get(`/board/${id}`).then(success).catch(fail);
+  local.get(`/board/view/${id}`).then(success).catch(fail);
 }
 
 function registArticle(article, success, fail) {
@@ -21,11 +21,11 @@ function getModifyArticle(id, success, fail) {
 }
 
 function modifyArticle(article, success, fail) {
-  local.put(`/board`, JSON.stringify(article)).then(success).catch(fail);
+  local.put(`/board/modify`, JSON.stringify(article)).then(success).catch(fail);
 }
 
 function deleteArticle(id, success, fail) {
-  local.delete(`/board/${id}`).then(success).catch(fail);
+  local.put(`/board/delete/${id}`).then(success).catch(fail);
 }
 
 export {

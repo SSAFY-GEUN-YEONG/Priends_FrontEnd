@@ -13,7 +13,7 @@ const selectOption = ref([
   { text: "검색조건", value: "" },
   { text: "글번호", value: "id" },
   { text: "제목", value: "title" },
-  { text: "작성자아이디", value: "member_id" },
+  { text: "작성자", value: "nickname" },
 ]);
 
 const articles = ref([]);

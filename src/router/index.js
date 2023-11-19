@@ -134,6 +134,11 @@ const router = createRouter({
           name: "path-list",
           component: () => import("@/components/path/PathList.vue"),
         },
+        {
+          path: "make",
+          name: "path-make",
+          component: () => import("@/components/path/PathMake.vue"),
+        },
       ],
     },
   ],

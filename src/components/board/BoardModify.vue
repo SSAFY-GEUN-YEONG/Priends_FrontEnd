@@ -11,7 +11,7 @@ import BoardFormItem from "./item/BoardFormItem.vue";
         </h2>
       </div>
       <div class="col-lg-10 text-start">
-        <BoardFormItem type="modify" />
+        <BoardFormItem type="modify" category="FREE" />
       </div>
     </div>
   </div>
