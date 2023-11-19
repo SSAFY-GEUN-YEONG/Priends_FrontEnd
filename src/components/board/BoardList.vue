@@ -11,9 +11,9 @@ const router = useRouter();
 
 const selectOption = ref([
   { text: "검색조건", value: "" },
-  { text: "글번호", value: "article_no" },
-  { text: "제목", value: "subject" },
-  { text: "작성자아이디", value: "user_id" },
+  { text: "글번호", value: "id" },
+  { text: "제목", value: "title" },
+  { text: "작성자아이디", value: "member_id" },
 ]);
 
 const articles = ref([]);
@@ -25,6 +25,7 @@ const param = ref({
   spp: VITE_ARTICLE_LIST_SIZE,
   key: "",
   word: "",
+  category: "FREE",
 });
 
 onMounted(() => {
@@ -41,9 +42,10 @@ const getArticleList = () => {
   listArticle(
     param.value,
     ({ data }) => {
-      articles.value = data.articles;
-      currentPage.value = data.currentPage;
-      totalPage.value = data.totalPageCount;
+      console.log(data);
+      articles.value = data.dataBody.articles;
+      currentPage.value = data.dataBody.currentPage;
+      totalPage.value = data.dataBody.totalPageCount;
     },
     (error) => {
       console.log(error);
@@ -74,7 +76,10 @@ const moveWrite = () => {
       <div class="col-lg-10">
         <div class="row align-self-center mb-2">
           <div class="col-md-2 text-start">
-            <button type="button" class="btn btn-outline-primary btn-sm" @click="moveWrite">
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              @click="moveWrite">
               글쓰기
             </button>
           </div>
@@ -86,9 +91,13 @@ const moveWrite = () => {
                   type="text"
                   class="form-control"
                   v-model="param.word"
-                  placeholder="검색어..."
-                />
-                <button class="btn btn-dark" type="button" @click="getArticleList">검색</button>
+                  placeholder="검색어..." />
+                <button
+                  class="btn btn-dark"
+                  type="button"
+                  @click="getArticleList">
+                  검색
+                </button>
               </div>
             </form>
           </div>
@@ -106,17 +115,15 @@ const moveWrite = () => {
           <tbody>
             <BoardListItem
               v-for="article in articles"
-              :key="article.articleNo"
-              :article="article"
-            ></BoardListItem>
+              :key="article.id"
+              :article="article"></BoardListItem>
           </tbody>
         </table>
       </div>
       <VPageNavigation
         :current-page="currentPage"
         :total-page="totalPage"
-        @pageChange="onPageChange"
-      ></VPageNavigation>
+        @pageChange="onPageChange"></VPageNavigation>
     </div>
   </div>
 </template>

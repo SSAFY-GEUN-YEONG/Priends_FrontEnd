@@ -1,46 +1,152 @@
 <script setup>
 import AttractionListItem from "./item/AttractionListItem.vue";
+
+import { ref, watch, onMounted } from "vue";
+import { useAttractionStore } from "@/stores/attractionStore";
+import { storeToRefs } from "pinia";
+import { getAreaListByCategory } from "@/api/attractionApi.js";
+
+const attractionStore = useAttractionStore();
+const { cityname, category, attractionList } = storeToRefs(attractionStore);
+const param = ref({
+  city: cityname.value,
+  category: category.value,
+});
+
+onMounted(() => {
+  ListByCategory();
+});
+
+const ListByCategory = () => {
+  console.log("카테고리별 리스트 얻어오자!!!", param.value);
+  getAreaListByCategory(
+    param.value,
+    ({ data }) => {
+      console.log(data.dataBody);
+      attractionList.value = data.dataBody;
+      console.log(attractionList.value);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+watch(
+  () => category.value,
+  () => {
+    ListByCategory();
+  }
+);
+
+function setCategory(value) {
+  const newCategory = value;
+  category.value = newCategory;
+  console.log("category :", category.value);
+  param.value.category = category.value;
+  console.log(param.value.category);
+}
 </script>
 
 <template>
   <div class="d-flex flex-column align-items-center">
     <div class=" " style="max-width: 1092px; width: 100%">
-      <div class="mb-3">여행지 > 부산 > 음식점</div>
-      <h3>부산</h3>
+      <div class="mb-3">여행지 > {{ cityname }} > 음식점</div>
+      <h3>{{ cityname }}</h3>
       <div class="pt-1">
         <ul class="nav nav-tabs nav-fill">
           <li class="nav-item">
-            <a class="nav-link text-dark active" href="#">홈</a>
+            <router-link
+              class="nav-link border border-secondary text-dark"
+              :to="{
+                name: 'attraction-area',
+                params: { areaname: cityname },
+              }"
+              @click="() => setCategory('')"
+              >홈</router-link
+            >
+            <!-- <a class="nav-link text-dark active" href="#">홈</a> -->
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
-              >호텔</a
+            <router-link
+              class="nav-link border border-secondary text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: cityname, category: 'hotel' },
+              }"
+              @click="() => setCategory('hotel')"
+              >호텔</router-link
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
+            <router-link
+              class="nav-link border border-secondary text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: cityname, category: 'culture' },
+              }"
+              @click="() => setCategory('culture')"
+              >문화생활</router-link
+            >
+            <!-- <a class="nav-link border border-secondary text-dark" href="#"
               >문화생활</a
-            >
+            > -->
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
+            <router-link
+              class="nav-link border border-secondary text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: cityname, category: 'restaurant' },
+              }"
+              @click="() => setCategory('restaurant')"
+              >음식점</router-link
+            >
+            <!-- <a class="nav-link border border-secondary text-dark" href="#"
               >음식점</a
-            >
+            > -->
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
+            <router-link
+              class="nav-link border border-secondary text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: cityname, category: 'market' },
+              }"
+              @click="() => setCategory('market')"
+              >마켓</router-link
+            >
+            <!-- <a class="nav-link border border-secondary text-dark" href="#"
               >마켓</a
-            >
+            > -->
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
+            <router-link
+              class="nav-link border border-secondary text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: cityname, category: 'activity' },
+              }"
+              @click="() => setCategory('activity')"
+              >액티비티</router-link
+            >
+            <!-- <a class="nav-link border border-secondary text-dark" href="#"
               >액티비티</a
-            >
+            > -->
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
-              >자연</a
+            <router-link
+              class="nav-link border border-secondary text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: cityname, category: 'nature' },
+              }"
+              @click="() => setCategory('nature')"
+              >자연</router-link
             >
+            <!-- <a class="nav-link border border-secondary text-dark" href="#"
+              >자연</a
+            > -->
           </li>
         </ul>
       </div>
@@ -60,12 +166,10 @@ import AttractionListItem from "./item/AttractionListItem.vue";
     </div>
 
     <div class="mb-5" style="max-width: 1092px; width: 100%">
-      <AttractionListItem />
-      <AttractionListItem />
-      <AttractionListItem />
-      <AttractionListItem />
-      <AttractionListItem />
-      <AttractionListItem />
+      <AttractionListItem
+        v-for="item in attractionList"
+        :key="item.content_id"
+        :attraction="item" />
     </div>
   </div>
 </template>

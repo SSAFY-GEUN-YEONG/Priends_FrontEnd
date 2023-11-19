@@ -2,9 +2,21 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import { getAttractionDetailApi } from "@/api/attractionApi";
 
+
 export const useAttractionStore = defineStore("attractionStore", () => {
+  const cityname = ref("");
+  const category = ref("");
   const attractionDetail = ref(null);
 
+  const areainfo = ref({
+    img: "",
+    natureAttractions: [],
+    restaurantAttractions: [],
+    cultureAttractions: [],
+  });
+
+  const attractionList = ref([]);
+  
   const getAttractionDetail = async (attractionId) => {
     await getAttractionDetailApi(
       attractionId,
@@ -24,9 +36,13 @@ export const useAttractionStore = defineStore("attractionStore", () => {
       }
     );
   };
-
+  
   return {
+    cityname,
+    category,
+    areainfo,
     attractionDetail,
-    getAttractionDetail,
+    attractionList,
+    getAttractionDetail
   };
 });

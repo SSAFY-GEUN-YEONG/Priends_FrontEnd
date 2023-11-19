@@ -27,7 +27,8 @@ export const useMemberStore = defineStore("memberStore", () => {
           // 로그인 성공 처리
           isLogin.value = true; // 로그인 상태 업데이트
           accessToken.value = response.data.dataBody.token.accessToken;
-
+          memberInfo.value = response.data.dataBody.memberInfo;
+          console.log("login member info : ", memberInfo.value);
           const menuStore = useMenuStore(); // 메뉴 스토어 인스턴스 가져오기
           menuStore.changeMenuState(); // 메뉴 상태 변경
           console.log(response.data.dataBody);
@@ -75,9 +76,11 @@ export const useMemberStore = defineStore("memberStore", () => {
   };
 
   const memberGet = async () => {
+    console.log("sss");
     await memberGetApi(
       (response) => {
         memberInfo.value = response.data.dataBody;
+        console.log("memberinfo ", memberInfo);
       },
       (error) => {
         // 오류가 발생한 경우
@@ -141,6 +144,7 @@ export const useMemberStore = defineStore("memberStore", () => {
     if (accessTokenFromCookie) {
       isLogin.value = true;
       accessToken.value = accessTokenFromCookie;
+      console.log(accessTokenFromCookie);
     } else {
       isLogin.value = false;
     }

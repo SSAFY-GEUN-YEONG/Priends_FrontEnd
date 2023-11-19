@@ -71,7 +71,7 @@ const router = createRouter({
           component: () => import("@/components/board/BoardList.vue"),
         },
         {
-          path: "view/:articleno",
+          path: "view/:id",
           name: "article-view",
           component: () => import("@/components/board/BoardDetail.vue"),
         },
@@ -81,7 +81,7 @@ const router = createRouter({
           component: () => import("@/components/board/BoardWrite.vue"),
         },
         {
-          path: "modify/:articleno",
+          path: "modify/:id",
           name: "article-modify",
           component: () => import("@/components/board/BoardModify.vue"),
         },
@@ -96,17 +96,26 @@ const router = createRouter({
         {
           path: "main",
           name: "attraction-main",
-          component: () => import("@/components/attractions/AttractionMain.vue"),
+          component: () =>
+            import("@/components/attractions/AttractionMain.vue"),
         },
         {
-          path: "area/:areaname",
+          path: "area/:areaname/home",
           name: "attraction-area",
-          component: () => import("@/components/attractions/AttractionCity.vue"),
+          component: () =>
+            import("@/components/attractions/AttractionCity.vue"),
+        },
+        {
+          path: "area/:areaname/:category",
+          name: "attraction-area-category",
+          component: () =>
+            import("@/components/attractions/AttractionList.vue"),
         },
         {
           path: "area/detail/:attractionid",
           name: "attraction-area-detail",
-          component: () => import("@/components/attractions/AttractionDetail.vue"),
+          component: () =>
+            import("@/components/attractions/AttractionDetail.vue"),
         },
       ],
     },

@@ -1,17 +1,19 @@
 <script setup>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faUser, faHeart, faEye } from "@fortawesome/free-regular-svg-icons";
+
+const props = defineProps(["attraction"]);
 </script>
 
 <template>
   <div class="path-list-item">
-    <img class="path-list-img" src="@/assets/img/building.jpg" />
+    <img class="path-list-img" :src="attraction.first_image" />
     <div class="content">
-      <h5>어쩌구 야경</h5>
+      <h5>{{ attraction.title }}</h5>
 
       <div class="icon-text">
         <font-awesome-icon :icon="['far', 'eye']" style="height: 15px" />
-        <div>898</div>
+        <div>{{ attraction.readcount }}</div>
       </div>
     </div>
   </div>
@@ -22,14 +24,13 @@ import { faUser, faHeart, faEye } from "@fortawesome/free-regular-svg-icons";
   display: inline-block;
   flex-direction: column;
   width: 260px;
-  height: 260px;
   border: 1px solid #696969;
   margin: 30px;
 }
 
 .path-list-img {
   width: 260px;
-  height: 182px;
+  height: 260px;
 }
 
 .content {
