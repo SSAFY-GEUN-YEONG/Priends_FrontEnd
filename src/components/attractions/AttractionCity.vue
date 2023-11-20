@@ -5,6 +5,7 @@ import { ref, watch, onBeforeMount } from "vue";
 import { useAttractionStore } from "@/stores/attractionStore";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
+import VKakaoMap from "@/components/common/VKakaoMap.vue";
 
 import { getAreaInfo } from "@/api/attractionApi.js";
 const attractionStore = useAttractionStore();
@@ -55,6 +56,7 @@ const getAreaInfo1 = async () => {
 
 const selectedCategory = ref("");
 const selectedAttractions = ref(() => getSelectedAttractions());
+// const selectedAttractions = ref([]);
 
 function selectCategory(category) {
   selectedCategory.value = category;
@@ -64,18 +66,25 @@ watch(
   () => {
     selectedAttractions.value = getSelectedAttractions();
   }
+  // () => {
+  //   getSelectedAttractions();
+  // }
 );
 
 function getSelectedAttractions() {
   console.log("getSelectedAttractions() : " + selectedCategory.value);
   switch (selectedCategory.value) {
     case "nature":
+      // selectedAttractions.value = areainfo.value.natureAttractions;
       return areainfo.value.natureAttractions;
     case "restaurant":
+      // selectedAttractions.value = areainfo.value.restaurantAttractions;
       return areainfo.value.restaurantAttractions;
     case "culture":
+      // selectedAttractions.value = areainfo.value.cultureAttractions;
       return areainfo.value.cultureAttractions;
     default:
+      // selectedAttractions.value = areainfo.value.natureAttractions;
       return areainfo.value.natureAttractions;
   }
 }
@@ -172,7 +181,7 @@ function setCategory(value) {
       </div>
       <div class="d-flex flex-row">
         <img :src="areainfo.img" style="max-height: 362px" />
-        <div class="border">map</div>
+        <VKakaoMap :attractions="selectedAttractions"></VKakaoMap>
       </div>
     </div>
 

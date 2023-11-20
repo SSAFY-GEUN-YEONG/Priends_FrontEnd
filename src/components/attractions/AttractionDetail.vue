@@ -121,7 +121,7 @@ watch(attractionDetail, (newDetail) => {
         <!--맵 부분 -->
         <!-- 여기에 VKakaoMap 컴포넌트 추가 -->
         <!-- <div class="map-container"> -->
-        <VKakaoMap :selectStation="selectedStation"></VKakaoMap>
+        <VKakaoMap :selectStation="selectedStation" style="height: 700px;"></VKakaoMap>
         <!-- </div> -->
       </div>
     </div>
