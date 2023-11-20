@@ -1,12 +1,13 @@
 <script setup>
-import { ref, onMounted } from "vue";
-
+import { ref, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
 import { listArea } from "@/api/attractionApi.js";
 import { useAttractionStore } from "@/stores/attractionStore";
 import { storeToRefs } from "pinia";
 
 const attractionStore = useAttractionStore();
 const { cityname } = storeToRefs(attractionStore);
+const route = useRoute();
 
 const areas = ref([]);
 const param = ref({
@@ -14,8 +15,16 @@ const param = ref({
 });
 
 onMounted(() => {
-  getListArea();
+  // console.log(route.query);
+  if (route.query) {
+    param.value.word = route.query.areaname;
+    getListArea();
+  } 
+  else {
+    getListArea();
+  }
 });
+
 
 const getListArea = () => {
   console.log("서버에서 시도 목록 얻어오자!!!", param.value);
