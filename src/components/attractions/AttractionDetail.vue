@@ -1,32 +1,29 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { useAttractionStore } from '@/stores/attractionStore';
-import VKakaoMap from '@/components/common/VKakaoMap.vue';
-import { storeToRefs } from 'pinia';
-
+import { ref, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
+import { useAttractionStore } from "@/stores/attractionStore";
+import VKakaoMap from "@/components/common/VKakaoMap.vue";
+import { storeToRefs } from "pinia";
 
 const route = useRoute();
 const attractionStore = useAttractionStore();
 
-const { attractionDetail } = storeToRefs(attractionStore);  // 관광지 관련 저장소에 저장되어 있는 변수
-const { getAttractionDetail } = attractionStore;  // 관광지 관련 저장소에 저장되어 있는 함수
-
+const { attractionDetail } = storeToRefs(attractionStore); // 관광지 관련 저장소에 저장되어 있는 변수
+const { getAttractionDetail } = attractionStore; // 관광지 관련 저장소에 저장되어 있는 함수
 
 // 맵에 전달할 데이터 집어넣기
 const selectedStation = ref({
   lat: 0, // 위도
-  lng: 0,  // 경도
+  lng: 0, // 경도
   title: null,
   addr1: null,
-  first_image: null
+  first_image: null,
 });
 
 onMounted(() => {
   const attractionId = route.params.attractionid; // 라우터에서 해당 param값 받아오기 (url)
-  getAttractionDetail(attractionId);  // attractionStore에서 가져온 해당 메서드 호출
+  getAttractionDetail(attractionId); // attractionStore에서 가져온 해당 메서드 호출
 });
-
 
 watch(attractionDetail, (newDetail) => {
   if (newDetail) {
@@ -37,7 +34,6 @@ watch(attractionDetail, (newDetail) => {
     selectedStation.value.first_image = newDetail.first_image;
   }
 });
-
 </script>
 
 <template>
@@ -54,14 +50,24 @@ watch(attractionDetail, (newDetail) => {
           </div>
           <div>
             <font-awesome-icon :icon="['far', 'eye']" style="height: 15px" />
-            <div>874 (조회수 받아오는거 현영이랑 얘기해봐야함)</div>
+            <div>
+              {{ attractionDetail.readcount }}
+            </div>
           </div>
         </div>
       </div>
       <div class="detail-content flex-column align-items-center">
         <div class="">
           <img
+            v-if="attractionDetail.first_image"
             :src="attractionDetail.first_image"
+            class="px-4"
+            alt="..."
+            style="width: 500px"
+          />
+          <img
+            v-else
+            src="@/assets/img/defaultImg.png"
             class="px-4"
             alt="..."
             style="width: 500px"
@@ -78,7 +84,7 @@ watch(attractionDetail, (newDetail) => {
       <div class="mt-4 mx-4 p-3 d-flex flex-column border border-dark-subtle">
         <div class="d-flex flex-column mt-3">
           <div class="mx-4 align-self-start">
-            <p>전화번호 010-7777-8888</p>
+            <p>전화번호 {{ attractionDetail.tel }}</p>
           </div>
           <div class="mx-4 align-self-start">
             <p>웹사이트 www.sssss.com</p>
@@ -115,11 +121,9 @@ watch(attractionDetail, (newDetail) => {
         <!--맵 부분 -->
         <!-- 여기에 VKakaoMap 컴포넌트 추가 -->
         <!-- <div class="map-container"> -->
-          <VKakaoMap :selectStation="selectedStation"></VKakaoMap>
+        <VKakaoMap :selectStation="selectedStation"></VKakaoMap>
         <!-- </div> -->
       </div>
-
-      
     </div>
   </div>
 </template>
@@ -185,5 +189,4 @@ watch(attractionDetail, (newDetail) => {
 .icon-text > * {
   margin-left: 5px;
 }
-
 </style>

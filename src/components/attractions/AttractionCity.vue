@@ -4,29 +4,36 @@ import AttractionRecomandPathItem from "./item/AttractionRecommandPathItem.vue";
 import { ref, watch, onBeforeMount } from "vue";
 import { useAttractionStore } from "@/stores/attractionStore";
 import { storeToRefs } from "pinia";
+import { useRoute } from "vue-router";
 
 import { getAreaInfo } from "@/api/attractionApi.js";
 const attractionStore = useAttractionStore();
-const { areainfo, cityname, category } = storeToRefs(attractionStore);
+const { category } = storeToRefs(attractionStore);
 
-// const areainfo = ref({
-//   img: "",
-//   natureAttractions: [],
-//   restaurantAttractions: [],
-//   cultureAttractions: [],
-// });
+const route = useRoute();
+
+const areainfo = ref({
+  img: "",
+  natureAttractions: [],
+  restaurantAttractions: [],
+  cultureAttractions: [],
+});
 
 const param = ref({
-  city: cityname.value,
+  city: "",
   category: "home",
 });
-onBeforeMount(() => {
-  getAreaInfo1();
+
+onBeforeMount(async () => {
+  // city에 대한 초기값을 설정
+  param.value.city = route.params.areaname;
+  await getAreaInfo1();
+  console.log(param.value.city);
 });
 
-const getAreaInfo1 = () => {
-  console.log("attraction cityname   얻어오자!!!", param.value);
-  getAreaInfo(
+const getAreaInfo1 = async () => {
+  console.log("attraction city   얻어오자!!!", param.value.city);
+  await getAreaInfo(
     param.value,
     ({ data }) => {
       console.log(data.dataBody.natureAttractions);
@@ -38,6 +45,7 @@ const getAreaInfo1 = () => {
       areainfo.value.natureAttractions = data.dataBody.natureAttractions;
       areainfo.value.cultureAttractions = data.dataBody.cultureAttractions;
       console.log("areainfo ", areainfo.value);
+      selectCategory("nature");
     },
     (error) => {
       console.log(error);
@@ -45,8 +53,8 @@ const getAreaInfo1 = () => {
   );
 };
 
-const selectedCategory = ref("nature");
-const selectedAttractions = ref(getSelectedAttractions());
+const selectedCategory = ref("");
+const selectedAttractions = ref(() => getSelectedAttractions());
 
 function selectCategory(category) {
   selectedCategory.value = category;
@@ -59,6 +67,7 @@ watch(
 );
 
 function getSelectedAttractions() {
+  console.log("getSelectedAttractions() : " + selectedCategory.value);
   switch (selectedCategory.value) {
     case "nature":
       return areainfo.value.natureAttractions;
@@ -80,50 +89,89 @@ function setCategory(value) {
 <template>
   <div class="d-flex flex-column align-items-center">
     <div class="mb-5" style="max-width: 1092px; width: 100%">
-      <div class="mb-3">여행지 > {{ cityname }} > 홈</div>
-      <h3>{{ cityname }}</h3>
+      <div class="mb-3">여행지 > {{ param.city }} > 홈</div>
+      <h3>{{ param.city }}</h3>
       <div class="pt-1">
         <ul class="nav nav-tabs nav-fill">
           <li class="nav-item">
-            <a class="nav-link text-dark active" href="#">홈</a>
+            <a class="nav-link text-dark active" aria-current="page" href="#"
+              >홈</a
+            >
           </li>
           <li class="nav-item">
             <router-link
-              class="nav-link border border-secondary text-dark"
+              class="nav-link text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: cityname, category: 'hotel' },
+                params: { areaname: param.city, category: 'hotel' },
               }"
+              :categoryKr="dfssdfsdfsdf"
               @click="() => setCategory('hotel')"
               >호텔</router-link
             >
+
             <!-- <a class="nav-link border border-secondary text-dark" href="#"
               >호텔</a
             > -->
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
-              >문화생활</a
+            <router-link
+              class="nav-link text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: param.city, category: 'culture' },
+              }"
+              :categoryKr="dfssdfsdfsdf"
+              @click="() => setCategory('culture')"
+              >문화생활</router-link
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
-              >음식점</a
+            <router-link
+              class="nav-link text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: param.city, category: 'restaurant' },
+                props: { categoryKr: '음식점' },
+              }"
+              @click="() => setCategory('restaurant')"
+              >음식점</router-link
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
-              >마켓</a
+            <router-link
+              class="nav-link text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: param.city, category: 'market' },
+                props: { categoryKr: '마켓' },
+              }"
+              @click="() => setCategory('market')"
+              >마켓</router-link
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
-              >액티비티</a
+            <router-link
+              class="nav-link text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: param.city, category: 'activity' },
+                props: { categoryKr: '액티비티' },
+              }"
+              @click="() => setCategory('activity')"
+              >액티비티</router-link
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link border border-secondary text-dark" href="#"
-              >자연</a
+            <router-link
+              class="nav-link text-dark"
+              :to="{
+                name: 'attraction-area-category',
+                params: { areaname: param.city, category: 'nature' },
+                props: { categoryKr: '자연' },
+              }"
+              @click="() => setCategory('nature')"
+              >자연</router-link
             >
           </li>
         </ul>
@@ -135,12 +183,12 @@ function setCategory(value) {
     </div>
 
     <div class="my-5" style="max-width: 1092px; width: 100%">
-      <h4 class="text-center">{{ cityname }} 인기장소</h4>
+      <h4 class="text-center">{{ param.city }} 인기장소</h4>
       <div class="">
         <ul class="nav nav-tabs">
           <li class="nav-item">
             <a
-              class="nav-link border text-dark"
+              class="nav-link text-dark"
               @click="selectCategory('nature')"
               href="#"
               >자연</a
@@ -148,7 +196,7 @@ function setCategory(value) {
           </li>
           <li class="nav-item">
             <a
-              class="nav-link border text-dark"
+              class="nav-link text-dark"
               @click="selectCategory('restaurant')"
               href="#"
               >음식점</a
@@ -156,7 +204,7 @@ function setCategory(value) {
           </li>
           <li class="nav-item">
             <a
-              class="nav-link border text-dark"
+              class="nav-link text-dark"
               @click="selectCategory('culture')"
               href="#"
               >문화생활</a
@@ -171,13 +219,15 @@ function setCategory(value) {
         <AttractionCityItem
           v-for="item in selectedAttractions"
           :key="item.content_id"
-          :attraction="item" />
+          :attraction="item"
+        />
       </div>
     </div>
 
     <div
       class="my-5 d-flex flex-column align-items-center"
-      style="max-width: 1092px; width: 100%">
+      style="max-width: 1092px; width: 100%"
+    >
       <h4 class="text-center mb-2">추천 여행 계획</h4>
       <div class="d-flex">
         <AttractionRecomandPathItem />

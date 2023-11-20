@@ -4,7 +4,6 @@ import { useRouter } from "vue-router";
 import VueDatepicker from "vue3-datepicker";
 import { compareAsc, parse } from "date-fns"; // date-fns를 사용하여 날짜 비교
 
-
 const dateFormat = "yyyy-MM-dd"; // 선택한 날짜의 형식
 const datePickerLanguage = "kr"; // 로케일 설정 (한국어)
 
@@ -17,49 +16,46 @@ const path = ref({
 
 const moveStep2 = () => {
   console.log(path.value);
-  if(!path.value.title){
-    alert("여행 이름을 입력해주세요.")
+  if (!path.value.title) {
+    alert("여행 이름을 입력해주세요.");
     return;
   }
-  compareDates(path.value.start_date, path.value.end_date)
+  compareDates(path.value.start_date, path.value.end_date);
 };
- 
 
 // 시작 날짜와 종료 날짜를 비교하는 함수
 const compareDates = (startDate, endDate) => {
   console.log("startDate:", startDate);
   console.log("endDate:", endDate);
-  if(startDate && endDate){
+  if (startDate && endDate) {
     // 직접 Date 객체를 사용하여 비교
     if (startDate > endDate) {
       alert("시작 날짜는 종료 날짜보다 이전이어야 합니다.");
     } else {
       console.log("날짜 통과");
-      
-      router.push({ name: "make-step2" });
+
+      router.push({
+        name: "make-step2",
+        params: { path: path },
+      });
     }
-  } else{
-    alert("날짜를 입력해주세요")
+  } else {
+    alert("날짜를 입력해주세요");
   }
 };
- 
 </script>
 
 <template>
   <div
-    class="container p-4 border border-secondary-subtle d-flex flex-column align-items-center">
+    class="container p-4 border border-secondary-subtle d-flex flex-column align-items-center"
+  >
     <h3 class="my-4">여행 계획 세우기</h3>
 
     <div class="d-flex flex-column">
       <p class="me-auto mb-0">여행 이름</p>
       <div class="form-floating mb-3" style="width: 400px">
-        <input
-          v-model="path.title"
-          type="text"
-          class="form-control"
-          id="floatingInput"
-          placeholder="집보내줘 여행" />
-        <label for="floatingInput">집보내줘 여행</label>
+        <input v-model="path.title" type="text" class="form-control" />
+        <label for="floatingInput">여행 이름</label>
       </div>
     </div>
 
@@ -68,25 +64,27 @@ const compareDates = (startDate, endDate) => {
 
       <div class="form-floating mb-3" style="width: 400px">
         <vue-datepicker
-        class="form-control"
-        id="datepicker_start"
-        v-model="path.start_date" 
-        :language="datePickerLanguage"></vue-datepicker>
-      </div>
-    </div>
-    
-    <div class="d-flex flex-column">
-      <p class="me-auto mb-0">종료 날짜</p>
-      <div class="form-floating mb-3" style="width: 400px">
-        <vue-datepicker
-        class="form-control"
-        id="datepicker_end"
-        v-model="path.end_date" 
-        :language="datePickerLanguage"></vue-datepicker>
+          class="form-control"
+          id="datepicker_start"
+          v-model="path.start_date"
+          :language="datePickerLanguage"
+        ></vue-datepicker>
       </div>
     </div>
 
-    <button type="button" class="btn btn-make my-1" @click="moveStep2">
+    <div class="d-flex flex-column mb-5">
+      <p class="me-auto mb-0">종료 날짜</p>
+      <div class="form-floating mb-3" style="width: 400px">
+        <vue-datepicker
+          class="form-control"
+          id="datepicker_end"
+          v-model="path.end_date"
+          :language="datePickerLanguage"
+        ></vue-datepicker>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-make my-2 py-2" @click="moveStep2">
       계획 세우기
     </button>
   </div>

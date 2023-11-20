@@ -2,7 +2,6 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import { getAttractionDetailApi } from "@/api/attractionApi";
 
-
 export const useAttractionStore = defineStore("attractionStore", () => {
   const cityname = ref("");
   const category = ref("");
@@ -16,7 +15,7 @@ export const useAttractionStore = defineStore("attractionStore", () => {
   });
 
   const attractionList = ref([]);
-  
+
   const getAttractionDetail = async (attractionId) => {
     await getAttractionDetailApi(
       attractionId,
@@ -36,13 +35,13 @@ export const useAttractionStore = defineStore("attractionStore", () => {
       }
     );
   };
-  
+
   return {
     cityname,
     category,
     areainfo,
     attractionDetail,
     attractionList,
-    getAttractionDetail
+    getAttractionDetail,
   };
 });
