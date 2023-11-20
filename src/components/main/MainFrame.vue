@@ -1,5 +1,14 @@
 <script setup>
 import MainRecommendPathItem from "./item/MainRecommendPathItem.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+// '여행 계획 세우기' 페이지로 이동하는 함수
+const goToPlanTrip = () => {
+  // 여행 계획 세우기 페이지의 라우트 이름이 'make-step1'이라고 가정
+  router.push({ name: 'make-step1' });
+};
 </script>
 
 <template>
@@ -10,7 +19,7 @@ import MainRecommendPathItem from "./item/MainRecommendPathItem.vue";
           소중한 사람들과 함께 여행을 떠나요!
         </p>
         <p class="fw-bold text-white">Priend가 여러분과 함께합니다</p>
-        <button type="button" class="btn btn-login my-1">
+        <button type="button" class="btn btn-login my-1" @click="goToPlanTrip">
           여행 계획 세우기
         </button>
       </div>

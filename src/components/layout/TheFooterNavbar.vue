@@ -1,5 +1,4 @@
 <script setup>
-import "@/assets/css/footer.css";
 </script>
 
 <template>
