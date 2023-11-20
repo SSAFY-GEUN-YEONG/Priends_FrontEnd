@@ -12,8 +12,6 @@ const route = useRoute();
 const attractionStore = useAttractionStore();
 const { category, attractionList } = storeToRefs(attractionStore);
 
-const props = defineProps({ categoryKr: String });
-
 const param = ref({
   city: route.params.areaname,
   category: route.params.category,
@@ -22,7 +20,6 @@ const param = ref({
 onMounted(() => {
   console.log(param.value);
   ListByCategory();
-  console.log("ppppprops", categoryKr);
 });
 
 const ListByCategory = () => {
@@ -59,7 +56,7 @@ function setCategory(value) {
 <template>
   <div class="d-flex flex-column align-items-center">
     <div class=" " style="max-width: 1092px; width: 100%">
-      <div class="mb-3">여행지 > {{ param.city }} > {{ categoryKr }}</div>
+      <div class="mb-3">여행지 > {{ param.city }} > {{ param.category }}</div>
       <h3>{{ param.city }}</h3>
       <div class="pt-1">
         <ul class="nav nav-tabs nav-fill">
@@ -162,14 +159,12 @@ function setCategory(value) {
 
     <div
       class="d-flex flex-row justify-content-between pt-4 pb-2 px-2"
-      style="max-width: 1092px; width: 100%"
-    >
+      style="max-width: 1092px; width: 100%">
       <p class="my-auto">총 100개</p>
       <select
         class="form-select"
         style="width: fit-content"
-        aria-label="Default select example"
-      >
+        aria-label="Default select example">
         <option selected value="1">인기순</option>
         <option value="2">이름순</option>
       </select>
@@ -179,8 +174,7 @@ function setCategory(value) {
       <AttractionListItem
         v-for="item in attractionList"
         :key="item.content_id"
-        :attraction="item"
-      />
+        :attraction="item" />
     </div>
   </div>
 </template>

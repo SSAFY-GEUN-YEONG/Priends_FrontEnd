@@ -105,7 +105,6 @@ function setCategory(value) {
                 name: 'attraction-area-category',
                 params: { areaname: param.city, category: 'hotel' },
               }"
-              :categoryKr="dfssdfsdfsdf"
               @click="() => setCategory('hotel')"
               >호텔</router-link
             >
@@ -121,7 +120,6 @@ function setCategory(value) {
                 name: 'attraction-area-category',
                 params: { areaname: param.city, category: 'culture' },
               }"
-              :categoryKr="dfssdfsdfsdf"
               @click="() => setCategory('culture')"
               >문화생활</router-link
             >
@@ -132,7 +130,6 @@ function setCategory(value) {
               :to="{
                 name: 'attraction-area-category',
                 params: { areaname: param.city, category: 'restaurant' },
-                props: { categoryKr: '음식점' },
               }"
               @click="() => setCategory('restaurant')"
               >음식점</router-link
@@ -144,7 +141,6 @@ function setCategory(value) {
               :to="{
                 name: 'attraction-area-category',
                 params: { areaname: param.city, category: 'market' },
-                props: { categoryKr: '마켓' },
               }"
               @click="() => setCategory('market')"
               >마켓</router-link
@@ -156,7 +152,6 @@ function setCategory(value) {
               :to="{
                 name: 'attraction-area-category',
                 params: { areaname: param.city, category: 'activity' },
-                props: { categoryKr: '액티비티' },
               }"
               @click="() => setCategory('activity')"
               >액티비티</router-link
@@ -168,7 +163,6 @@ function setCategory(value) {
               :to="{
                 name: 'attraction-area-category',
                 params: { areaname: param.city, category: 'nature' },
-                props: { categoryKr: '자연' },
               }"
               @click="() => setCategory('nature')"
               >자연</router-link
@@ -219,15 +213,13 @@ function setCategory(value) {
         <AttractionCityItem
           v-for="item in selectedAttractions"
           :key="item.content_id"
-          :attraction="item"
-        />
+          :attraction="item" />
       </div>
     </div>
 
     <div
       class="my-5 d-flex flex-column align-items-center"
-      style="max-width: 1092px; width: 100%"
-    >
+      style="max-width: 1092px; width: 100%">
       <h4 class="text-center mb-2">추천 여행 계획</h4>
       <div class="d-flex">
         <AttractionRecomandPathItem />
