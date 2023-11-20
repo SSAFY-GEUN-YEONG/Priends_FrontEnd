@@ -63,15 +63,13 @@ watch(attractionDetail, (newDetail) => {
             :src="attractionDetail.first_image"
             class="px-4"
             alt="..."
-            style="width: 500px"
-          />
+            style="width: 500px" />
           <img
             v-else
             src="@/assets/img/defaultImg.png"
             class="px-4"
             alt="..."
-            style="width: 500px"
-          />
+            style="width: 500px" />
           <!-- <img
             src="@/assets/img/building.jpg"
             class="px-4"
@@ -92,8 +90,7 @@ watch(attractionDetail, (newDetail) => {
         </div>
         <button
           type="button"
-          class="justify-content-end btn btn-outline-secondary ms-auto mb-3 me-3"
-        >
+          class="justify-content-end btn btn-outline-secondary ms-auto mb-3 me-3">
           정보 수정 업데이트
         </button>
       </div>
@@ -106,8 +103,7 @@ watch(attractionDetail, (newDetail) => {
               <font-awesome-icon
                 :icon="['far', 'eye']"
                 style="height: 15px"
-                class="align-bottom pt-1"
-              />
+                class="align-bottom pt-1" />
               <div class="ms-2 align-top">874</div>
               <button type="button" class="btn btn-secondary ms-auto">
                 음식점

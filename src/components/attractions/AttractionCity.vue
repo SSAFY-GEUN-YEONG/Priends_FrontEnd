@@ -63,6 +63,7 @@ watch(
   () => selectedCategory.value,
   () => {
     selectedAttractions.value = getSelectedAttractions();
+    console.log("watch : ", selectedAttractions.value);
   }
 );
 
@@ -208,7 +209,6 @@ function setCategory(value) {
         </ul>
       </div>
 
-      <!-- 문제!!! 서울->제주도 이동하면 서울의 인기 자연이 제주도화면에서 보임 -->
       <div class="cityitem d-flex flex-row justify-content-center">
         <AttractionCityItem
           v-for="item in selectedAttractions"

@@ -160,7 +160,7 @@ function setCategory(value) {
     <div
       class="d-flex flex-row justify-content-between pt-4 pb-2 px-2"
       style="max-width: 1092px; width: 100%">
-      <p class="my-auto">총 100개</p>
+      <p class="my-auto">총 {{ attractionList.length }}개</p>
       <select
         class="form-select"
         style="width: fit-content"

@@ -5,7 +5,9 @@ const props = defineProps(["attraction"]);
 const truncatedOverview = computed(() => {
   const MAX_LENGTH = 100;
   // console.log(props.attraction.overview);
-  if (props.attraction.overview.length <= MAX_LENGTH) {
+  if (!props.attraction.overview) {
+    return ` `;
+  } else if (props.attraction.overview.length <= MAX_LENGTH) {
     return props.attraction.overview;
   } else {
     return `${props.attraction.overview.substring(0, MAX_LENGTH)}...`;
