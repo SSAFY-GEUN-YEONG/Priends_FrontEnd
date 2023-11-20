@@ -13,4 +13,5 @@ import TheFooterNavbar from "./components/layout/TheFooterNavbar.vue";
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

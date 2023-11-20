@@ -9,6 +9,7 @@ import {
   memberGetApi,
   memberSignupApi,
   memberEmailCheckApi,
+  memberPasswordUpdateApi,
 } from "@/api/memberApi";
 
 export const useMemberStore = defineStore("memberStore", () => {
@@ -76,7 +77,6 @@ export const useMemberStore = defineStore("memberStore", () => {
   };
 
   const memberGet = async () => {
-    console.log("sss");
     await memberGetApi(
       (response) => {
         memberInfo.value = response.data.dataBody;
@@ -154,6 +154,30 @@ export const useMemberStore = defineStore("memberStore", () => {
     menuStore.initializeMenuState(isLogin.value);
   };
 
+  // 비밀번호 변경 메서드
+  const memberPasswordUpdate = async (passwordData) => {
+    return new Promise((resolve, reject) => {
+      memberPasswordUpdateApi(
+        passwordData,
+        (response) => {
+          if (response.data.dataHeader.successCode === 0) {
+            resolve(response); // 비밀번호 변경 성공
+            console.log("비밀번호가 성공적으로 변경되었습니다!");
+          }
+          // 서버에서 실패 응답 받았을 경우
+          else {
+            resolve(response); // 비밀번호 변경 실패
+            console.log(response.data.dataHeader.resultMessage);
+          }
+        },
+        (error) => {
+          reject(error); // 서버 내 오류
+          console.log("비밀번호 변경 실패: ", error);
+        }
+      );
+    });
+  };
+
   return {
     isLogin,
     accessToken,
@@ -164,5 +188,6 @@ export const useMemberStore = defineStore("memberStore", () => {
     memberCheckLoginStatus,
     memberSignup,
     memberEmailCheck,
+    memberPasswordUpdate,
   };
 });

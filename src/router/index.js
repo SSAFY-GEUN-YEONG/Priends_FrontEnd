@@ -28,31 +28,27 @@ const router = createRouter({
           path: "mypage",
           name: "member-mypage",
           component: () => import("@/components/member/MemberMyPage.vue"),
-          redirect: { name: "mypage-alarm" },
+          redirect: { name: "mypage-info" },
           children: [
             {
               path: "alarm",
               name: "mypage-alarm",
-              component: () =>
-                import("@/components/member/mypage/MyPageAlarm.vue"),
+              component: () => import("@/components/member/mypage/MyPageAlarm.vue"),
             },
             {
               path: "myboard",
               name: "mypage-myboard",
-              component: () =>
-                import("@/components/member/mypage/MyPageBoard.vue"),
+              component: () => import("@/components/member/mypage/MyPageBoard.vue"),
             },
             {
               path: "mypath",
               name: "mypage-mypath",
-              component: () =>
-                import("@/components/member/mypage/MyPagePath.vue"),
+              component: () => import("@/components/member/mypage/MyPagePath.vue"),
             },
             {
               path: "info",
               name: "mypage-info",
-              component: () =>
-                import("@/components/member/mypage/MyPageInfo.vue"),
+              component: () => import("@/components/member/mypage/MyPageInfo.vue"),
             },
           ],
         },
@@ -100,26 +96,22 @@ const router = createRouter({
         {
           path: "main",
           name: "attraction-main",
-          component: () =>
-            import("@/components/attractions/AttractionMain.vue"),
+          component: () => import("@/components/attractions/AttractionMain.vue"),
         },
         {
           path: "area/:areaname/home",
           name: "attraction-area",
-          component: () =>
-            import("@/components/attractions/AttractionCity.vue"),
+          component: () => import("@/components/attractions/AttractionCity.vue"),
         },
         {
           path: "area/:areaname/:category",
           name: "attraction-area-category",
-          component: () =>
-            import("@/components/attractions/AttractionList.vue"),
+          component: () => import("@/components/attractions/AttractionList.vue"),
         },
         {
           path: "area/detail/:attractionid",
           name: "attraction-area-detail",
-          component: () =>
-            import("@/components/attractions/AttractionDetail.vue"),
+          component: () => import("@/components/attractions/AttractionDetail.vue"),
         },
       ],
     },
