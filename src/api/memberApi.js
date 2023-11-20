@@ -29,6 +29,10 @@ async function memberGetApi(success, fail) {
   await local.get(`/member/get`).then(success).catch(fail);
 }
 
+async function memberPasswordUpdateApi(param, success, fail) {
+  await local.put(`/member/password/update`, param).then(success).catch(fail);
+}
+
 export {
   memberLoginApi,
   memberEmailCheckApi,
@@ -36,4 +40,5 @@ export {
   tokenRegeneration,
   memberGetApi,
   memberSignupApi,
+  memberPasswordUpdateApi,
 };
