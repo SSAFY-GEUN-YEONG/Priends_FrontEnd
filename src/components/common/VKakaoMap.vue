@@ -1,25 +1,53 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onBeforeMount, watch, onMounted } from "vue";
 
 const map = ref(null);
 const markers = ref([]);
-const overlay = ref(null); // 오버레이를 저장할 ref 추가
+const overlay = ref(null);
+const overlays = ref([]); // 오버레이를 저장할 배열 추가
 
 const props = defineProps({
-  selectStation: Object
+  selectStation: Object,
+  attractions: Array
 });
+
+
+// 관광지들의 평균 위치를 계산하는 함수
+const calculateCenter = (attractions) => {
+  let totalLat = 0;
+  let totalLng = 0;
+  attractions.forEach(attraction => {
+    totalLat += attraction.latitude;
+    totalLng += attraction.longitude;
+  });
+  return {
+    lat: totalLat / attractions.length,
+    lng: totalLng / attractions.length
+  };
+};
+
 
 // 지도 초기화 함수
 const initMap = () => {
   const container = document.getElementById("map");
+  let center = new kakao.maps.LatLng(33.450701, 126.570667); // 기본 중심 좌표
+
+  // // props.attractions가 있으면, 중심 좌표를 업데이트
+  if (props.attractions && props.attractions.length > 0) {
+    const avgCenter = calculateCenter(props.attractions);
+    center = new kakao.maps.LatLng(avgCenter.lat, avgCenter.lng);
+  }
+
   const options = {
-    center: new kakao.maps.LatLng(33.450701, 126.570667),
-    level: 3,
+    center: center,
+    level: 10,
   };
+
   map.value = new kakao.maps.Map(container, options);
   if (props.selectStation) {
     updateMap(props.selectStation);
   }
+ 
 };
 
 // 카카오 맵 스크립트 로드 함수
@@ -55,16 +83,6 @@ const updateMap = (newVal) => {
   markers.value.push(marker);
   // 지도 중심을 이동시킴
   map.value.setCenter(moveLatLon);
-
-  // 커스텀 오버레이 생성 및 추가
-  // const content = `
-  //   <div class="overlay">
-  //     <h3>${newVal.title}</h3>
-  //     <p>${newVal.addr1}</p>
-  //     <img src="${newVal.first_image}" alt="${newVal.title}" style="width: 100px; height: auto;">
-  //     <button @click="closeOverlay">닫기</button>
-  //   </div>
-  // `;
 
   const content = `
     <div class="wrap">
@@ -103,14 +121,84 @@ const updateMap = (newVal) => {
 
 };
 
-onMounted(() => {
-  if (!window.kakao || !window.kakao.maps) {
-    loadKakaoMapScript(); // 카카오 맵 스크립트 로드
-  } else {
-    initMap();  // 지도 초기화
-  }
-});
 
+// 마커를 생성하고 지도에 추가하는 함수
+const addMarkers = () => {
+  if (!window.kakao || !window.kakao.maps) {
+    return; // kakao 맵이 로드되지 않았다면 함수 실행 중지
+  }
+
+  // 기존 마커 및 오버레이를 제거
+  markers.value.forEach(marker => marker.setMap(null));
+  overlays.value.forEach(overlay => overlay.setMap(null));
+  markers.value = [];
+  overlays.value = [];
+
+  // 새 마커 및 오버레이 추가
+  props.attractions.forEach(attraction => {
+    const position = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
+    const marker = new kakao.maps.Marker({ map: map.value, position: position });
+    markers.value.push(marker);
+
+    const content = `
+    <div class="wrap">
+      <div class="info">
+        <div class="title">
+          ${attraction.title}
+        </div>
+        <div class="body">
+          <div class="img">
+            <img src="${attraction.first_image}" width="73" height="70">
+          </div>
+          <div class="desc">
+            <div class="ellipsis">${attraction.addr1}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+    const overlay = new kakao.maps.CustomOverlay({ content, map: map.value, position });
+    overlays.value.push(overlay);
+
+  });
+
+
+
+  // 랜덤 마커 선택 및 중심 설정
+  if (markers.value.length > 0) {
+    const randomIndex = Math.floor(Math.random() * markers.value.length);
+    const randomMarkerPosition = markers.value[randomIndex].getPosition();
+    // 오차값을 추가하기 위한 랜덤 위도와 경도 오차 생성
+    const latOffset = (Math.random() - 0.1) * 0.001; // 예: 0.001은 약 111m를 의미
+    const lngOffset = (Math.random() - 0.1) * 0.001; // 지도의 확대 레벨에 따라 이 값을 조정
+
+    // 오차값을 더해 새로운 중심 좌표 생성
+    const newCenter = new kakao.maps.LatLng(
+      randomMarkerPosition.getLat() + latOffset,
+      randomMarkerPosition.getLng() + lngOffset
+    );
+
+    map.value.setCenter(newCenter);
+    map.value.relayout(); // 지도 크기 재조정
+  }
+};
+
+// 관측하여 마커 업데이트
+watch(() => props.attractions, (newAttractions) => {
+  if (map.value && newAttractions) {
+    addMarkers(); // 마커를 추가하는 함수
+  }
+}, { deep: true });
+
+onMounted(async () => {
+  if (!window.kakao || !window.kakao.maps) {
+    loadKakaoMapScript();
+  } else {
+    initMap();
+  }
+
+});
 </script>
 
 <template>
@@ -120,7 +208,6 @@ onMounted(() => {
 <style>
 #map {
   width: 100%;
-  height: 700px;
 }
 .overlay {
   background-color: white;

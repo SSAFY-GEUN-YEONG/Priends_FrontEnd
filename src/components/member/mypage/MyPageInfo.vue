@@ -1,10 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { useMemberStore } from "@/stores/memberStore";
 import { storeToRefs } from 'pinia';
 
 const memberStore = useMemberStore();
-const { memberPasswordUpdate } = memberStore;
+const { memberGet, memberPasswordUpdate } = memberStore;
 const { memberInfo } = storeToRefs(memberStore);
 
 // 비밀번호 데이터
@@ -60,8 +60,8 @@ const previewImage = event => {
   memberInfo.image = URL.createObjectURL(file);
 };
 
-onMounted(() => {
-  memberStore.memberGet();
+onBeforeMount(async () => {
+  await memberGet();
   console.log(memberInfo.value);
 });
 </script>
