@@ -4,12 +4,13 @@ import { useRouter } from "vue-router";
 import { useMenuStore } from "@/stores/menuStore";
 import { useMemberStore } from "@/stores/memberStore";
 import { storeToRefs } from 'pinia';
+import * as bootstrap from 'bootstrap';
 
 const router = useRouter();
 const memberStore = useMemberStore();
 
 const { isLogin } = storeToRefs(memberStore);
-const { memberLogin } = memberStore;  // 멤버관련 저장소에서 함수들 사용할 함수들
+const { memberLogin, memberTempPassword } = memberStore;  // 멤버관련 저장소에서 함수들 사용할 함수들
 const { changeMenuState } = useMenuStore();
 
 const loginMember = ref({
@@ -17,16 +18,39 @@ const loginMember = ref({
   password: "",
 });
 
+const tempEmail = ref('');
+const tempPasswordModal = ref(null);
+
 const login = async () => {
   await memberLogin(loginMember.value);
   if (isLogin.value) {
-    // changeMenuState();  // 메뉴 상태 바꾸기
+    changeMenuState();  // 메뉴 상태 바꾸기
     router.push("/");   // 메인 페이지로 가기
   }
   else {
     alert("아이디 또는 비밀번호를 잘못 입력했습니다. 다시 확인해주세요.");
   }
 }
+
+
+const issueTempPassword = async () => {
+  console.log("좀 찍혀");
+  if (!tempEmail.value) {
+    alert('이메일을 입력해주세요.');
+    return;
+  }
+  try {
+    const result = await memberTempPassword(tempEmail.value);
+    alert(result.message);
+    if (result.success && tempPasswordModal.value) {
+      const modal = bootstrap.Modal.getInstance(tempPasswordModal.value);
+      modal.hide();
+    }
+  } catch (error) {
+    console.log(error);
+    alert('임시 비밀번호 발급에 실패했습니다. 다시 시도해주세요.');
+  }
+};
 
 </script>
 
@@ -64,8 +88,9 @@ const login = async () => {
         <label for="floatingPassword">Password</label>
       </div>
     </div>
-    <button type="button" class="btn btn-find-pw btn-light mt-4 mb-2">
-      비밀번호 찾기
+
+    <button type="button" class="btn btn-find-pw btn-light mt-4 mb-2" data-bs-toggle="modal" data-bs-target="#tempPasswordModal">
+      임시 비밀번호 발급
     </button>
     <button type="button" class="btn btn-login my-1" @click="login">
       이메일로 로그인
@@ -101,6 +126,29 @@ const login = async () => {
           </button>
         </router-link>
       </div>
+    </div>
+
+
+    <!-- 임시 비밀번호 발급 모달 -->
+    <div class="modal fade" id="tempPasswordModal" tabindex="-1" ref="tempPasswordModal" aria-labelledby="tempPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="tempPasswordModalLabel">임시 비밀번호 발급</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="tempPasswordEmail" class="form-label">이메일</label>
+                <input type="email" class="form-control" id="tempPasswordEmail" v-model="tempEmail">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+              <button type="button" class="btn btn-primary" @click="issueTempPassword">발급</button>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
 </template>
