@@ -4,8 +4,9 @@ import { defineStore } from "pinia";
 export const usePathStore = defineStore("pathStore", () => {
   const pathInfo = ref({
     title: "",
-    start_date: "",
-    end_date: "",
+    content: "",
+    startDate: "",
+    endDate: "",
     id: "",
   });
 

@@ -6,8 +6,13 @@ import { usePathStore } from "@/stores/pathStore";
 import { useAttractionStore } from "@/stores/attractionStore";
 import { storeToRefs } from "pinia";
 
-import { listSido, listGugun } from "@/api/pathApi";
 import { getAreaListByCategory } from "@/api/attractionApi";
+import {
+  listSido,
+  listGugun,
+  createPath,
+  createAndUpdatePathDetails,
+} from "@/api/pathApi";
 
 import PathMakeListItem from "@/components/path/item/PathMakeListItem.vue";
 import VSelect from "@/components/common/VSelect.vue";
@@ -34,19 +39,122 @@ const param = ref({
   litmit: 0,
 });
 
+const detailParam = ref({
+  id: 0,
+  myAttractionList: [],
+});
+
+//여행 기간
+const days = ref(0);
+
+//내 여행 경로
+const myAttractionList = ref([]);
+const orders = ref([]); //여행 일자 별 여행지의 순서
+
+//PathMakeListIme 에서 받은 attraction으로 경로에 추가
+const addAttractionToPath = (attraction) => {
+  console.log("Attraction added to path:", attraction);
+  // const newAttraction = {
+  //   id: null,
+  //   orders: orders.value[activeTab.value]++,
+  //   day: activeTab.value,
+  //   contentId: attraction.content_id,
+  // };
+  console.log("order active tab ++");
+  console.log(orders.value[activeTab.value]);
+  attraction.orders = orders.value[activeTab.value]++;
+  console.log(orders.value[activeTab.value]);
+  attraction.day = activeTab.value;
+  attraction.contentId = attraction.content_id;
+  attraction.id = null;
+
+  // myAttractionList에 추가
+  myAttractionList.value.push(attraction);
+  // console.log(newAttraction);
+  console.log(myAttractionList.value);
+};
+
+//PathMakeListIme 에서 받은 attraction으로 경로에서 삭제 추가
+const removeAttractionToPath = (attraction) => {
+  console.log("Attraction remove from path:", attraction);
+  // attraction의 content_id, orders, day를 기준으로 삭제할 여행지의 인덱스를 찾음
+  const attractionIndex = myAttractionList.value.findIndex(
+    (item) =>
+      item.content_id === attraction.content_id &&
+      item.orders === attraction.orders &&
+      item.day === attraction.day
+  );
+  if (attractionIndex !== -1) {
+    // myAttractionList에서 해당 day의 orders가 큰 요소들을 찾아서 orders-1을 수행
+    myAttractionList.value.forEach((item) => {
+      if (item.day === attraction.day && item.orders > attraction.orders) {
+        console.log("item", item.orders, item.title);
+        item.orders -= 1;
+        console.log("item", item.orders, item.title);
+      }
+    });
+
+    //해당 day의 orders 전체 크기 -1
+    --orders.value[activeTab.value];
+    //myAttractionList에서 삭제
+    myAttractionList.value.splice(attractionIndex, 1);
+  }
+
+  console.log(myAttractionList.value);
+};
+
 onMounted(() => {
   attractionStore.attractionList = [];
-  console.log("on mounted", pathInfo.value);
-  console.log("attraction list ", attractionList.value);
   getSidoList();
+
+  pathInfo.value.startDate = formatDate(pathInfo.value.startDate);
+  pathInfo.value.endDate = formatDate(pathInfo.value.endDate);
+  days.value = calcDate() + 1;
+
+  //일자별 여행순서 초기화
+  for (let i = 1; i <= days.value; i++) {
+    orders.value[i] = 1;
+  }
+  console.log("orders", orders.value);
+
+  console.log("Dddddddddd", days.value);
+  console.log("on mounted", pathInfo.value);
+  // console.log("attraction list ", attractionList.value);
 });
+
+const calcDate = () => {
+  // 문자열을 Date 객체로 변환
+  const date1 = new Date(pathInfo.value.startDate);
+  const date2 = new Date(pathInfo.value.endDate);
+
+  // 두 날짜 간의 차이를 계산
+  const timeDifference = Math.abs(date2 - date1); // 차이를 밀리초로 얻음
+
+  // 차이를 일로 변환
+  const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+
+  return daysDifference;
+  // console.log(daysDifference);
+};
+
+const formatDate = (val) => {
+  const start = new Date(val);
+
+  const year = start.getFullYear();
+  const month = String(start.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 1을 더하고 두 자리로 맞춰줍니다.
+  const day = String(start.getDate()).padStart(2, "0"); // 날짜도 두 자리로 맞춰줍니다.
+
+  const formattedDate = `${year}-${month}-${day}`;
+  // console.log(formattedDate);
+  return formattedDate;
+};
 
 const getSidoList = () => {
   listSido(
     ({ data }) => {
       console.log("sido data : ", data.dataBody);
       let options = [];
-      options.push({ text: "시도선택", value: { code: 0, name: "" } });
+      options.push({ text: "시도선택", value: "" });
       data.dataBody.forEach((sido) => {
         options.push({
           text: sido.sido_name,
@@ -123,6 +231,56 @@ watch(
   }
 );
 
+//days nav활성화
+const activeTab = ref(1);
+function changeTab(dayIndex) {
+  activeTab.value = dayIndex;
+  console.log("changeTab = activetab ", activeTab.value);
+}
+
+//day 탭을 클릭 했을 때 내 경로에서 해당되는 날짜만 선택
+const filteredAttractions = (dayIndex, order) => {
+  const newList = myAttractionList.value.filter(
+    (item) => item.day === dayIndex
+  );
+  if (order > 0)
+    newList = myAttractionList.value.filter((item) => item.orders > order);
+  return newList;
+};
+
+//저장 버튼
+const registMyPath = () => {
+  console.log("path 저장하기!!!", pathInfo.value);
+  //path db에 저장
+  createPath(
+    pathInfo.value,
+    ({ data }) => {
+      console.log(data.dataBody);
+      pathInfo.value.id = data.dataBody;
+      console.log(pathInfo.value);
+
+      detailParam.value.id = data.dataBody;
+      detailParam.value.myAttractionList = myAttractionList.value;
+      console.log("detailParam", detailParam.value);
+      createAndUpdatePathDetails(
+        detailParam.value,
+        ({ data }) => {
+          console.log(data.dataBody);
+          alert("계획 생성이 완료되었습니다.");
+          router.push({ name: "main" });
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+//취소 버튼
 const cancelMakePath = () => {
   router.push({ name: "main" });
 };
@@ -131,7 +289,8 @@ const cancelMakePath = () => {
 <template>
   <div
     class="container-fluid p-0 border border-primary"
-    style="height: fit-content">
+    style="height: fit-content"
+  >
     <!--상단 네비-->
     <nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
       <div class="container-fluid">
@@ -139,15 +298,21 @@ const cancelMakePath = () => {
 
         <div
           class="collapse navbar-collapse justify-content-end"
-          id="navbarSupportedContent">
+          id="navbarSupportedContent"
+        >
           <form class="d-flex" role="search">
-            <button class="btn btn-outline-success me-2" type="submit">
+            <button
+              class="btn btn-outline-success me-2"
+              type="submit"
+              @click.prevent="registMyPath"
+            >
               저장
             </button>
             <button
               class="btn btn-outline-success"
               type="button"
-              @click="cancelMakePath">
+              @click="cancelMakePath"
+            >
               취소
             </button>
           </form>
@@ -162,13 +327,15 @@ const cancelMakePath = () => {
             <VSelect
               class="mx-3"
               :selectOption="sidoList"
-              @onKeySelect="onChangeSido" />
+              @onKeySelect="onChangeSido"
+            />
 
             <VSelect
               class="mx-3"
               :disabled="gugunDisable"
               :selectOption="gugunList"
-              @onKeySelect="onChangeGugun" />
+              @onKeySelect="onChangeGugun"
+            />
           </div>
           <nav class="navbar navbar-expand-lg">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -196,7 +363,8 @@ const cancelMakePath = () => {
                     href="#"
                     ><img
                       class="icon-svg me-1 my-1"
-                      src="@/assets/img/utensils.svg" />음식점</a
+                      src="@/assets/img/utensils.svg"
+                    />음식점</a
                   >
                 </li>
                 <li class="nav-item mx-1">
@@ -228,12 +396,15 @@ const cancelMakePath = () => {
           </nav>
           <div
             v-if="attractionList && attractionList.length > 0"
-            class="attraction-list">
+            class="attraction-list"
+          >
             <PathMakeListItem
               v-for="item in attractionList"
               :key="item.content_id"
               :attraction="item"
-              itemType="attraction"></PathMakeListItem>
+              itemType="attraction"
+              @addAttractionToPath="addAttractionToPath"
+            ></PathMakeListItem>
           </div>
           <div v-else></div>
         </div>
@@ -242,18 +413,33 @@ const cancelMakePath = () => {
         <h3 class="my-3 ms-2">내 여행 경로</h3>
         <div class="scrollable-container overflow-auto-x">
           <ul class="nav nav-tabs">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Day1</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Day2</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Day3</a>
+            <li class="nav-item" v-for="dayIndex in days" :key="dayIndex">
+              <a
+                class="nav-link"
+                :class="{ active: activeTab === dayIndex }"
+                :style="{
+                  color: activeTab === dayIndex ? 'white' : 'black',
+                  backgroundColor: activeTab === dayIndex ? '#c19ee0' : '',
+                }"
+                href="#"
+                @click="changeTab(dayIndex)"
+                >Day{{ dayIndex }}</a
+              >
             </li>
           </ul>
         </div>
-        <!-- <div><PathMakeListItem itemType="mypath"></PathMakeListItem></div> -->
+        <div v-for="dayIndex in days" :key="dayIndex">
+          <div v-if="activeTab === dayIndex">
+            {{ dayIndex }} 번 탭이야
+            <PathMakeListItem
+              v-for="item in filteredAttractions(dayIndex, 0)"
+              :key="item.contentId"
+              :attraction="item"
+              :itemType="'mypath'"
+              @removeAttractionToPath="removeAttractionToPath"
+            ></PathMakeListItem>
+          </div>
+        </div>
       </div>
       <div class="col-6 border border-danger">map</div>
     </div>

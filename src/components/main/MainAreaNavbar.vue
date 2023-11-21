@@ -34,7 +34,6 @@ const getListArea = () => {
     }
   );
 };
-
 </script>
 
 <template>
@@ -48,10 +47,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '서울' },
-                }"
-                @click="() => setCityName('서울')"
+                name: 'attraction-area',
+                params: { areaname: '서울' },
+              }"
+              @click="() => setCityName('서울')"
               >서울</router-link
             >
           </li>
@@ -59,10 +58,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '부산' },
-                }"
-                @click="() => setCityName('부산')"
+                name: 'attraction-area',
+                params: { areaname: '부산' },
+              }"
+              @click="() => setCityName('부산')"
               >부산</router-link
             >
           </li>
@@ -70,10 +69,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '대구' },
-                }"
-                @click="() => setCityName('대구')"
+                name: 'attraction-area',
+                params: { areaname: '대구' },
+              }"
+              @click="() => setCityName('대구')"
               >대구</router-link
             >
           </li>
@@ -81,10 +80,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '인천' },
-                }"
-                @click="() => setCityName('인천')"
+                name: 'attraction-area',
+                params: { areaname: '인천' },
+              }"
+              @click="() => setCityName('인천')"
               >인천</router-link
             >
           </li>
@@ -92,10 +91,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '광주' },
-                }"
-                @click="() => setCityName('광주')"
+                name: 'attraction-area',
+                params: { areaname: '광주' },
+              }"
+              @click="() => setCityName('광주')"
               >광주</router-link
             >
           </li>
@@ -103,10 +102,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '울산' },
-                }"
-                @click="() => setCityName('울산')"
+                name: 'attraction-area',
+                params: { areaname: '울산' },
+              }"
+              @click="() => setCityName('울산')"
               >울산</router-link
             >
           </li>
@@ -114,10 +113,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '세종' },
-                }"
-                @click="() => setCityName('세종')"
+                name: 'attraction-area',
+                params: { areaname: '세종' },
+              }"
+              @click="() => setCityName('세종')"
               >세종</router-link
             >
           </li>
@@ -125,10 +124,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction',
-                  query: { areaname: '경기도' },
-                }"
-                @click="() => setCityName('경기')"
+                name: 'attraction',
+                query: { areaname: '경기도' },
+              }"
+              @click="() => setCityName('경기')"
               >경기</router-link
             >
           </li>
@@ -136,10 +135,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction',
-                  query: { areaname: '강원도' },
-                }"
-                @click="() => setCityName('강원')"
+                name: 'attraction',
+                query: { areaname: '강원도' },
+              }"
+              @click="() => setCityName('강원')"
               >강원</router-link
             >
           </li>
@@ -147,10 +146,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction',
-                  query: { areaname: '충청북도' },
-                }"
-                @click="() => setCityName('충북')"
+                name: 'attraction',
+                query: { areaname: '충청북도' },
+              }"
+              @click="() => setCityName('충북')"
               >충북</router-link
             >
           </li>
@@ -158,10 +157,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction',
-                  query: { areaname: '충청남도' },
-                }"
-                @click="() => setCityName('충남')"
+                name: 'attraction',
+                query: { areaname: '충청남도' },
+              }"
+              @click="() => setCityName('충남')"
               >충남</router-link
             >
           </li>
@@ -169,10 +168,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction',
-                  query: { areaname: '전라북도' },
-                }"
-                @click="() => setCityName('전북')"
+                name: 'attraction',
+                query: { areaname: '전라북도' },
+              }"
+              @click="() => setCityName('전북')"
               >전북</router-link
             >
           </li>
@@ -180,10 +179,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction',
-                  query: { areaname: '전라남도' },
-                }"
-                @click="() => setCityName('전남')"
+                name: 'attraction',
+                query: { areaname: '전라남도' },
+              }"
+              @click="() => setCityName('전남')"
               >전남</router-link
             >
           </li>
@@ -191,10 +190,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction',
-                  query: { areaname: '경상북도' },
-                }"
-                @click="() => setCityName('경북')"
+                name: 'attraction',
+                query: { areaname: '경상북도' },
+              }"
+              @click="() => setCityName('경북')"
               >경북</router-link
             >
           </li>
@@ -202,10 +201,10 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction',
-                  query: { areaname: '경상남도' },
-                }"
-                @click="() => setCityName('경남')"
+                name: 'attraction',
+                query: { areaname: '경상남도' },
+              }"
+              @click="() => setCityName('경남')"
               >경남</router-link
             >
           </li>
@@ -213,16 +212,17 @@ const getListArea = () => {
             <router-link
               class="nav-link text-dark bg-opacity-25"
               :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '제주' },
-                }"
-                @click="() => setCityName('제주')"
+                name: 'attraction-area',
+                params: { areaname: '제주' },
+              }"
+              @click="() => setCityName('제주')"
               >제주</router-link
             >
           </li>
         </ul>
       </div>
-      <div class="test input-group my-3 px-5">
+      <!-- 검색창 -->
+      <!-- <div class="test input-group my-3 px-5">
         <span class="input-group-text" style="background-color: transparent">
           <i class="bi bi-search my-auto mx-2"></i>
         </span>
@@ -234,7 +234,7 @@ const getListArea = () => {
         >
           검색
         </button>
-      </div>
+      </div> -->
     </nav>
   </div>
 </template>

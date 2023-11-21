@@ -19,7 +19,7 @@ const moveStep2 = () => {
     alert("여행 이름을 입력해주세요.");
     return;
   }
-  compareDates(pathInfo.value.start_date, pathInfo.value.end_date);
+  compareDates(pathInfo.value.startDate, pathInfo.value.endDate);
 };
 
 // 시작 날짜와 종료 날짜를 비교하는 함수
@@ -45,7 +45,8 @@ const compareDates = (startDate, endDate) => {
 
 <template>
   <div
-    class="container p-4 border border-secondary-subtle d-flex flex-column align-items-center">
+    class="container p-4 mb-5 border border-secondary-subtle d-flex flex-column align-items-center"
+  >
     <h3 class="my-4">여행 계획 세우기</h3>
 
     <div class="d-flex flex-column">
@@ -63,8 +64,9 @@ const compareDates = (startDate, endDate) => {
         <vue-datepicker
           class="form-control"
           id="datepicker_start"
-          v-model="pathInfo.start_date"
-          :language="datePickerLanguage"></vue-datepicker>
+          v-model="pathInfo.startDate"
+          :language="datePickerLanguage"
+        ></vue-datepicker>
       </div>
     </div>
 
@@ -74,12 +76,17 @@ const compareDates = (startDate, endDate) => {
         <vue-datepicker
           class="form-control"
           id="datepicker_end"
-          v-model="pathInfo.end_date"
-          :language="datePickerLanguage"></vue-datepicker>
+          v-model="pathInfo.endDate"
+          :language="datePickerLanguage"
+        ></vue-datepicker>
       </div>
     </div>
 
-    <button type="button" class="btn btn-make my-2 py-2" @click="moveStep2">
+    <button
+      type="button"
+      class="btn btn-make mt-2 mb-5 pt-2 pb-2"
+      @click="moveStep2"
+    >
       계획 세우기
     </button>
   </div>
