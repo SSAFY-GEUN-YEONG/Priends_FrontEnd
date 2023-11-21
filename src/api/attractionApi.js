@@ -8,13 +8,13 @@ function listArea(param, success, fail) {
 }
 
 function getAttractionDetailApi(attractionId, success, fail) {
-  local.get(`/attraction/${attractionId}/view`).then(success).catch(fail);
+  return local.get(`/attraction/${attractionId}/view`).then(success).catch(fail);
 }
 
 // 특정 지역 정보 home 가져오기
 function getAreaInfo(param, success, fail) {
   console.log("area : ", `${param.city} ${param.category}`);
-  local
+  return local
     .get(`/attraction/area/${param.city}/home`, { params: param })
     .then(success)
     .catch(fail);

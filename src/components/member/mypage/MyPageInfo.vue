@@ -2,6 +2,7 @@
 import { ref, onBeforeMount } from 'vue';
 import { useMemberStore } from "@/stores/memberStore";
 import { storeToRefs } from 'pinia';
+import * as bootstrap from 'bootstrap';
 
 const memberStore = useMemberStore();
 const { memberGet, memberPasswordUpdate } = memberStore;
@@ -11,7 +12,7 @@ const { memberInfo } = storeToRefs(memberStore);
 const nowPassword = ref('');
 const changePassword = ref('');
 const confirmChangePassword = ref('');
-const passwordModalButton = ref(null);
+const passwordModal = ref(null);
 
 // 비밀번호 변경 함수
 const updatePassword = async () => {
@@ -26,32 +27,20 @@ const updatePassword = async () => {
   }
 
   try {
-    const response = await memberPasswordUpdate({
+    const result = await memberPasswordUpdate({
       nowPassword: nowPassword.value,
       changePassword: changePassword.value
     });
 
-    if (response.data.dataHeader.successCode === 0) {
-      alert("비밀번호가 변경되었습니다.");
-    } else {
-      alert(response.data.dataHeader.resultMessage); // 실패한 경우 서버에서 받은 메시지를 표시
+    alert(result.message);
+    if (result.success && passwordModal.value) {
+      const model = bootstrap.Modal.getInstance(passwordModal.value);
+      model.hide();
     }
   } catch (error) {
     console.log("서버 작동 중지");
   }
-  closePasswordModal();
 }
-
-// 비밀번호 변경 후 모달을 닫는 함수
-// 비밀번호 변경 후 모달을 닫는 함수
-const closePasswordModal = () => {
-  if (passwordModalButton.value) {
-    const modal = bootstrap.Modal.getInstance(passwordModalButton.value);
-    if (modal) {
-      modal.hide();
-    }
-  }
-};
 
 
 // 이미지 프리뷰 함수
@@ -102,7 +91,7 @@ onBeforeMount(async () => {
         
 
         <!-- 비밀번호 변경 모달 -->
-        <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal fade" id="passwordModal" ref="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
