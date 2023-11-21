@@ -16,22 +16,20 @@ const areainfo = ref({
   cultureAttractions: [],
 });
 
-
 const selectedCategory = ref("nature");
 const selectedAttractions = ref([]);
 
 const fetchAreaInfo = async () => {
   const city = route.params.areaname;
   try {
-    const response = await getAreaInfo({ city, category: 'home' });
+    const response = await getAreaInfo({ city, category: "home" });
     // console.log(response);
     areainfo.value = response.data.dataBody;
     updateSelectedAttractions();
+  } catch (error) {
+    console.error("지역 정보를 가져오는 데 실패했습니다.", error);
   }
-  catch (error) {
-    console.error('지역 정보를 가져오는 데 실패했습니다.', error);
-  }
-}
+};
 
 // 선택된 카테고리에 따라 관광지 목록을 업데이트하는 함수
 const updateSelectedAttractions = () => {
@@ -57,10 +55,18 @@ function selectCategory(category) {
 
 function goToAttracitionDetail(contentId) {
   router.push({
-    name: 'attraction-area-detail',
-    params: { attractionid: contentId }
+    name: "attraction-area-detail",
+    params: { attractionid: contentId },
   });
 }
+
+// function setCategory(value) {
+//   const newCategory = value;
+//   category.value = newCategory;
+//   console.log("category :", category.value);
+//   param.value.category = category.value;
+//   console.log(param.value.category);
+// }
 
 onBeforeMount(() => {
   fetchAreaInfo();
@@ -86,7 +92,6 @@ onBeforeMount(() => {
                 name: 'attraction-area-category',
                 params: { areaname: route.params.areaname, category: 'hotel' },
               }"
-              @click="() => setCategory('hotel')"
               >호텔</router-link
             >
 
@@ -99,9 +104,11 @@ onBeforeMount(() => {
               class="nav-link text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: route.params.areaname, category: 'culture' },
+                params: {
+                  areaname: route.params.areaname,
+                  category: 'culture',
+                },
               }"
-              @click="() => setCategory('culture')"
               >문화생활</router-link
             >
           </li>
@@ -110,9 +117,11 @@ onBeforeMount(() => {
               class="nav-link text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: route.params.areaname, category: 'restaurant' },
+                params: {
+                  areaname: route.params.areaname,
+                  category: 'restaurant',
+                },
               }"
-              @click="() => setCategory('restaurant')"
               >음식점</router-link
             >
           </li>
@@ -123,7 +132,6 @@ onBeforeMount(() => {
                 name: 'attraction-area-category',
                 params: { areaname: route.params.areaname, category: 'market' },
               }"
-              @click="() => setCategory('market')"
               >마켓</router-link
             >
           </li>
@@ -132,9 +140,11 @@ onBeforeMount(() => {
               class="nav-link text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: route.params.areaname, category: 'activity' },
+                params: {
+                  areaname: route.params.areaname,
+                  category: 'activity',
+                },
               }"
-              @click="() => setCategory('activity')"
               >액티비티</router-link
             >
           </li>
@@ -145,7 +155,6 @@ onBeforeMount(() => {
                 name: 'attraction-area-category',
                 params: { areaname: route.params.areaname, category: 'nature' },
               }"
-              @click="() => setCategory('nature')"
               >자연</router-link
             >
           </li>
@@ -153,7 +162,9 @@ onBeforeMount(() => {
       </div>
       <div class="d-flex flex-row">
         <img :src="areainfo.img" style="max-height: 362px" />
-        <VKakaoMap :attractions="selectedAttractions" style="height: 362px;"></VKakaoMap>
+        <VKakaoMap
+          :attractions="selectedAttractions"
+          style="height: 362px"></VKakaoMap>
       </div>
     </div>
 

@@ -1,25 +1,25 @@
 <script setup>
+import { defineProps } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faUser, faHeart, faEye } from "@fortawesome/free-regular-svg-icons";
+const props = defineProps(["pathInfo"]);
+
+console.log("path list item ", props.pathInfo);
 </script>
 
 <template>
   <div class="d-flex flex-column border">
     <img class="path-list-img" src="@/assets/img/building.jpg" />
     <div class="p-2">
-      <h5>가족들과 함께하는 즐거운 시간</h5>
+      <h5>{{ pathInfo.title }}</h5>
 
-      <p>2023.11.11 - 2023.11.15 | 5 Days</p>
-      <p>부산, 김해</p>
+      <p>{{ pathInfo.startDate }} - {{ pathInfo.endDate }}| 5 Days</p>
 
       <div class="icon-text">
         <font-awesome-icon icon="fa-regular fa-user" style="height: 15px" />
         <div>ssafy@ssafy.com</div>
         <div class="heart-icon">
-          <font-awesome-icon :icon="['far', 'heart']" style="height: 15px" />
-          <div>234</div>
           <font-awesome-icon :icon="['far', 'eye']" style="height: 15px" />
-          <div>898</div>
+          <div>{{ pathInfo.hit }}</div>
         </div>
       </div>
     </div>

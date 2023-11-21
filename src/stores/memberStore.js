@@ -29,6 +29,7 @@ export const useMemberStore = defineStore("memberStore", () => {
           // 로그인 성공 처리
           isLogin.value = true; // 로그인 상태 업데이트
           accessToken.value = response.data.dataBody.token.accessToken;
+          console.log("로그인 accessToken : ", accessToken.value);
           memberInfo.value = response.data.dataBody.memberInfo;
           console.log("로그인한 회원 정보 : ", memberInfo.value);
           const menuStore = useMenuStore(); // 메뉴 스토어 인스턴스 가져오기
@@ -145,7 +146,7 @@ export const useMemberStore = defineStore("memberStore", () => {
     if (accessTokenFromCookie) {
       isLogin.value = true;
       accessToken.value = accessTokenFromCookie;
-      console.log(accessTokenFromCookie);
+      console.log("access token ", accessTokenFromCookie);
     } else {
       isLogin.value = false;
     }

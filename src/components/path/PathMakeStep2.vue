@@ -1,6 +1,6 @@
 <script setup>
-import { ref, watch, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { ref, watch, onMounted, onUpdated } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import { usePathStore } from "@/stores/pathStore";
 import { useAttractionStore } from "@/stores/attractionStore";
@@ -17,10 +17,12 @@ import {
 import PathMakeListItem from "@/components/path/item/PathMakeListItem.vue";
 import VSelect from "@/components/common/VSelect.vue";
 
+// const route = useRoute();
 const router = useRouter();
 
 const pathStore = usePathStore();
 const { pathInfo } = storeToRefs(pathStore);
+// const pathInfo = ref(JSON.parse(route.params.pathInfo));
 
 const attractionStore = useAttractionStore();
 const { attractionList } = storeToRefs(attractionStore);
@@ -120,6 +122,10 @@ onMounted(() => {
   console.log("Dddddddddd", days.value);
   console.log("on mounted", pathInfo.value);
   // console.log("attraction list ", attractionList.value);
+});
+
+onUpdated(() => {
+  console.log("Component updated");
 });
 
 const calcDate = () => {
@@ -240,9 +246,7 @@ function changeTab(dayIndex) {
 
 //day 탭을 클릭 했을 때 내 경로에서 해당되는 날짜만 선택
 const filteredAttractions = (dayIndex, order) => {
-  const newList = myAttractionList.value.filter(
-    (item) => item.day === dayIndex
-  );
+  let newList = myAttractionList.value.filter((item) => item.day === dayIndex);
   if (order > 0)
     newList = myAttractionList.value.filter((item) => item.orders > order);
   return newList;
@@ -267,6 +271,8 @@ const registMyPath = () => {
         ({ data }) => {
           console.log(data.dataBody);
           alert("계획 생성이 완료되었습니다.");
+
+          initPathInfo();
           router.push({ name: "main" });
         },
         (error) => {
@@ -283,14 +289,27 @@ const registMyPath = () => {
 //취소 버튼
 const cancelMakePath = () => {
   router.push({ name: "main" });
+  initPathInfo();
+  console.log(pathInfo.value);
+};
+
+//피니아 pathInfo 초기화
+const initPathInfo = () => {
+  console.log("init path info");
+  pathInfo.value = {
+    title: "",
+    content: "",
+    startDate: "",
+    endDate: "",
+    id: "",
+  };
 };
 </script>
 
 <template>
   <div
     class="container-fluid p-0 border border-primary"
-    style="height: fit-content"
-  >
+    style="height: fit-content">
     <!--상단 네비-->
     <nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
       <div class="container-fluid">
@@ -298,21 +317,18 @@ const cancelMakePath = () => {
 
         <div
           class="collapse navbar-collapse justify-content-end"
-          id="navbarSupportedContent"
-        >
+          id="navbarSupportedContent">
           <form class="d-flex" role="search">
             <button
               class="btn btn-outline-success me-2"
               type="submit"
-              @click.prevent="registMyPath"
-            >
+              @click.prevent="registMyPath">
               저장
             </button>
             <button
               class="btn btn-outline-success"
               type="button"
-              @click="cancelMakePath"
-            >
+              @click="cancelMakePath">
               취소
             </button>
           </form>
@@ -327,15 +343,13 @@ const cancelMakePath = () => {
             <VSelect
               class="mx-3"
               :selectOption="sidoList"
-              @onKeySelect="onChangeSido"
-            />
+              @onKeySelect="onChangeSido" />
 
             <VSelect
               class="mx-3"
               :disabled="gugunDisable"
               :selectOption="gugunList"
-              @onKeySelect="onChangeGugun"
-            />
+              @onKeySelect="onChangeGugun" />
           </div>
           <nav class="navbar navbar-expand-lg">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -363,8 +377,7 @@ const cancelMakePath = () => {
                     href="#"
                     ><img
                       class="icon-svg me-1 my-1"
-                      src="@/assets/img/utensils.svg"
-                    />음식점</a
+                      src="@/assets/img/utensils.svg" />음식점</a
                   >
                 </li>
                 <li class="nav-item mx-1">
@@ -396,15 +409,13 @@ const cancelMakePath = () => {
           </nav>
           <div
             v-if="attractionList && attractionList.length > 0"
-            class="attraction-list"
-          >
+            class="attraction-list">
             <PathMakeListItem
               v-for="item in attractionList"
               :key="item.content_id"
               :attraction="item"
               itemType="attraction"
-              @addAttractionToPath="addAttractionToPath"
-            ></PathMakeListItem>
+              @addAttractionToPath="addAttractionToPath"></PathMakeListItem>
           </div>
           <div v-else></div>
         </div>
@@ -436,8 +447,9 @@ const cancelMakePath = () => {
               :key="item.contentId"
               :attraction="item"
               :itemType="'mypath'"
-              @removeAttractionToPath="removeAttractionToPath"
-            ></PathMakeListItem>
+              @removeAttractionToPath="
+                removeAttractionToPath
+              "></PathMakeListItem>
           </div>
         </div>
       </div>

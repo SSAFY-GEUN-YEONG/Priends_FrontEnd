@@ -26,4 +26,14 @@ function createAndUpdatePathDetails(param, success, fail) {
     .catch(fail);
 }
 
-export { listSido, listGugun, createPath, createAndUpdatePathDetails };
+function getPathList(param, success, fail) {
+  local.get(`/path/get/list`, { params: param }).then(success).catch(fail);
+}
+
+export {
+  listSido,
+  listGugun,
+  createPath,
+  createAndUpdatePathDetails,
+  getPathList,
+};

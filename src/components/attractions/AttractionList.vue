@@ -10,12 +10,15 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 
 const attractionStore = useAttractionStore();
-const { category, attractionList } = storeToRefs(attractionStore);
+const { category } = storeToRefs(attractionStore);
+// const { category, attractionList } = storeToRefs(attractionStore);
 
 const param = ref({
   city: route.params.areaname,
   category: route.params.category,
 });
+
+const attractionList = ref([]);
 
 onMounted(() => {
   console.log(param.value);
