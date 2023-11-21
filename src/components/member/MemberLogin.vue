@@ -20,8 +20,11 @@ const loginMember = ref({
 const login = async () => {
   await memberLogin(loginMember.value);
   if (isLogin.value) {
-    changeMenuState();  // 메뉴 상태 바꾸기
+    // changeMenuState();  // 메뉴 상태 바꾸기
     router.push("/");   // 메인 페이지로 가기
+  }
+  else {
+    alert("아이디 또는 비밀번호를 잘못 입력했습니다. 다시 확인해주세요.");
   }
 }
 

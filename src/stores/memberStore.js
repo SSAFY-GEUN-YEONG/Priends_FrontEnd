@@ -20,32 +20,29 @@ export const useMemberStore = defineStore("memberStore", () => {
   const memberInfo = ref(null);
 
   const memberLogin = async (loginMember) => {
-    await memberLoginApi(
-      loginMember,
-      (response) => {
-        // 서버에서 성공적인 응답을 받았을 때
-        if (response.data.dataHeader.successCode === 0) {
-          // 로그인 성공 처리
-          isLogin.value = true; // 로그인 상태 업데이트
-          accessToken.value = response.data.dataBody.token.accessToken;
-          memberInfo.value = response.data.dataBody.memberInfo;
-          console.log("login member info : ", memberInfo.value);
-          const menuStore = useMenuStore(); // 메뉴 스토어 인스턴스 가져오기
-          menuStore.changeMenuState(); // 메뉴 상태 변경
-          console.log(response.data.dataBody);
-          console.log(response.data);
-        } else {
-          // 로그인 실패 처리
-          isLogin.value = false;
-          console.log(response.data.dataHeader);
-          console.log(response.data.dataHeader.resultMessage);
+    return new Promise((resolve, reject) => {
+      memberLoginApi(
+        loginMember,
+        (response) => {
+          if (response.data.dataHeader.successCode === 0) {
+            isLogin.value = true;
+            accessToken.value = response.data.dataBody.token.accessToken;
+            memberInfo.value = response.data.dataBody.memberInfo;
+            console.log("로그인한 회원 정보: ", memberInfo.value);
+            const menuStore = useMenuStore(); // 메뉴 스토어 인스턴스 가져오기
+            resolve(true);
+          } else {
+            isLogin.value = false;
+            resolve(false);
+            console.log(response.data.dataHeader.resultMessage);
+          }
+        },
+        (error) => {
+          reject(error);
+          console.log("로그인 실패: ", error);
         }
-      },
-      (error) => {
-        console.error("Login failed: ", error);
-        isLogin.value = false;
-      }
-    );
+      );
+    });
   };
 
   const memberLogout = async () => {
