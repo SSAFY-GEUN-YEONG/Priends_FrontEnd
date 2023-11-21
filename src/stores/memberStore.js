@@ -11,6 +11,7 @@ import {
   memberEmailCheckApi,
   memberPasswordUpdateApi,
 } from "@/api/memberApi";
+import { memberTempPasswordApi } from "../api/memberApi";
 
 export const useMemberStore = defineStore("memberStore", () => {
   const isLogin = ref(false);
@@ -20,29 +21,32 @@ export const useMemberStore = defineStore("memberStore", () => {
   const memberInfo = ref(null);
 
   const memberLogin = async (loginMember) => {
-    return new Promise((resolve, reject) => {
-      memberLoginApi(
-        loginMember,
-        (response) => {
-          if (response.data.dataHeader.successCode === 0) {
-            isLogin.value = true;
-            accessToken.value = response.data.dataBody.token.accessToken;
-            memberInfo.value = response.data.dataBody.memberInfo;
-            console.log("로그인한 회원 정보: ", memberInfo.value);
-            const menuStore = useMenuStore(); // 메뉴 스토어 인스턴스 가져오기
-            resolve(true);
-          } else {
-            isLogin.value = false;
-            resolve(false);
-            console.log(response.data.dataHeader.resultMessage);
-          }
-        },
-        (error) => {
-          reject(error);
-          console.log("로그인 실패: ", error);
+    await memberLoginApi(
+      loginMember,
+      (response) => {
+        // 서버에서 성공적인 응답을 받았을 때
+        if (response.data.dataHeader.successCode === 0) {
+          // 로그인 성공 처리
+          isLogin.value = true; // 로그인 상태 업데이트
+          accessToken.value = response.data.dataBody.token.accessToken;
+          memberInfo.value = response.data.dataBody.memberInfo;
+          console.log("로그인한 회원 정보 : ", memberInfo.value);
+          const menuStore = useMenuStore(); // 메뉴 스토어 인스턴스 가져오기
+          menuStore.changeMenuState(); // 메뉴 상태 변경
+          // console.log(response.data.dataBody);
+          // console.log(response.data);
+        } else {
+          // 로그인 실패 처리
+          isLogin.value = false;
+          // console.log(response.data.dataHeader);
+          // console.log(response.data.dataHeader.resultMessage);
         }
-      );
-    });
+      },
+      (error) => {
+        console.error("로그인 실패: ", error);
+        isLogin.value = false;
+      }
+    );
   };
 
   const memberLogout = async () => {
@@ -158,18 +162,50 @@ export const useMemberStore = defineStore("memberStore", () => {
         passwordData,
         (response) => {
           if (response.data.dataHeader.successCode === 0) {
-            resolve(response); // 비밀번호 변경 성공
-            console.log("비밀번호가 성공적으로 변경되었습니다!");
+            resolve({
+              success: true,
+              message: "비밀번호가 성공적으로 변경되었습니다!",
+            });
           }
           // 서버에서 실패 응답 받았을 경우
           else {
-            resolve(response); // 비밀번호 변경 실패
-            console.log(response.data.dataHeader.resultMessage);
+            resolve({
+              success: false,
+              message: response.data.dataHeader.resultMessage,
+            });
           }
         },
         (error) => {
-          reject(error); // 서버 내 오류
           console.log("비밀번호 변경 실패: ", error);
+          reject(error); // 서버 내 오류
+        }
+      );
+    });
+  };
+
+  // 임시 비밀번호 발급 메서드
+  const memberTempPassword = async (email) => {
+    return new Promise((resolve, reject) => {
+      memberTempPasswordApi(
+        email,
+        (response) => {
+          if (response.data.dataHeader.successCode === 0) {
+            console.log("임시 비밀번호가 발급되었습니다!");
+            resolve({
+              success: true,
+              message: "임시 비밀번호가 발급되었습니다!",
+            });
+          } else {
+            console.log(response.data.dataHeader.resultMessage);
+            resolve({
+              success: false,
+              message: response.data.dataHeader.resultMessage,
+            });
+          }
+        },
+        (error) => {
+          console.error("임시 비밀번호 발급 실패: ", error);
+          reject(error);
         }
       );
     });
@@ -186,5 +222,6 @@ export const useMemberStore = defineStore("memberStore", () => {
     memberSignup,
     memberEmailCheck,
     memberPasswordUpdate,
+    memberTempPassword,
   };
 });

@@ -1,15 +1,11 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { useAttractionStore } from "@/stores/attractionStore";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
-import { storeToRefs } from "pinia";
+import { getAttractionDetailApi } from "@/api/attractionApi";
 
 const route = useRoute();
-const attractionStore = useAttractionStore();
-
-const { attractionDetail } = storeToRefs(attractionStore); // 관광지 관련 저장소에 저장되어 있는 변수
-const { getAttractionDetail } = attractionStore; // 관광지 관련 저장소에 저장되어 있는 함수
+const attractionDetail = ref(null);
 
 // 맵에 전달할 데이터 집어넣기
 const selectedStation = ref({
@@ -20,20 +16,29 @@ const selectedStation = ref({
   first_image: null,
 });
 
+const fetchAttractionDetail = async () => {
+  const attractionId = route.params.attractionid;
+  try {
+    const response = await getAttractionDetailApi(attractionId);
+    attractionDetail.value = response.data.dataBody;
+    selectedStation.value = {
+      lat: attractionDetail.value.latitude, // 위도
+      lng: attractionDetail.value.longitude, // 경도
+      title: attractionDetail.value.title,
+      addr1: attractionDetail.value.addr1,
+      first_image: attractionDetail.value.first_image,
+    };
+  }
+  catch (error) {
+    console.error("여행지 관광정보 상세 받아오기 실패: ", error);
+  }
+}
+
+
 onMounted(() => {
-  const attractionId = route.params.attractionid; // 라우터에서 해당 param값 받아오기 (url)
-  getAttractionDetail(attractionId); // attractionStore에서 가져온 해당 메서드 호출
+  fetchAttractionDetail(); // 괄호를 추가하여 함수
 });
 
-watch(attractionDetail, (newDetail) => {
-  if (newDetail) {
-    selectedStation.value.lat = newDetail.latitude;
-    selectedStation.value.lng = newDetail.longitude;
-    selectedStation.value.title = newDetail.title;
-    selectedStation.value.addr1 = newDetail.addr1;
-    selectedStation.value.first_image = newDetail.first_image;
-  }
-});
 </script>
 
 <template>

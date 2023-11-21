@@ -1,17 +1,13 @@
 <script setup>
 import AttractionCityItem from "./item/AttractionCityItem.vue";
 import AttractionRecomandPathItem from "./item/AttractionRecommandPathItem.vue";
-import { ref, watch, onBeforeMount } from "vue";
-import { useAttractionStore } from "@/stores/attractionStore";
-import { storeToRefs } from "pinia";
-import { useRoute } from "vue-router";
+import { ref, onBeforeMount } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
-
 import { getAreaInfo } from "@/api/attractionApi.js";
-const attractionStore = useAttractionStore();
-const { category } = storeToRefs(attractionStore);
 
 const route = useRoute();
+const router = useRouter();
 
 const areainfo = ref({
   img: "",
@@ -20,87 +16,62 @@ const areainfo = ref({
   cultureAttractions: [],
 });
 
-const param = ref({
-  city: "",
-  category: "home",
-});
 
-onBeforeMount(async () => {
-  // city에 대한 초기값을 설정
-  param.value.city = route.params.areaname;
-  await getAreaInfo1();
-  console.log(param.value.city);
-});
+const selectedCategory = ref("nature");
+const selectedAttractions = ref([]);
 
-const getAreaInfo1 = async () => {
-  console.log("attraction city   얻어오자!!!", param.value.city);
-  await getAreaInfo(
-    param.value,
-    ({ data }) => {
-      console.log(data.dataBody.natureAttractions);
-      areainfo.value.img = data.dataBody.img;
+const fetchAreaInfo = async () => {
+  const city = route.params.areaname;
+  try {
+    const response = await getAreaInfo({ city, category: 'home' });
+    // console.log(response);
+    areainfo.value = response.data.dataBody;
+    updateSelectedAttractions();
+  }
+  catch (error) {
+    console.error('지역 정보를 가져오는 데 실패했습니다.', error);
+  }
+}
 
-      // areas.value = data.dataBody.map((value) => value.gugun_name);
-      areainfo.value.restaurantAttractions =
-        data.dataBody.restaurantAttractions;
-      areainfo.value.natureAttractions = data.dataBody.natureAttractions;
-      areainfo.value.cultureAttractions = data.dataBody.cultureAttractions;
-      console.log("areainfo ", areainfo.value);
-      selectCategory("nature");
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+// 선택된 카테고리에 따라 관광지 목록을 업데이트하는 함수
+const updateSelectedAttractions = () => {
+  switch (selectedCategory.value) {
+    case "nature":
+      selectedAttractions.value = areainfo.value.natureAttractions;
+      break;
+    case "restaurant":
+      selectedAttractions.value = areainfo.value.restaurantAttractions;
+      break;
+    case "culture":
+      selectedAttractions.value = areainfo.value.cultureAttractions;
+      break;
+    default:
+      selectedAttractions.value = areainfo.value.natureAttractions;
+  }
 };
-
-const selectedCategory = ref("");
-const selectedAttractions = ref(() => getSelectedAttractions());
-// const selectedAttractions = ref([]);
 
 function selectCategory(category) {
   selectedCategory.value = category;
-}
-watch(
-  () => selectedCategory.value,
-  () => {
-    selectedAttractions.value = getSelectedAttractions();
-    console.log("watch : ", selectedAttractions.value);
-  }
-  // () => {
-  //   getSelectedAttractions();
-  // }
-);
-
-function getSelectedAttractions() {
-  console.log("getSelectedAttractions() : " + selectedCategory.value);
-  switch (selectedCategory.value) {
-    case "nature":
-      // selectedAttractions.value = areainfo.value.natureAttractions;
-      return areainfo.value.natureAttractions;
-    case "restaurant":
-      // selectedAttractions.value = areainfo.value.restaurantAttractions;
-      return areainfo.value.restaurantAttractions;
-    case "culture":
-      // selectedAttractions.value = areainfo.value.cultureAttractions;
-      return areainfo.value.cultureAttractions;
-    default:
-      // selectedAttractions.value = areainfo.value.natureAttractions;
-      return areainfo.value.natureAttractions;
-  }
+  updateSelectedAttractions();
 }
 
-function setCategory(value) {
-  category.value = value;
-  console.log("category :", category.value);
+function goToAttracitionDetail(contentId) {
+  router.push({
+    name: 'attraction-area-detail',
+    params: { attractionid: contentId }
+  });
 }
+
+onBeforeMount(() => {
+  fetchAreaInfo();
+});
 </script>
 
 <template>
   <div class="d-flex flex-column align-items-center">
     <div class="mb-5" style="max-width: 1092px; width: 100%">
-      <div class="mb-3">여행지 > {{ param.city }} > 홈</div>
-      <h3>{{ param.city }}</h3>
+      <div class="mb-3">여행지 > {{ route.params.areaname }} > 홈</div>
+      <h3>{{ route.params.areaname }}</h3>
       <div class="pt-1">
         <ul class="nav nav-tabs nav-fill">
           <li class="nav-item">
@@ -113,7 +84,7 @@ function setCategory(value) {
               class="nav-link text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: param.city, category: 'hotel' },
+                params: { areaname: route.params.areaname, category: 'hotel' },
               }"
               @click="() => setCategory('hotel')"
               >호텔</router-link
@@ -128,7 +99,7 @@ function setCategory(value) {
               class="nav-link text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: param.city, category: 'culture' },
+                params: { areaname: route.params.areaname, category: 'culture' },
               }"
               @click="() => setCategory('culture')"
               >문화생활</router-link
@@ -139,7 +110,7 @@ function setCategory(value) {
               class="nav-link text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: param.city, category: 'restaurant' },
+                params: { areaname: route.params.areaname, category: 'restaurant' },
               }"
               @click="() => setCategory('restaurant')"
               >음식점</router-link
@@ -150,7 +121,7 @@ function setCategory(value) {
               class="nav-link text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: param.city, category: 'market' },
+                params: { areaname: route.params.areaname, category: 'market' },
               }"
               @click="() => setCategory('market')"
               >마켓</router-link
@@ -161,7 +132,7 @@ function setCategory(value) {
               class="nav-link text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: param.city, category: 'activity' },
+                params: { areaname: route.params.areaname, category: 'activity' },
               }"
               @click="() => setCategory('activity')"
               >액티비티</router-link
@@ -172,7 +143,7 @@ function setCategory(value) {
               class="nav-link text-dark"
               :to="{
                 name: 'attraction-area-category',
-                params: { areaname: param.city, category: 'nature' },
+                params: { areaname: route.params.areaname, category: 'nature' },
               }"
               @click="() => setCategory('nature')"
               >자연</router-link
@@ -182,12 +153,12 @@ function setCategory(value) {
       </div>
       <div class="d-flex flex-row">
         <img :src="areainfo.img" style="max-height: 362px" />
-        <VKakaoMap :attractions="selectedAttractions"></VKakaoMap>
+        <VKakaoMap :attractions="selectedAttractions" style="height: 362px;"></VKakaoMap>
       </div>
     </div>
 
     <div class="my-5" style="max-width: 1092px; width: 100%">
-      <h4 class="text-center">{{ param.city }} 인기장소</h4>
+      <h4 class="text-center">{{ route.params.areaname }} 인기장소</h4>
       <div class="">
         <ul class="nav nav-tabs">
           <li class="nav-item">
@@ -222,7 +193,9 @@ function setCategory(value) {
         <AttractionCityItem
           v-for="item in selectedAttractions"
           :key="item.content_id"
-          :attraction="item" />
+          :attraction="item"
+          @click="goToAttracitionDetail(item.content_id)">
+        </AttractionCityItem>
       </div>
     </div>
 

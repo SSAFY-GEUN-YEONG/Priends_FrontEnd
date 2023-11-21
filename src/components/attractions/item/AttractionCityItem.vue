@@ -3,10 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faUser, faHeart, faEye } from "@fortawesome/free-regular-svg-icons";
 
 const props = defineProps(["attraction"]);
+
+// 여기서 click 이벤트를 발생시킬 수 있도록 정의합니다.
+const emit = defineEmits(["click"]);
+
+function emitClickEvent() {
+  emit('click');
+}
 </script>
 
 <template>
-  <div class="path-list-item">
+  <div class="path-list-item" @click="emitClickEvent">
     <img class="path-list-img" :src="attraction.first_image" />
     <div class="content">
       <h5>{{ attraction.title }}</h5>
