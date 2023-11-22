@@ -1,5 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router";
+import { onBeforeMount } from "vue";
+
 import VueDatepicker from "vue3-datepicker";
 
 import { usePathStore } from "@/stores/pathStore";
@@ -11,6 +13,11 @@ const { pathInfo } = storeToRefs(pathStore);
 const datePickerLanguage = "kr"; // 로케일 설정 (한국어)
 
 const router = useRouter();
+
+onBeforeMount(() => {
+  console.log("step1 reset pinia");
+  pathStore.reset();
+});
 
 // const pathInfo = ref({
 //   title: "",
@@ -52,7 +59,8 @@ const compareDates = (startDate, endDate) => {
 
 <template>
   <div
-    class="container p-4 mb-5 border border-secondary-subtle d-flex flex-column align-items-center">
+    class="container p-4 mb-5 border border-secondary-subtle d-flex flex-column align-items-center"
+  >
     <h3 class="my-4">여행 계획 세우기</h3>
 
     <div class="d-flex flex-column">
@@ -71,7 +79,8 @@ const compareDates = (startDate, endDate) => {
           class="form-control"
           id="datepicker_start"
           v-model="pathInfo.startDate"
-          :language="datePickerLanguage"></vue-datepicker>
+          :language="datePickerLanguage"
+        ></vue-datepicker>
       </div>
     </div>
 
@@ -82,14 +91,16 @@ const compareDates = (startDate, endDate) => {
           class="form-control"
           id="datepicker_end"
           v-model="pathInfo.endDate"
-          :language="datePickerLanguage"></vue-datepicker>
+          :language="datePickerLanguage"
+        ></vue-datepicker>
       </div>
     </div>
 
     <button
       type="button"
       class="btn btn-make mt-2 mb-5 pt-2 pb-2"
-      @click="moveStep2">
+      @click="moveStep2"
+    >
       계획 세우기
     </button>
   </div>

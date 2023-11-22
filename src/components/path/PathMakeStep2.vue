@@ -284,8 +284,7 @@ const registMyPath = () => {
         ({ data }) => {
           console.log(data.dataBody);
           alert("계획 생성이 완료되었습니다.");
-
-          initPathInfo();
+          pathStore.reset();
           router.push({ name: "main" });
         },
         (error) => {
@@ -301,8 +300,10 @@ const registMyPath = () => {
 
 //취소 버튼
 const cancelMakePath = () => {
-  initPathInfo();
-  console.log(pathInfo.value);
+  // initPathInfo();
+  // console.log(pathInfo.value);
+
+  pathStore.reset();
   router.push({ name: "main" });
 };
 

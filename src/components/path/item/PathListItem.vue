@@ -15,7 +15,7 @@ const calcDate = () => {
   const date2 = new Date(props.pathInfo.endDate);
 
   // 두 날짜 간의 차이를 밀리초로 얻고 일로 변환
-  const dayDifference = Math.abs(date2 - date1) / (1000 * 60 * 60 * 24);
+  const dayDifference = Math.abs(date2 - date1) / (1000 * 60 * 60 * 24) + 1;
   console.log("day :::", dayDifference);
   return dayDifference;
 };

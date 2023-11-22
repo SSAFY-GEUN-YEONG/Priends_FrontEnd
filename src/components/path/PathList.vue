@@ -13,12 +13,19 @@ onBeforeMount(() => {
   getListPath();
 });
 
+const param = ref({
+  pathId: -1,
+  city: "",
+  order: 1,
+  limitCount: 0,
+});
+
 const getListPath = () => {
   console.log("path 목록 가져오기!");
   getPathList(
-    { isMy: false },
+    param.value,
     ({ data }) => {
-      // console.log(data.dataBody);
+      console.log(data.dataBody);
       pathList.value = data.dataBody;
       console.log("pathList : ", pathList.value);
     },
@@ -39,17 +46,20 @@ function goToPathDetail(id) {
 <template>
   <div class="d-flex flex-column align-items-center">
     <div
-      class="search-area d-flex flex-column align-items-center justify-content-center">
+      class="search-area d-flex flex-column align-items-center justify-content-center"
+    >
       <div class="text-wrapper text-center pb-5">
         Priends의 여행 계획을 살펴보세요!
       </div>
       <div
-        class="div-search-area d-flex flex-column justify-content-center align-items-center">
+        class="div-search-area d-flex flex-column justify-content-center align-items-center"
+      >
         <div>
           <input
             type="text"
             class="input"
-            placeholder="계획하고 싶은 도시를 입력하세요." />
+            placeholder="계획하고 싶은 도시를 입력하세요."
+          />
           <p class="recommend_city pt-3 mb-0">추천도시 : 제주, 부산, 서울</p>
         </div>
       </div>
@@ -273,7 +283,8 @@ function goToPathDetail(id) {
 
     <div class="d-flex flex-column">
       <div
-        class="d-flex justify-content-between align-items-center mb-2 path-list-item">
+        class="d-flex justify-content-between align-items-center mb-2 path-list-item"
+      >
         <div class="">
           <button class="btn">인기</button> |
           <button class="btn">신규</button>
@@ -292,7 +303,8 @@ function goToPathDetail(id) {
           v-for="item in pathList"
           :key="item.id"
           :pathInfo="item"
-          @click="goToPathDetail(item.id)">
+          @click="goToPathDetail(item.id)"
+        >
         </PathListItem>
       </div>
     </div>

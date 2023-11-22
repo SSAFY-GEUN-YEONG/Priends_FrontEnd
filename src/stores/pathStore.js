@@ -10,5 +10,13 @@ export const usePathStore = defineStore("pathStore", () => {
     id: "",
   });
 
-  return { pathInfo };
+  const reset = () => {
+    pathInfo.value.title = "";
+    pathInfo.value.content = "";
+    pathInfo.value.startDate = "";
+    pathInfo.value.endDate = "";
+    pathInfo.value.id = "";
+  };
+
+  return { pathInfo, reset };
 });

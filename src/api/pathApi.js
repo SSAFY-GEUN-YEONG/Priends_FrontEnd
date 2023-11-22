@@ -27,7 +27,20 @@ function createAndUpdatePathDetails(param, success, fail) {
 }
 
 function getPathList(param, success, fail) {
-  local.get(`/path/get/list`, { params: param }).then(success).catch(fail);
+  console.log("getPathList param", param);
+  return local
+    .get(`/path/get/list`, { params: param })
+    .then(success)
+    .catch(fail);
+}
+
+function getMyPathList(success, fail) {
+  local.get(`/path/get/mylist`, then(success).catch(fail));
+}
+
+function getPathDetailsWithAttraction(pathId, success, fail) {
+  console.log("getPathDetailsWithAttraction param", pathId);
+  return local.get(`/path/detail/get/list/${pathId}`).then(success).catch(fail);
 }
 
 export {
@@ -36,4 +49,6 @@ export {
   createPath,
   createAndUpdatePathDetails,
   getPathList,
+  getMyPathList,
+  getPathDetailsWithAttraction,
 };
