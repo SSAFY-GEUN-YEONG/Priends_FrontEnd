@@ -73,34 +73,41 @@ const displayMarkersAndPolyline  = () => {
 
   let path = [];
 
-  props.attractions.forEach(attraction => {
+  props.attractions.forEach((attraction, index) => {
     const position = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
+
+    // 마커 이미지 설정
+    const imageSrc = 'https://cdn-icons-png.flaticon.com/512/4467/4467108.png';
+    const imageSize = new kakao.maps.Size(40, 40);  // 마커 이미지 크기
+    const imageOption = { offset: new kakao.maps.Point(13, 35) }; // 마커 이미지 옵션
+
+    // 마커에 사용될 이미지 객체 생성
+    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
     // 마커 생성 설정
     const marker = new kakao.maps.Marker({
       map: map.value,
       position: position,
-      // 마커에 숫자 표시하기 (추가적인 커스텀)
+      image: markerImage,
+      zIndex: index // 순서대로 표시하기 위해 z-index 설정
     });
-    markers.value.set(attraction.content_id, marker);
 
-    // 커스텀 오버레이 부분
-    const content = `
-    <div class="wrap">
-      <div class="info">
-        <div class="title">
-          ${attraction.title}
-        </div>
-      </div>
-    </div>
-    `;
+    // 마커 순서를 표시하기 위한 오버레이
+    const markerLabelContent = `
+      <div class="marker-number">
+        ${index + 1}
+      </div>`; // 여기서 index는 마커의 순서(1부터 시작)
 
-    const overlay = new kakao.maps.CustomOverlay({
-      content: content,
+    const markerLabel = new kakao.maps.CustomOverlay({
+      content: markerLabelContent,
       map: map.value,
-      position: marker.getPosition()
+      position: marker.getPosition(),
+      yAnchor: 1, // 마커 이미지의 중앙 아래에 오버레이가 오도록 설정
+      zIndex: index // 순서대로 표시하기 위해 z-index 설정
     });
 
-    overlays.value.set(attraction.content_id, overlay);
+    markers.value.set(attraction.content_id, marker);
+    overlays.value.set(attraction.content_id, markerLabel);
     map.value.setCenter(position);
 
     path.push(position);
@@ -130,9 +137,6 @@ onMounted(() => {
   }
 });
 
-
-
-
 </script>
 
 <template>
@@ -146,8 +150,15 @@ onMounted(() => {
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
-.wrap {
-  font-size: 20px;
+.marker-number {
+  color: #FFFFFF; /* 숫자 색상 */
+  background-color: #C19EE0; /* 배경 색상 */
+  border-radius: 50%; /* 원형으로 표시 */
+  padding: 5px 10px; /* 안쪽 여백 */
+  font-size: 14px; /* 글꼴 크기 */
+  font-weight: bold; /* 글꼴 굵기 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
+  display: inline-block; /* 인라인 블록으로 표시 */
 }
-
 </style>
