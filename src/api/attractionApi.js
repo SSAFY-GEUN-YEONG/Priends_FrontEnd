@@ -29,4 +29,16 @@ function getAreaListByCategory(param, success, fail) {
     .catch(fail);
 }
 
-export { listArea, getAreaInfo, getAreaListByCategory, getAttractionDetailApi };
+// 조회수 기준 상위 4개 관광지 벙보 가져오기
+
+function topGetAttractionListApi(success, fail) {
+  return local.get(`/attraction/top/get`).then(success).catch(fail);
+}
+
+export {
+  listArea,
+  getAreaInfo,
+  getAreaListByCategory,
+  getAttractionDetailApi,
+  topGetAttractionListApi,
+};
