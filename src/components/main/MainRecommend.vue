@@ -1,8 +1,11 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import MainRecommendAttractionItem from "./item/MainRecommendAttractionItem.vue";
+import MainRecommendPathItem from "./item/MainRecommendPathItem.vue";
 import { topGetAttractionListApi } from "@/api/attractionApi";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const attractions = ref([]); // 인기 관광지 목록을 담을 반응형 변수
 
 
@@ -16,6 +19,10 @@ const fetchTopAttractions = () => {
       console.error(error);
     }
   );
+};
+
+const navigateToAttractionDetail = (contentId) => {
+  router.push({ name: 'attraction-area-detail', params: { attractionid: contentId } });
 };
 
 // 컴포넌트가 마운트될 때 인기 관광지 목록을 가져옵니다.
@@ -35,7 +42,7 @@ onMounted(fetchTopAttractions);
           :key="attraction.content_id"
           :title="attraction.title"
           :image="attraction.first_image"
-          :addr1="attraction.addr1"
+          @click="navigateToAttractionDetail(attraction.content_id)"
         />
       </div>
     </div>
@@ -45,10 +52,10 @@ onMounted(fetchTopAttractions);
       <div
         class="recommend-attraction px-3 d-flex flex-row justify-content-between mb-5"
       >
-        <MainRecommendAttractionItem />
-        <MainRecommendAttractionItem />
-        <MainRecommendAttractionItem />
-        <MainRecommendAttractionItem />
+        <MainRecommendPathItem />
+        <MainRecommendPathItem />
+        <MainRecommendPathItem />
+        <MainRecommendPathItem />
       </div>
     </div>
   </div>
@@ -58,4 +65,6 @@ onMounted(fetchTopAttractions);
 .recommend-attraction {
   width: 1092px;
 }
+
+
 </style>
