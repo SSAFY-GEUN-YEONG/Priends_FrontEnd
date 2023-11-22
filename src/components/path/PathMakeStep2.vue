@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted, onUpdated } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 import { usePathStore } from "@/stores/pathStore";
 import { storeToRefs } from "pinia";
@@ -15,6 +15,7 @@ import {
 
 import PathMakeListItem from "@/components/path/item/PathMakeListItem.vue";
 import VSelect from "@/components/common/VSelect.vue";
+import VKakaoMap from "@/components/common/VKakaoMap.vue";
 
 // const route = useRoute();
 const router = useRouter();
@@ -31,6 +32,7 @@ const attractionList = ref([]);
 const sidoList = ref([]);
 const gugunList = ref([{ text: "구군선택", value: "" }]);
 const gugunDisable = ref(false);
+
 
 const param = ref({
   // serviceKey: VITE_OPEN_API_SERVICE_KEY,
@@ -53,6 +55,7 @@ const days = ref(0);
 //내 여행 경로
 const myAttractionList = ref([]);
 const orders = ref([]); //여행 일자 별 여행지의 순서
+
 
 //PathMakeListIme 에서 받은 attraction으로 경로에 추가
 const addAttractionToPath = async (attraction) => {
@@ -119,6 +122,7 @@ const removeAttractionToPath = (attraction) => {
   }
 
   console.log(myAttractionList.value);
+
 };
 
 onMounted(() => {
@@ -317,6 +321,7 @@ const initPathInfo = () => {
     id: "",
   };
 };
+
 </script>
 
 <template>
@@ -470,7 +475,9 @@ const initPathInfo = () => {
           </div>
         </div>
       </div>
-      <div class="col-6 border border-danger">map</div>
+      <div class="col-6 border">
+        <VKakaoMap style="height: 1026px;" :attractions="myAttractionList"></VKakaoMap>
+      </div>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount, watch, onMounted } from "vue";
+import { ref, watch, onMounted } from "vue";
 
 const map = ref(null);
 const markers = ref([]);
@@ -10,7 +10,6 @@ const props = defineProps({
   selectStation: Object,
   attractions: Array
 });
-
 
 // 관광지들의 평균 위치를 계산하는 함수
 const calculateCenter = (attractions) => {
@@ -186,7 +185,7 @@ const addMarkers = () => {
 
 // 관측하여 마커 업데이트
 watch(() => props.attractions, (newAttractions) => {
-  if (map.value && newAttractions) {
+  if (map.value && newAttractions && newAttractions.length > 0) {
     addMarkers(); // 마커를 추가하는 함수
   }
 }, { deep: true });
@@ -199,6 +198,9 @@ onMounted(async () => {
   }
 
 });
+
+
+
 </script>
 
 <template>
