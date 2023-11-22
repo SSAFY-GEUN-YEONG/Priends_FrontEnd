@@ -7,32 +7,24 @@ import { getAttractionDetailApi } from "@/api/attractionApi";
 const route = useRoute();
 const attractionDetail = ref(null);
 
-// 맵에 전달할 데이터 집어넣기
-const selectedStation = ref({
-  lat: 0, // 위도
-  lng: 0, // 경도
-  title: null,
-  addr1: null,
-  first_image: null,
-});
+const selectedStations = ref([]); // attractions을 배열로 변경
 
 const fetchAttractionDetail = async () => {
   const attractionId = route.params.attractionid;
   try {
     const response = await getAttractionDetailApi(attractionId);
     attractionDetail.value = response.data.dataBody;
-    selectedStation.value = {
-      lat: attractionDetail.value.latitude, // 위도
-      lng: attractionDetail.value.longitude, // 경도
+    selectedStations.value = [{ // 배열 안에 객체를 담아서 설정
+      latitude: attractionDetail.value.latitude,
+      longitude: attractionDetail.value.longitude,
       title: attractionDetail.value.title,
       addr1: attractionDetail.value.addr1,
       first_image: attractionDetail.value.first_image,
-    };
+    }];
+  } catch (error) {
+    console.error('여행지 관광정보 상세 받아오기 실패: ', error);
   }
-  catch (error) {
-    console.error("여행지 관광정보 상세 받아오기 실패: ", error);
-  }
-}
+};
 
 
 onMounted(() => {
@@ -122,7 +114,7 @@ onMounted(() => {
         <!--맵 부분 -->
         <!-- 여기에 VKakaoMap 컴포넌트 추가 -->
         <!-- <div class="map-container"> -->
-        <VKakaoMap :selectStation="selectedStation" style="height: 700px;"></VKakaoMap>
+        <VKakaoMap :attractions="selectedStations" style="height: 700px;"></VKakaoMap>
         <!-- </div> -->
       </div>
     </div>
