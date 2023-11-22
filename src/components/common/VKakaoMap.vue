@@ -4,6 +4,7 @@ import { ref, watch, onMounted } from 'vue';
 const map = ref(null);
 const markers = ref(new Map()); // 마커를 저장할 Map 객체
 const overlays = ref(new Map()); // 오버레이를 저장할 Map 객체
+const polyline = ref(null);
 
 const props = defineProps({
   attractions: Array
@@ -39,7 +40,7 @@ const initMap = () => {
   };
 
   map.value = new kakao.maps.Map(container, options);
-  displayMarkers(); // 지도가 초기화된 후에 마커를 표시
+  // displayMarkers(); // 지도가 초기화된 후에 마커를 표시
 };
 
 const loadKakaoMapScript = () => {
@@ -49,15 +50,20 @@ const loadKakaoMapScript = () => {
   document.head.appendChild(script);
 };
 
+
 const clearMarkersAndOverlays = () => {
   markers.value.forEach(marker => marker.setMap(null));
   markers.value.clear();
   overlays.value.forEach(overlay => overlay.setMap(null));
   overlays.value.clear();
+  if (polyline.value) {
+    polyline.value.setMap(null);  // 폴리라인도 제거
+  }
 };
 
 
-const displayMarkers = () => {
+// 마커, 오버레이, 폴리라인을 표시하는 함수
+const displayMarkersAndPolyline  = () => {
   if (!window.kakao || !window.kakao.maps) {
     console.error("카카오맵 API 아직 호출 안됨!!!");
     return;
@@ -65,38 +71,64 @@ const displayMarkers = () => {
 
   clearMarkersAndOverlays();
 
-  props.attractions.forEach(attraction => {
+  let path = [];
+
+  props.attractions.forEach((attraction, index) => {
     const position = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
+
+    // 마커 이미지 설정
+    const imageSrc = 'https://cdn-icons-png.flaticon.com/512/4467/4467108.png';
+    const imageSize = new kakao.maps.Size(40, 40);  // 마커 이미지 크기
+    const imageOption = { offset: new kakao.maps.Point(13, 35) }; // 마커 이미지 옵션
+
+    // 마커에 사용될 이미지 객체 생성
+    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
+    // 마커 생성 설정
     const marker = new kakao.maps.Marker({
       map: map.value,
-      position: position
+      position: position,
+      image: markerImage,
+      zIndex: index // 순서대로 표시하기 위해 z-index 설정
     });
-    markers.value.set(attraction.content_id, marker);
-    const content = `
-    <div class="wrap">
-      <div class="info">
-        <div class="title">
-          ${attraction.title}
-        </div>
-      </div>
-    </div>
-    `;
 
-    const overlay = new kakao.maps.CustomOverlay({
-      content: content,
+    // 마커 순서를 표시하기 위한 오버레이
+    const markerLabelContent = `
+      <div class="marker-number">
+        ${index + 1}
+      </div>`; // 여기서 index는 마커의 순서(1부터 시작)
+
+    const markerLabel = new kakao.maps.CustomOverlay({
+      content: markerLabelContent,
       map: map.value,
-      position: marker.getPosition()
+      position: marker.getPosition(),
+      yAnchor: 1, // 마커 이미지의 중앙 아래에 오버레이가 오도록 설정
+      zIndex: index // 순서대로 표시하기 위해 z-index 설정
     });
 
-    overlays.value.set(attraction.content_id, overlay);
+    markers.value.set(attraction.content_id, marker);
+    overlays.value.set(attraction.content_id, markerLabel);
     map.value.setCenter(position);
+
+    path.push(position);
   });
+
+  polyline.value = new kakao.maps.Polyline({
+    path: path, // 폴리라인 경로 설정
+    strokeWeight: 5, // 선 두께
+    strokeColor: '#FFAE00', // 선 색상
+    strokeOpacity: 1, // 선 투명도
+    strokeStyle: 'solid' // 선 스타일
+  });
+  polyline.value.setMap(map.value); // 폴리라인 지도에 표시
 };
 
+// 값 변경될때 마다 실행
 watch(() => props.attractions, (newAttractions) => {
-  displayMarkers();
+  displayMarkersAndPolyline();
 }, { deep: true });
 
+// 해당 컴포넌트 처음 마운트 될 때 실행
 onMounted(() => {
   if (!window.kakao || !window.kakao.maps) {
     loadKakaoMapScript();
@@ -104,9 +136,6 @@ onMounted(() => {
     initMap();
   }
 });
-
-
-
 
 </script>
 
@@ -121,8 +150,15 @@ onMounted(() => {
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
-.wrap {
-  font-size: 20px;
+.marker-number {
+  color: #FFFFFF; /* 숫자 색상 */
+  background-color: #C19EE0; /* 배경 색상 */
+  border-radius: 50%; /* 원형으로 표시 */
+  padding: 5px 10px; /* 안쪽 여백 */
+  font-size: 14px; /* 글꼴 크기 */
+  font-weight: bold; /* 글꼴 굵기 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
+  display: inline-block; /* 인라인 블록으로 표시 */
 }
-
 </style>
