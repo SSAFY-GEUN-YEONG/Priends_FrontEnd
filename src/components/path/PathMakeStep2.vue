@@ -3,7 +3,6 @@ import { ref, watch, onMounted, onUpdated } from "vue";
 import { useRouter } from "vue-router";
 
 import { usePathStore } from "@/stores/pathStore";
-import { useAttractionStore } from "@/stores/attractionStore";
 import { storeToRefs } from "pinia";
 
 import { getAreaListByCategory } from "@/api/attractionApi";
@@ -25,8 +24,10 @@ const pathStore = usePathStore();
 const { pathInfo } = storeToRefs(pathStore);
 // const pathInfo = ref(JSON.parse(route.params.pathInfo));
 
-const attractionStore = useAttractionStore();
-const { attractionList } = storeToRefs(attractionStore);
+// const attractionStore = useAttractionStore();
+// const { attractionList } = storeToRefs(attractionStore);
+
+const attractionList = ref([]);
 
 const sidoList = ref([]);
 const gugunList = ref([{ text: "구군선택", value: "" }]);
@@ -57,30 +58,46 @@ const orders = ref([]); //여행 일자 별 여행지의 순서
 
 
 //PathMakeListIme 에서 받은 attraction으로 경로에 추가
-const addAttractionToPath = (attraction) => {
-  // 중복 검사: 동일한 content_id를 가진 관광지가 이미 리스트에 있는지 확인
-  const isDuplicate = myAttractionList.value.some(
-    (item) => item.content_id === attraction.content_id && item.day === activeTab.value
+const addAttractionToPath = async (attraction) => {
+  console.log("Attraction added to path:", attraction);
+
+  console.log("order active tab ++");
+  const newAddAttraction = {
+    title: attraction.title,
+    addr1: attraction.addr1,
+    addr2: attraction.addr2,
+    content_id: attraction.content_id,
+    first_image: attraction.first_image,
+    gugun_code: attraction.gugun_code,
+    sido_code: attraction.sido_code,
+  };
+  // attraction;
+  newAddAttraction.orders = orders.value[activeTab.value]++;
+  newAddAttraction.day = activeTab.value;
+  newAddAttraction.contentId = attraction.content_id;
+  newAddAttraction.id = null;
+
+  // myAttractionList에 추가
+  myAttractionList.value.push(newAddAttraction);
+  console.log(
+    "day ",
+    activeTab.value,
+    " order ",
+    orders.value[activeTab.value]
   );
 
-  if (isDuplicate) {
-    // 중복이 있다면 알림을 표시하고 추가하지 않음
-    alert("중복되는 여행지입니다!");
-  } else {
-    // 중복이 없다면 리스트에 관광지 추가
-    console.log("Attraction added to path:", attraction);
-    attraction.orders = orders.value[activeTab.value]++;
-    attraction.day = activeTab.value;
-    attraction.contentId = attraction.content_id;
-    attraction.id = null;
-    myAttractionList.value.push(attraction);
-    console.log(myAttractionList.value);
-  }
+  // console.log(newAttraction);
+  console.log(myAttractionList.value);
 };
 
 //PathMakeListIme 에서 받은 attraction으로 경로에서 삭제 추가
 const removeAttractionToPath = (attraction) => {
-  console.log("Attraction remove from path:", attraction);
+  console.log(
+    "Attraction remove from path:",
+    attraction.title,
+    attraction.day,
+    attraction.orders
+  );
   // attraction의 content_id, orders, day를 기준으로 삭제할 여행지의 인덱스를 찾음
   const attractionIndex = myAttractionList.value.findIndex(
     (item) =>
@@ -109,7 +126,7 @@ const removeAttractionToPath = (attraction) => {
 };
 
 onMounted(() => {
-  attractionStore.attractionList = [];
+  attractionList.value = [];
   getSidoList();
 
   pathInfo.value.startDate = formatDate(pathInfo.value.startDate);
@@ -248,11 +265,8 @@ function changeTab(dayIndex) {
 }
 
 //day 탭을 클릭 했을 때 내 경로에서 해당되는 날짜만 선택
-const filteredAttractions = (dayIndex, order) => {
-  let newList = myAttractionList.value.filter((item) => item.day === dayIndex);
-  if (order > 0)
-    newList = myAttractionList.value.filter((item) => item.orders > order);
-  return newList;
+const filteredAttractions = (dayIndex) => {
+  return myAttractionList.value.filter((item) => item.day === dayIndex);
 };
 
 //저장 버튼
@@ -291,9 +305,9 @@ const registMyPath = () => {
 
 //취소 버튼
 const cancelMakePath = () => {
-  router.push({ name: "main" });
   initPathInfo();
   console.log(pathInfo.value);
+  router.push({ name: "main" });
 };
 
 //피니아 pathInfo 초기화
@@ -311,9 +325,7 @@ const initPathInfo = () => {
 </script>
 
 <template>
-  <div
-    class="container-fluid p-0 border border-primary"
-    style="height: fit-content">
+  <div class="container-fluid p-0" style="height: fit-content">
     <!--상단 네비-->
     <nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
       <div class="container-fluid">
@@ -321,18 +333,21 @@ const initPathInfo = () => {
 
         <div
           class="collapse navbar-collapse justify-content-end"
-          id="navbarSupportedContent">
+          id="navbarSupportedContent"
+        >
           <form class="d-flex" role="search">
             <button
               class="btn btn-outline-success me-2"
               type="submit"
-              @click.prevent="registMyPath">
+              @click.prevent="registMyPath"
+            >
               저장
             </button>
             <button
               class="btn btn-outline-success"
               type="button"
-              @click="cancelMakePath">
+              @click="cancelMakePath"
+            >
               취소
             </button>
           </form>
@@ -347,13 +362,15 @@ const initPathInfo = () => {
             <VSelect
               class="mx-3"
               :selectOption="sidoList"
-              @onKeySelect="onChangeSido" />
+              @onKeySelect="onChangeSido"
+            />
 
             <VSelect
               class="mx-3"
               :disabled="gugunDisable"
               :selectOption="gugunList"
-              @onKeySelect="onChangeGugun" />
+              @onKeySelect="onChangeGugun"
+            />
           </div>
           <nav class="navbar navbar-expand-lg">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -381,7 +398,8 @@ const initPathInfo = () => {
                     href="#"
                     ><img
                       class="icon-svg me-1 my-1"
-                      src="@/assets/img/utensils.svg" />음식점</a
+                      src="@/assets/img/utensils.svg"
+                    />음식점</a
                   >
                 </li>
                 <li class="nav-item mx-1">
@@ -413,13 +431,15 @@ const initPathInfo = () => {
           </nav>
           <div
             v-if="attractionList && attractionList.length > 0"
-            class="attraction-list">
+            class="attraction-list"
+          >
             <PathMakeListItem
               v-for="item in attractionList"
               :key="item.content_id"
               :attraction="item"
               itemType="attraction"
-              @addAttractionToPath="addAttractionToPath"></PathMakeListItem>
+              @addAttractionToPath="addAttractionToPath"
+            ></PathMakeListItem>
           </div>
           <div v-else></div>
         </div>
@@ -443,17 +463,15 @@ const initPathInfo = () => {
             </li>
           </ul>
         </div>
-        <div v-for="dayIndex in days" :key="dayIndex">
+        <div v-for="dayIndex in days" :key="dayIndex" class="attraction-list">
           <div v-if="activeTab === dayIndex">
-            {{ dayIndex }} 번 탭이야
             <PathMakeListItem
-              v-for="item in filteredAttractions(dayIndex, 0)"
+              v-for="item in filteredAttractions(dayIndex)"
               :key="item.contentId"
               :attraction="item"
               :itemType="'mypath'"
-              @removeAttractionToPath="
-                removeAttractionToPath
-              "></PathMakeListItem>
+              @removeAttractionToPath="removeAttractionToPath"
+            ></PathMakeListItem>
           </div>
         </div>
       </div>
