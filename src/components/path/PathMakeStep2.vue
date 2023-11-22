@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted, onUpdated } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 import { usePathStore } from "@/stores/pathStore";
 import { storeToRefs } from "pinia";
@@ -15,6 +15,8 @@ import {
 
 import PathMakeListItem from "@/components/path/item/PathMakeListItem.vue";
 import VSelect from "@/components/common/VSelect.vue";
+import VKakaoMap from "@/components/common/VKakaoMap.vue";
+
 
 // const route = useRoute();
 const router = useRouter();
@@ -31,6 +33,7 @@ const attractionList = ref([]);
 const sidoList = ref([]);
 const gugunList = ref([{ text: "구군선택", value: "" }]);
 const gugunDisable = ref(false);
+
 
 const param = ref({
   // serviceKey: VITE_OPEN_API_SERVICE_KEY,
@@ -54,37 +57,51 @@ const days = ref(0);
 const myAttractionList = ref([]);
 const orders = ref([]); //여행 일자 별 여행지의 순서
 
+
 //PathMakeListIme 에서 받은 attraction으로 경로에 추가
-const addAttractionToPath = async (attraction) => {
-  console.log("Attraction added to path:", attraction);
-
-  console.log("order active tab ++");
-  const newAddAttraction = {
-    title: attraction.title,
-    addr1: attraction.addr1,
-    addr2: attraction.addr2,
-    content_id: attraction.content_id,
-    first_image: attraction.first_image,
-    gugun_code: attraction.gugun_code,
-    sido_code: attraction.sido_code,
-  };
-  // attraction;
-  newAddAttraction.orders = orders.value[activeTab.value]++;
-  newAddAttraction.day = activeTab.value;
-  newAddAttraction.contentId = attraction.content_id;
-  newAddAttraction.id = null;
-
-  // myAttractionList에 추가
-  myAttractionList.value.push(newAddAttraction);
-  console.log(
-    "day ",
-    activeTab.value,
-    " order ",
-    orders.value[activeTab.value]
+//PathMakeListIme 에서 받은 attraction으로 경로에 추가
+const addAttractionToPath = (attraction) => {
+  // 중복 검사: 동일한 content_id를 가진 관광지가 이미 리스트에 있는지 확인
+  const isDuplicate = myAttractionList.value.some(
+    (item) => item.content_id === attraction.content_id && item.day === activeTab.value
   );
 
-  // console.log(newAttraction);
-  console.log(myAttractionList.value);
+  if (isDuplicate) {
+    // 중복이 있다면 알림을 표시하고 추가하지 않음
+    alert("중복되는 여행지입니다!");
+  } else {
+ 
+    const newAddAttraction = {
+      title: attraction.title,
+      addr1: attraction.addr1,
+      addr2: attraction.addr2,
+      content_id: attraction.content_id,
+      first_image: attraction.first_image,
+      gugun_code: attraction.gugun_code,
+      sido_code: attraction.sido_code,
+      latitude: attraction.latitude,
+      longitude: attraction.longitude
+    };
+    // attraction;
+    newAddAttraction.orders = orders.value[activeTab.value]++;
+    newAddAttraction.day = activeTab.value;
+    newAddAttraction.contentId = attraction.content_id;
+    newAddAttraction.id = null;
+
+    // 중복이 없다면 리스트에 관광지 추가
+    console.log("여행지 경로에 추가된 여행지:", newAddAttraction);
+    // myAttractionList에 추가
+    myAttractionList.value.push(newAddAttraction);
+    console.log(
+      "day ",
+      activeTab.value,
+      " order ",
+      orders.value[activeTab.value] - 1
+    );
+
+    // console.log(newAttraction);
+    console.log(myAttractionList.value);
+  }
 };
 
 //PathMakeListIme 에서 받은 attraction으로 경로에서 삭제 추가
@@ -253,6 +270,18 @@ watch(
   }
 );
 
+// 관찰자를 사용하여 myAttractionList의 변화를 감지하고 마커를 업데이트하는 로직
+watch(
+  () => [...myAttractionList.value],
+  (newList, oldList) => {
+    if (newList.length !== oldList.length) {
+      // myAttractionList가 변경될 때마다 VKakaoMap 컴포넌트에 전달되는 attractions prop를 업데이트합니다.
+      // VKakaoMap 컴포넌트 내부에서는 이 prop의 변경을 감지하여 마커를 새로 그리는 로직이 있어야 합니다.
+    }
+  },
+  { deep: true }
+);
+
 //days nav활성화
 const activeTab = ref(1);
 function changeTab(dayIndex) {
@@ -318,6 +347,8 @@ const initPathInfo = () => {
     id: "",
   };
 };
+
+
 </script>
 
 <template>
@@ -471,7 +502,10 @@ const initPathInfo = () => {
           </div>
         </div>
       </div>
-      <div class="col-6 border border-danger">map</div>
+      <div class="col-6 border">
+        <!-- 변경된 activeTab에 따라 attractions을 필터링하여 전달 -->
+        <VKakaoMap style="height: 1026px;" :attractions="filteredAttractions(activeTab)"></VKakaoMap>
+      </div>
     </div>
   </div>
 </template>
