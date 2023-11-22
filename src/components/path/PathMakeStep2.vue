@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted, onUpdated } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 import { usePathStore } from "@/stores/pathStore";
 import { useAttractionStore } from "@/stores/attractionStore";
@@ -16,6 +16,7 @@ import {
 
 import PathMakeListItem from "@/components/path/item/PathMakeListItem.vue";
 import VSelect from "@/components/common/VSelect.vue";
+import VKakaoMap from "@/components/common/VKakaoMap.vue";
 
 // const route = useRoute();
 const router = useRouter();
@@ -30,6 +31,7 @@ const { attractionList } = storeToRefs(attractionStore);
 const sidoList = ref([]);
 const gugunList = ref([{ text: "구군선택", value: "" }]);
 const gugunDisable = ref(false);
+
 
 const param = ref({
   // serviceKey: VITE_OPEN_API_SERVICE_KEY,
@@ -53,27 +55,27 @@ const days = ref(0);
 const myAttractionList = ref([]);
 const orders = ref([]); //여행 일자 별 여행지의 순서
 
+
 //PathMakeListIme 에서 받은 attraction으로 경로에 추가
 const addAttractionToPath = (attraction) => {
-  console.log("Attraction added to path:", attraction);
-  // const newAttraction = {
-  //   id: null,
-  //   orders: orders.value[activeTab.value]++,
-  //   day: activeTab.value,
-  //   contentId: attraction.content_id,
-  // };
-  console.log("order active tab ++");
-  console.log(orders.value[activeTab.value]);
-  attraction.orders = orders.value[activeTab.value]++;
-  console.log(orders.value[activeTab.value]);
-  attraction.day = activeTab.value;
-  attraction.contentId = attraction.content_id;
-  attraction.id = null;
+  // 중복 검사: 동일한 content_id를 가진 관광지가 이미 리스트에 있는지 확인
+  const isDuplicate = myAttractionList.value.some(
+    (item) => item.content_id === attraction.content_id && item.day === activeTab.value
+  );
 
-  // myAttractionList에 추가
-  myAttractionList.value.push(attraction);
-  // console.log(newAttraction);
-  console.log(myAttractionList.value);
+  if (isDuplicate) {
+    // 중복이 있다면 알림을 표시하고 추가하지 않음
+    alert("중복되는 여행지입니다!");
+  } else {
+    // 중복이 없다면 리스트에 관광지 추가
+    console.log("Attraction added to path:", attraction);
+    attraction.orders = orders.value[activeTab.value]++;
+    attraction.day = activeTab.value;
+    attraction.contentId = attraction.content_id;
+    attraction.id = null;
+    myAttractionList.value.push(attraction);
+    console.log(myAttractionList.value);
+  }
 };
 
 //PathMakeListIme 에서 받은 attraction으로 경로에서 삭제 추가
@@ -103,6 +105,7 @@ const removeAttractionToPath = (attraction) => {
   }
 
   console.log(myAttractionList.value);
+
 };
 
 onMounted(() => {
@@ -304,6 +307,7 @@ const initPathInfo = () => {
     id: "",
   };
 };
+
 </script>
 
 <template>
@@ -453,7 +457,9 @@ const initPathInfo = () => {
           </div>
         </div>
       </div>
-      <div class="col-6 border border-danger">map</div>
+      <div class="col-6 border">
+        <VKakaoMap style="height: 1026px;" :attractions="myAttractionList"></VKakaoMap>
+      </div>
     </div>
   </div>
 </template>
