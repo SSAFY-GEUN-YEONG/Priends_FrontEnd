@@ -40,7 +40,7 @@ const initMap = () => {
   };
 
   map.value = new kakao.maps.Map(container, options);
-  // displayMarkers(); // 지도가 초기화된 후에 마커를 표시
+  displayMarkersAndPolyline(); // 지도가 초기화된 후에 마커를 표시
 };
 
 const loadKakaoMapScript = () => {
