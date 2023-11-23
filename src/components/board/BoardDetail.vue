@@ -1,6 +1,7 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/memberStore";
 import { detailArticle, deleteArticle } from "@/api/board";
 
 const route = useRoute();
@@ -10,6 +11,7 @@ const router = useRouter();
 const { id } = route.params;
 
 const article = ref({});
+const memberStore = useMemberStore();
 
 onMounted(() => {
   getArticle();
@@ -29,6 +31,13 @@ const getArticle = () => {
     }
   );
 };
+
+// 현재 로그인한 사용자가 게시글의 작성자인지 확인하는 계산된 속성
+const isAuthor = computed(() => {
+  console.log(memberStore.memberInfo);
+  console.log(article.value.member_id);
+  return memberStore.memberInfo?.id === article.value.member_id;
+})
 
 function moveList() {
   router.push({ name: "article-list" });
@@ -92,7 +101,7 @@ function onDeleteArticle() {
               </p>
             </div>
           </div>
-          <div class="col-md-4 align-self-center text-end">댓글 : 17</div>
+          <!-- <div class="col-md-4 align-self-center text-end">댓글 : 17</div> -->
           <div class="divider mb-3"></div>
           <div class="text-secondary">
             {{ article.content }}
@@ -106,12 +115,14 @@ function onDeleteArticle() {
               글목록
             </button>
             <button
+              v-if="!isAuthor"
               type="button"
               class="btn btn-outline-success mb-3 ms-1"
               @click="moveModify">
               글수정
             </button>
             <button
+              v-if="!isAuthor"
               type="button"
               class="btn btn-outline-danger mb-3 ms-1"
               @click="onDeleteArticle">
@@ -124,4 +135,15 @@ function onDeleteArticle() {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.btn-outline-primary {
+  --bs-btn-bg: #dac3e8;
+  --bs-btn-border-color: #dac3e8;
+  --bs-btn-hover-bg: #c19ee0;
+  --bs-btn-hover-border-color: #c19ee0;
+  --bs-btn-focus-shadow-rgb: #a06cd5;
+  --bs-btn-active-bg: #a06cd5;
+  --bs-btn-active-border-color: #a06cd5;
+  color: white; /* 버튼 텍스트 색상 */
+}
+</style>

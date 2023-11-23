@@ -13,12 +13,13 @@ import {
 } from "@/api/memberApi";
 import { memberTempPasswordApi } from "../api/memberApi";
 
+// 내정보를 저장할 ref 추가
+const memberInfo = ref(null);
+
 export const useMemberStore = defineStore("memberStore", () => {
   const isLogin = ref(false);
   const { cookies } = useCookies(); // 쿠키를 사용하기 위해 가져오기
   const accessToken = ref(null); // accessToken을 저장할 ref
-  // 내정보를 저장할 ref 추가
-  const memberInfo = ref(null);
 
   const memberLogin = async (loginMember) => {
     await memberLoginApi(

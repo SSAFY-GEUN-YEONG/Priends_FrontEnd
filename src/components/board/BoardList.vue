@@ -128,4 +128,33 @@ const moveWrite = () => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.btn-outline-primary {
+  --bs-btn-bg: #dac3e8;
+  --bs-btn-border-color: #dac3e8;
+  --bs-btn-hover-bg: #c19ee0;
+  --bs-btn-hover-border-color: #c19ee0;
+  --bs-btn-focus-shadow-rgb: #a06cd5;
+  --bs-btn-active-bg: #a06cd5;
+  --bs-btn-active-border-color: #a06cd5;
+  color: white; /* 버튼 텍스트 색상 */
+}
+
+/* 글목록 테이블 헤더 스타일 */
+thead {
+  background-color: #dac3e8; /* 테이블 헤더 배경 색상 */
+  color: white; /* 테이블 헤더 텍스트 색상 */
+}
+
+/* 검색 버튼 스타일 */
+.btn-dark {
+  --bs-btn-bg: #a06cd5;
+  --bs-btn-border-color: #a06cd5;
+  --bs-btn-hover-bg: #dac3e8;
+  --bs-btn-hover-border-color: #dac3e8;
+  --bs-btn-focus-shadow-rgb: #c19ee0;
+  --bs-btn-active-bg: #c19ee0;
+  --bs-btn-active-border-color: #c19ee0;
+  color: white; /* 버튼 텍스트 색상 */
+}
+</style>
