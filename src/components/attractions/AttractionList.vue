@@ -1,12 +1,11 @@
 <script setup>
-import AttractionListItem from "./item/AttractionListItem.vue";
-
 import { ref, watch, onMounted } from "vue";
 import { useAttractionStore } from "@/stores/attractionStore";
 import { storeToRefs } from "pinia";
 import { getAreaListByCategory } from "@/api/attractionApi.js";
 import { useRoute } from "vue-router";
-
+import AttractionListItem from "./item/AttractionListItem.vue";
+import VSelect from "@/components/common/VSelect.vue";
 const route = useRoute();
 
 const attractionStore = useAttractionStore();
@@ -16,7 +15,13 @@ const { category } = storeToRefs(attractionStore);
 const param = ref({
   city: route.params.areaname,
   category: route.params.category,
+  order: 2, //1:이름순 2:인기순
 });
+
+const selectOption = ref([
+  { text: "이름순", value: 1 },
+  { text: "인기순", value: 2 },
+]);
 
 const attractionList = ref([]);
 
@@ -54,6 +59,11 @@ function setCategory(value) {
   param.value.category = category.value;
   console.log(param.value.category);
 }
+
+// const onChangeOrder = (val) => {
+//   param.value.order = val;
+//   console.log("onchange gugun ", param.value.order);
+// };
 </script>
 
 <template>
@@ -124,9 +134,6 @@ function setCategory(value) {
               @click="() => setCategory('market')"
               >마켓</router-link
             >
-            <!-- <a class="nav-link border border-secondary text-dark" href="#"
-              >마켓</a
-            > -->
           </li>
           <li class="nav-item">
             <router-link
@@ -138,9 +145,6 @@ function setCategory(value) {
               @click="() => setCategory('activity')"
               >액티비티</router-link
             >
-            <!-- <a class="nav-link border border-secondary text-dark" href="#"
-              >액티비티</a
-            > -->
           </li>
           <li class="nav-item">
             <router-link
@@ -152,9 +156,6 @@ function setCategory(value) {
               @click="() => setCategory('nature')"
               >자연</router-link
             >
-            <!-- <a class="nav-link border border-secondary text-dark" href="#"
-              >자연</a
-            > -->
           </li>
         </ul>
       </div>
@@ -164,13 +165,18 @@ function setCategory(value) {
       class="d-flex flex-row justify-content-between pt-4 pb-2 px-2"
       style="max-width: 1092px; width: 100%">
       <p class="my-auto">총 {{ attractionList.length }}개</p>
-      <select
+      <VSelect
+        class="mx-3"
+        :selectOption="selectOption"
+        @onKeySelect="onChangeOrder" />
+
+      <!-- <select
         class="form-select"
         style="width: fit-content"
         aria-label="Default select example">
         <option selected value="1">인기순</option>
         <option value="2">이름순</option>
-      </select>
+      </select> -->
     </div>
 
     <div class="mb-5" style="max-width: 1092px; width: 100%">

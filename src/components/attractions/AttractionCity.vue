@@ -68,6 +68,12 @@ function goToAttracitionDetail(contentId) {
 //   console.log(param.value.category);
 // }
 
+function moveToPathList() {
+  router.push({
+    name: "path-list",
+  });
+}
+
 onBeforeMount(() => {
   fetchAreaInfo();
 });
@@ -219,7 +225,10 @@ onBeforeMount(() => {
         <AttractionRecomandPathItem />
         <AttractionRecomandPathItem />
       </div>
-      <button type="button" class="btn btn-outline-secondary mb-5">
+      <button
+        type="button"
+        class="btn btn-outline-secondary mb-5"
+        @click="moveToPathList">
         여행 계획 모두보기
       </button>
     </div>

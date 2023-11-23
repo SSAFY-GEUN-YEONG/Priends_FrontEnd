@@ -1,11 +1,10 @@
 <script setup>
-import { ref, onBeforeMount, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { getPathList, getPathDetailsWithAttraction } from "@/api/pathApi.js";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from "vue3-carousel"; //스크롤
 import PathDetailItem from "./item/PathDetailItem.vue";
-
 const route = useRoute();
 
 const pathInfo = ref({
@@ -27,17 +26,9 @@ const pathParam = ref({
   limitCount: 0,
 });
 
-// const detailParam = ref({
-//   pathId: route.params.pathId,
-//   city: "",
-//   order: 1,
-//   limitCount: 0,
-// });
-
 onMounted(() => {
   console.log(pathParam.value);
   getPathInfo();
-
   getPathDetail();
 });
 
@@ -122,35 +113,33 @@ function changeTab(dayIndex) {
             :key="day"
             :pathDetail="filteredAttractions(day)"
             :dayNum="day"
-            :startDate="pathInfo.startDate"
-          ></PathDetailItem>
-          <!-- 
-          <PathDetailItem />
-          <PathDetailItem /> -->
+            :startDate="pathInfo.startDate"></PathDetailItem>
         </div>
         <!-- 여행 계획 지도 부분-->
-        <div class="path-map-content p-1 mt-3">
-          <div class="scrollable-container overflow-auto-x border">
-            <ul class="nav nav-tabs">
-              <carousel :items-to-show="4" :snap-align="start">
-                <slide v-for="dayIndex in period" :key="dayIndex">
-                  <li class="nav-item" style="width: 100px">
-                    <a
-                      class="nav-link"
-                      :class="{ active: activeTab === dayIndex }"
-                      :style="{
-                        color: activeTab === dayIndex ? 'white' : 'black',
-                        backgroundColor:
-                          activeTab === dayIndex ? '#c19ee0' : '',
-                      }"
-                      href="#"
-                      @click="changeTab(dayIndex)"
-                      >Day{{ dayIndex }}</a
-                    >
-                  </li>
-                </slide>
-              </carousel>
-            </ul>
+        <div class="path-map-content p-1 pb-0 mt-3">
+          <div class="navbar-nav" style="width: 300px">
+            <carousel class="p-0 m-0" :items-to-show="4" :snap-align="start">
+              <slide
+                v-for="dayIndex in period"
+                :key="dayIndex"
+                class="border"
+                :style="{
+                  color: activeTab === dayIndex ? 'white' : 'black',
+                  backgroundColor: activeTab === dayIndex ? '#c19ee0' : '',
+                }">
+                <li
+                  class="nav-item list-unstyled p-0 pt-2"
+                  style="width: fit-content">
+                  <a
+                    class="nav-link"
+                    :class="{ active: activeTab === dayIndex }"
+                    href="#"
+                    @click="changeTab(dayIndex)"
+                    >Day{{ dayIndex }}</a
+                  >
+                </li>
+              </slide>
+            </carousel>
           </div>
           <div class="path-map">map</div>
         </div>

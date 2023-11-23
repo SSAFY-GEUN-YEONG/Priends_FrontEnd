@@ -19,12 +19,10 @@ onMounted(() => {
   if (route.query) {
     param.value.word = route.query.areaname;
     getListArea();
-  } 
-  else {
+  } else {
     getListArea();
   }
 });
-
 
 const getListArea = () => {
   console.log("서버에서 시도 목록 얻어오자!!!", param.value);
@@ -55,10 +53,12 @@ function clickDoEvent(value) {
 <template>
   <div class="screen">
     <div class="search-area">
-      <div class="text-wrapper text-center pt-5">어디로 여행을 가시나요?</div>
+      <div class="text-wrapper text-center pt-5 fs-2 fw-bolder">
+        어디로 여행을 가시나요?
+      </div>
       <div class="div-search-area">
         <form @submit.prevent="onSubmit" class="mx-5 mt-4">
-          <div class="input-group input-group-sm">
+          <div class="input-group input-group-sm pt-2">
             <input
               type="text"
               class="form-control"
@@ -80,7 +80,7 @@ function clickDoEvent(value) {
             <th scope="row">주요도시</th>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '서울' },
@@ -91,7 +91,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{ name: 'attraction-area', params: { areaname: '제주' } }"
                 @click="() => setCityName('제주')"
                 >제주</router-link
@@ -99,7 +99,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{ name: 'attraction-area', params: { areaname: '부산' } }"
                 @click="() => setCityName('부산')"
                 >부산</router-link
@@ -107,7 +107,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{ name: 'attraction-area', params: { areaname: '대구' } }"
                 @click="() => setCityName('대구')"
                 >대구</router-link
@@ -115,7 +115,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{ name: 'attraction-area', params: { areaname: '인천' } }"
                 @click="() => setCityName('인천')"
                 >인천</router-link
@@ -123,7 +123,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{ name: 'attraction-area', params: { areaname: '광주' } }"
                 @click="() => setCityName('광주')"
                 >광주</router-link
@@ -131,7 +131,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{ name: 'attraction-area', params: { areaname: '울산' } }"
                 @click="() => setCityName('울산')"
                 >울산</router-link
@@ -139,11 +139,11 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{ name: 'attraction-area', params: { areaname: '대전' } }"
                 @click="() => setCityName('대전')"
-                >대전</router-link
-              >
+                >대전
+              </router-link>
             </td>
           </tr>
           <tr>
@@ -176,7 +176,7 @@ function clickDoEvent(value) {
           <tr>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '가평' },
@@ -187,7 +187,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '강릉' },
@@ -198,7 +198,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '경주' },
@@ -209,7 +209,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '목포' },
@@ -220,7 +220,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '속초' },
@@ -231,7 +231,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '양양' },
@@ -242,7 +242,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '여수' },
@@ -253,7 +253,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '전주' },
@@ -264,7 +264,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '춘천' },
@@ -275,7 +275,7 @@ function clickDoEvent(value) {
             </td>
             <td>
               <router-link
-                class="text-dark"
+                class="text-dark text-decoration-none"
                 :to="{
                   name: 'attraction-area',
                   params: { areaname: '포항' },
@@ -296,7 +296,7 @@ function clickDoEvent(value) {
         <router-link
           v-for="area in areas"
           :key="area"
-          class="text-dark"
+          class="text-dark text-decoration-none"
           :to="{
             name: 'attraction-area',
             params: { areaname: area },
@@ -304,165 +304,6 @@ function clickDoEvent(value) {
           @click="() => setCityName(area)"
           >{{ area }}</router-link
         >
-        <!-- <p v-for="area in areas" :key="area">{{ area }}</p> -->
-        <!-- <p>강릉</p>
-        <p>구례</p>
-        <p>대전광역시</p>
-        <p>서귀포</p>
-        <p>양양</p>
-        <p>울산광역시</p>
-        <p>제천</p>
-        <p>파주</p>
-        <p>강진</p>
-        <p>구리</p>
-        <p>동두천</p>
-        <p>서산</p>
-        <p>양주</p>
-        <p>울진</p>
-        <p>증평</p>
-        <p>평창</p>
-        <p>거제</p>
-        <p>구미</p>
-        <p>동해</p>
-        <p>서울특별시</p>
-        <p>여수</p>
-        <p>원주</p>
-        <p>진도</p>
-        <p>평택</p>
-        <p>거창</p>
-        <p>군산</p>
-        <p>목포</p>
-        <p>서천</p>
-        <p>여주</p>
-        <p>음성</p>
-        <p>진안</p>
-        <p>포천</p>
-        <p>경산</p>
-        <p>군위</p>
-        <p>무안</p>
-        <p>성남</p>
-        <p>영광</p>
-        <p>의령</p>
-        <p>진주</p>
-        <p>포항</p>
-        <p>경주</p>
-        <p>군포</p>
-        <p>무주</p>
-        <p>성주</p>
-        <p>영덕</p>
-        <p>의성</p>
-        <p>진천</p>
-        <p>하남</p>
-        <p>계룡</p>
-        <p>금산</p>
-        <p>문경</p>
-        <p>세종</p>
-        <p>영동</p>
-        <p>의왕</p>
-        <p>창녕</p>
-        <p>하동</p>
-        <p>고령</p>
-        <p>김제</p>
-        <p>밀양</p>
-        <p>속초</p>
-        <p>영암</p>
-        <p>의정부</p>
-        <p>창원</p>
-        <p>함안</p>
-        <p>고성</p>
-        <p>김천</p>
-        <p>보령</p>
-        <p>수원</p>
-        <p>영양</p>
-        <p>이천</p>
-        <p>천안</p>
-        <p>함양</p>
-        <p>고양</p>
-        <p>김포</p>
-        <p>보성</p>
-        <p>순창</p>
-        <p>영월</p>
-        <p>익산</p>
-        <p>철원</p>
-        <p>함평</p>
-        <p>고창</p>
-        <p>김해</p>
-        <p>보은</p>
-        <p>순천</p>
-        <p>영주</p>
-        <p>인제</p>
-        <p>청도</p>
-        <p>합천</p>
-        <p>고흥</p>
-        <p>나주</p>
-        <p>봉화</p>
-        <p>시흥</p>
-        <p>영천</p>
-        <p>인천광역시</p>
-        <p>청송</p>
-        <p>해남</p>
-        <p>곡성</p>
-        <p>남양주</p>
-        <p>부산광역시</p>
-        <p>신안</p>
-        <p>예산</p>
-        <p>임실</p>
-        <p>청양</p>
-        <p>홍성</p>
-        <p>공주</p>
-        <p>남원</p>
-        <p>부안</p>
-        <p>아산</p>
-        <p>예천</p>
-        <p>장성</p>
-        <p>청주</p>
-        <p>홍천</p>
-        <p>과천</p>
-        <p>남해</p>
-        <p>부여</p>
-        <p>안동</p>
-        <p>오산</p>
-        <p>장수</p>
-        <p>춘천</p>
-        <p>화성</p>
-        <p>광명</p>
-        <p>논산</p>
-        <p>부천</p>
-        <p>안산</p>
-        <p>옥천</p>
-        <p>장흥</p>
-        <p>충주</p>
-        <p>화순</p>
-        <p>광양</p>
-        <p>단양</p>
-        <p>사천</p>
-        <p>안성</p>
-        <p>완도</p>
-        <p>전주</p>
-        <p>칠곡</p>
-        <p>화천</p>
-        <p>광주</p>
-        <p>담양</p>
-        <p>산청</p>
-        <p>안양</p>
-        <p>완주</p>
-        <p>정선</p>
-        <p>태백</p>
-        <p>횡성</p>
-        <p>광주광역시</p>
-        <p>당진</p>
-        <p>삼척</p>
-        <p>양구</p>
-        <p>용인</p>
-        <p>정읍</p>
-        <p>태안</p>
-        <p>괴산</p>
-        <p>대구광역시</p>
-        <p>상주</p>
-        <p>양산</p>
-        <p>울릉</p>
-        <p>제주</p>
-        <p>통영</p> -->
       </div>
     </div>
   </div>
@@ -489,7 +330,7 @@ function clickDoEvent(value) {
 }
 
 .search-area .text-wrapper {
-  font: 700 34.6px/36px "Inter-Bold", Helvetica;
+  font: 700 34.6px/36px;
   color: #ffffff;
   text-shadow: 0px 0px 5px #00000080;
 }
@@ -516,12 +357,12 @@ function clickDoEvent(value) {
 
 .search-area .recommand_city {
   height: 14px;
-  font: 400 14px/14px "Inter-Regular", Helvetica;
+  font: 400 14px/14px;
   color: #ffffff;
 }
 
 .search-area {
-  font: 400 14px "Inter-Regular", Helvetica;
+  font: 400 14px;
   color: #ffffff;
   white-space: nowrap;
 }

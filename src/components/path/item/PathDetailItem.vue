@@ -1,11 +1,48 @@
 <script setup>
-import { defineProps, onMounted } from "vue";
+import { ref, defineProps, watch } from "vue";
 import PathDetailItemAttraction from "./PathDetailItemAttraction.vue";
-const props = defineProps(["pathDetail", "dayNum", "startDate"]);
+import { getAreaName } from "@/api/attractionApi";
 
-console.log(props.pathDetail);
+const props = defineProps(["pathDetail", "dayNum", "startDate", "areaSet"]);
+
+watch(
+  () => props.pathDetail,
+  (newAreaSet, oldAreaSet) => {
+    // 변경된 사항을 여기서 처리합니다.
+    console.log("Area set이 변경전 :", oldAreaSet);
+    console.log("Area set이 변경되었습니다:", newAreaSet);
+    getAreaNameSet(newAreaSet);
+    console.log("areaNameset", areaNameSet.value);
+  }
+);
 // console.log(props.dayNum);
+// console.log(props.areaSet);
 // console.log(props.startDate);
+
+const areaNameSet = ref(new Set());
+const getAreaNameSet = (val) => {
+  console.log("get Area Name set ", val);
+
+  // Set을 초기화합니다.
+  areaNameSet.value = new Set();
+
+  val.forEach(async (item) => {
+    await getAreaName(
+      {
+        sido: item.sidoCode,
+        gugun: item.gugunCode,
+      },
+      ({ data }) => {
+        console.log("get Area naem data", data.dataBody);
+        areaNameSet.value.add(data.dataBody);
+        // console.log("areaNameSet : ", [...areaNameSet]);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  });
+};
 
 //여행 당일날짜와 요일 얻기
 const calcDate = () => {
@@ -20,7 +57,9 @@ const calcDate = () => {
     dayOfWeek: dayOfWeek,
   };
 };
-const nowDate = calcDate();
+let nowDate = {};
+
+nowDate = calcDate();
 </script>
 
 <template>
@@ -29,14 +68,13 @@ const nowDate = calcDate();
       <h4>DAY{{ dayNum }}</h4>
       <div class="path-detail-date-city">
         <p>{{ nowDate.date }}({{ nowDate.dayOfWeek }})</p>
-        <p>서울</p>
+        <p>{{ Array.from(areaNameSet).join(", ") }}</p>
       </div>
     </div>
     <PathDetailItemAttraction
       v-for="item in pathDetail"
       :key="item.orders"
-      :pathDetailInfo="item"
-    ></PathDetailItemAttraction>
+      :pathDetailInfo="item"></PathDetailItemAttraction>
   </div>
 </template>
 

@@ -35,7 +35,7 @@ function getPathList(param, success, fail) {
 }
 
 function getMyPathList(success, fail) {
-  local.get(`/path/get/mylist`, then(success).catch(fail));
+  local.get(`/path/get/mylist`).then(success).catch(fail);
 }
 
 function getPathDetailsWithAttraction(pathId, success, fail) {

@@ -2,42 +2,92 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
-import { getAttractionDetailApi } from "@/api/attractionApi";
+import { getAttractionDetailApi, getAreaName } from "@/api/attractionApi";
 
 const route = useRoute();
 const attractionDetail = ref(null);
-
 const selectedStations = ref([]); // attractions을 배열로 변경
+
+const category = ref(0);
+const categoryMapping = {
+  호텔: 32,
+  문화생활: [14, 15],
+  음식점: 39,
+  마켓: 38,
+  액티비티: 28,
+  자연: [12, 25],
+};
+const area = ref("");
 
 const fetchAttractionDetail = async () => {
   const attractionId = route.params.attractionid;
   try {
     const response = await getAttractionDetailApi(attractionId);
     attractionDetail.value = response.data.dataBody;
-    selectedStations.value = [{ // 배열 안에 객체를 담아서 설정
-      latitude: attractionDetail.value.latitude,
-      longitude: attractionDetail.value.longitude,
-      title: attractionDetail.value.title,
-      addr1: attractionDetail.value.addr1,
-      first_image: attractionDetail.value.first_image,
-    }];
+    category.value = findMatchingKey(attractionDetail.value.content_type_id);
+
+    console.log(attractionDetail.value);
+    // console.log(category.value);
+    selectedStations.value = [
+      {
+        // 배열 안에 객체를 담아서 설정
+        latitude: attractionDetail.value.latitude,
+        longitude: attractionDetail.value.longitude,
+        title: attractionDetail.value.title,
+        addr1: attractionDetail.value.addr1,
+        first_image: attractionDetail.value.first_image,
+      },
+    ];
+
+    console.log(area.value);
   } catch (error) {
-    console.error('여행지 관광정보 상세 받아오기 실패: ', error);
+    console.error("여행지 관광정보 상세 받아오기 실패: ", error);
   }
+
+  getAreaName(
+    {
+      sido: attractionDetail.value.sido_code,
+      gugun: attractionDetail.value.gugun_code,
+    },
+    ({ data }) => {
+      // console.log(data.dataBody);
+      area.value = data.dataBody;
+      // console.log("pathDetails : ", pathDetails.value);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
 };
 
+function findMatchingKey(contentTypeId) {
+  for (const key in categoryMapping) {
+    const value = categoryMapping[key];
+
+    if (Array.isArray(value)) {
+      if (value.includes(contentTypeId)) {
+        return key;
+      }
+    } else {
+      if (value === contentTypeId) {
+        return key;
+      }
+    }
+  }
+
+  return null; // 매칭되는 키가 없는 경우
+}
 
 onMounted(() => {
   fetchAttractionDetail(); // 괄호를 추가하여 함수
 });
-
 </script>
 
 <template>
   <div class="screen">
     <!-- attractionDetail이 있는 경우에 렌더링 -->
     <div class="detail-info" v-if="attractionDetail">
-      <div class="detail-category">여행지 > 부산 > 자연</div>
+      <div class="detail-category">여행지 > {{ area }} > {{ category }}</div>
       <div class="detail-info-title">
         <h3>{{ attractionDetail.title }}</h3>
         <div class="icon-text">
@@ -114,7 +164,9 @@ onMounted(() => {
         <!--맵 부분 -->
         <!-- 여기에 VKakaoMap 컴포넌트 추가 -->
         <!-- <div class="map-container"> -->
-        <VKakaoMap :attractions="selectedStations" style="height: 700px;"></VKakaoMap>
+        <VKakaoMap
+          :attractions="selectedStations"
+          style="height: 700px"></VKakaoMap>
         <!-- </div> -->
       </div>
     </div>

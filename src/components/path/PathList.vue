@@ -1,10 +1,9 @@
 <script setup>
 import PathListItem from "./item/PathListItem.vue";
-import { ref, onBeforeMount } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { ref, watch, onBeforeMount } from "vue";
+import { useRouter } from "vue-router";
 import { getPathList } from "@/api/pathApi.js";
 
-const route = useRoute();
 const router = useRouter();
 
 const pathList = ref([]);
@@ -16,7 +15,7 @@ onBeforeMount(() => {
 const param = ref({
   pathId: -1,
   city: "",
-  order: 1,
+  order: 2, //1:최신순 2:인기순
   limitCount: 0,
 });
 
@@ -41,27 +40,47 @@ function goToPathDetail(id) {
     params: { pathId: id },
   });
 }
+
+function changePathListOrder(val) {
+  const newOrder = val;
+  param.value.order = newOrder;
+  console.log("param order ", param.value.order);
+}
+function setCityName(area) {
+  param.value.city = area;
+  param.value.order = 2;
+  console.log("cityname" + param.value.city);
+
+  getListPath();
+}
+watch(
+  () => param.value.order,
+  () => {
+    getListPath();
+  }
+);
 </script>
 
 <template>
-  <div class="d-flex flex-column align-items-center">
-    <div
-      class="search-area d-flex flex-column align-items-center justify-content-center"
-    >
-      <div class="text-wrapper text-center pb-5">
+  <div class="screen">
+    <div class="search-area">
+      <div class="text-wrapper text-center pt-5 fs-2 fw-bolder">
         Priends의 여행 계획을 살펴보세요!
       </div>
-      <div
-        class="div-search-area d-flex flex-column justify-content-center align-items-center"
-      >
-        <div>
-          <input
-            type="text"
-            class="input"
-            placeholder="계획하고 싶은 도시를 입력하세요."
-          />
-          <p class="recommend_city pt-3 mb-0">추천도시 : 제주, 부산, 서울</p>
-        </div>
+      <div class="div-search-area mt-0">
+        <form @submit.prevent="onSubmit" class="mx-5 mt-4">
+          <div class="input-group input-group-sm pt-2">
+            <input
+              type="text"
+              class="form-control"
+              v-model="param.city"
+              placeholder="계획하고 싶은 도시를 입력하세요." />
+            <button class="btn btn-dark" type="button" @click="getListPath">
+              검색
+            </button>
+          </div>
+          <div class="recommand_city mt-3">추천도시 : 제주, 부산, 서울</div>
+        </form>
       </div>
     </div>
 
@@ -70,241 +89,70 @@ function goToPathDetail(id) {
         <tbody>
           <tr>
             <th scope="row">주요도시</th>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '서울' },
-                }"
-                @click="() => setCityName('서울')"
-                >서울</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{ name: 'attraction-area', params: { areaname: '제주' } }"
-                @click="() => setCityName('제주')"
-                >제주</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{ name: 'attraction-area', params: { areaname: '부산' } }"
-                @click="() => setCityName('부산')"
-                >부산</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{ name: 'attraction-area', params: { areaname: '대구' } }"
-                @click="() => setCityName('대구')"
-                >대구</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{ name: 'attraction-area', params: { areaname: '인천' } }"
-                @click="() => setCityName('인천')"
-                >인천</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{ name: 'attraction-area', params: { areaname: '광주' } }"
-                @click="() => setCityName('광주')"
-                >광주</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{ name: 'attraction-area', params: { areaname: '울산' } }"
-                @click="() => setCityName('울산')"
-                >울산</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{ name: 'attraction-area', params: { areaname: '대전' } }"
-                @click="() => setCityName('대전')"
-                >대전</router-link
-              >
-            </td>
+            <td @click="() => setCityName('서울')">서울</td>
+            <td @click="() => setCityName('제주')">제주</td>
+            <td @click="() => setCityName('부산')">부산</td>
+            <td @click="() => setCityName('대구')">대구</td>
+            <td @click="() => setCityName('인천')">인천</td>
+            <td @click="() => setCityName('광주')">광주</td>
+            <td @click="() => setCityName('울산')">울산</td>
+            <td @click="() => setCityName('대전')">대전</td>
           </tr>
           <tr>
             <th scope="row" rowspan="2">주요지역</th>
-            <td @click="clickDoEvent('강원도')">
-              <a>강원도</a>
-            </td>
-            <td @click="clickDoEvent('경기도')">
-              <a>경기도</a>
-            </td>
-            <td @click="clickDoEvent('경상남도')">
-              <a>경상남도</a>
-            </td>
-            <td @click="clickDoEvent('경상북도')">
-              <a>경상북도</a>
-            </td>
-            <td @click="clickDoEvent('전라남도')">
-              <a>전라남도</a>
-            </td>
-            <td @click="clickDoEvent('전라북도')">
-              <a>전라북도</a>
-            </td>
-            <td @click="clickDoEvent('충청남도')">
-              <a>충청남도</a>
-            </td>
-            <td @click="clickDoEvent('충청북도')">
-              <a>충청북도</a>
-            </td>
+
+            <td @click="() => setCityName('강원도')">강원도</td>
+            <td @click="() => setCityName('경기도')">경기도</td>
+            <td @click="() => setCityName('경상남도')">경상남도</td>
+            <td @click="() => setCityName('경상북도')">경상북도</td>
+            <td @click="() => setCityName('전라남도')">전라남도</td>
+            <td @click="() => setCityName('전라북도')">전라북도</td>
+            <td @click="() => setCityName('충청남도')">충청남도</td>
+            <td @click="() => setCityName('충청북도')">충청북도</td>
           </tr>
           <tr>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '가평' },
-                }"
-                @click="() => setCityName('가평')"
-                >가평</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '강릉' },
-                }"
-                @click="() => setCityName('강릉')"
-                >강릉</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '경주' },
-                }"
-                @click="() => setCityName('경주')"
-                >경주</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '목포' },
-                }"
-                @click="() => setCityName('목포')"
-                >목포</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '속초' },
-                }"
-                @click="() => setCityName('속초')"
-                >속초</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '양양' },
-                }"
-                @click="() => setCityName('양양')"
-                >양양</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '여수' },
-                }"
-                @click="() => setCityName('여수')"
-                >여수</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '전주' },
-                }"
-                @click="() => setCityName('전주')"
-                >전주</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '춘천' },
-                }"
-                @click="() => setCityName('춘천')"
-                >춘천</router-link
-              >
-            </td>
-            <td>
-              <router-link
-                class="text-dark"
-                :to="{
-                  name: 'attraction-area',
-                  params: { areaname: '포항' },
-                }"
-                @click="() => setCityName('포항')"
-                >포항</router-link
-              >
-            </td>
+            <td @click="() => setCityName('가평')">가평</td>
+            <td @click="() => setCityName('강릉')">강릉</td>
+            <td @click="() => setCityName('경주')">경주</td>
+            <td @click="() => setCityName('목포')">목포</td>
+            <td @click="() => setCityName('속초')">속초</td>
+            <td @click="() => setCityName('양양')">양양</td>
+            <td @click="() => setCityName('여수')">여수</td>
+            <td @click="() => setCityName('전주')">전주</td>
+            <td @click="() => setCityName('춘천')">춘천</td>
+            <td @click="() => setCityName('포항')">포항</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column path-list">
       <div
-        class="d-flex justify-content-between align-items-center mb-2 path-list-item"
-      >
+        class="d-flex justify-content-between align-items-center mb-2 path-list-item">
         <div class="">
-          <button class="btn">인기</button> |
-          <button class="btn">신규</button>
+          <button
+            class="btn"
+            @click="changePathListOrder(2)"
+            :class="{ 'btn-active': param.order === 2 }">
+            인기
+          </button>
+          |
+          <button
+            class="btn"
+            @click="changePathListOrder(1)"
+            :class="{ 'btn-active': param.order === 1 }">
+            신규
+          </button>
         </div>
-        <p class="plan-count mb-0 me-1">총 1234개의 계획</p>
+        <p class="plan-count mb-0 me-1">총 {{ pathList.length }}개의 계획</p>
       </div>
-      <div class="d-flex flex-row justify-content-between mb-5">
-        <!-- <AttractionCityItem
-          v-for="item in selectedAttractions"
-          :key="item.content_id"
-          :attraction="item"
-          @click="goToAttracitionDetail(item.content_id)">
-        </AttractionCityItem> -->
 
+      <div class="d-flex flex-column mb-5">
         <PathListItem
           v-for="item in pathList"
           :key="item.id"
           :pathInfo="item"
-          @click="goToPathDetail(item.id)"
-        >
+          @click="goToPathDetail(item.id)">
         </PathListItem>
       </div>
     </div>
@@ -312,19 +160,36 @@ function goToPathDetail(id) {
 </template>
 
 <style scoped>
+.screen {
+  background-color: transparent;
+  display: block;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+
+  position: -webkit-sticky;
+  position: sticky;
+}
+
 .search-area {
+  display: block;
+  position: relative;
   width: 100%;
   height: 400px;
   background: url(@/assets/img/field.jpg) center/cover;
 }
 
 .search-area .text-wrapper {
-  font: 700 34.6px/36px "Inter-Bold", Helvetica;
+  font: 700 34.6px/36px;
   color: #ffffff;
   text-shadow: 0px 0px 5px #00000080;
 }
 
 .div-search-area {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 가운데 정렬을 위한 트랜스폼 */
   width: 698px;
   height: 138px;
   background-color: #363636b2;
@@ -332,20 +197,29 @@ function goToPathDetail(id) {
 }
 
 .search-area .input {
+  position: absolute;
+  top: 20px;
+  left: 20px;
   width: 650px;
   height: 50px;
   background-color: white;
 }
 
 .search-area .recommend_city {
-  font: 400 14px/14px "Inter-Regular", Helvetica;
+  height: 14px;
+  font: 400 14px/14px;
   color: #ffffff;
 }
 
 .search-area {
-  font: 400 14px "Inter-Regular", Helvetica;
+  font: 400 14px;
   color: #ffffff;
   white-space: nowrap;
+}
+
+.path-list {
+  width: 1200px;
+  margin: 100px auto;
 }
 
 .major-city {
@@ -382,5 +256,14 @@ td {
 
 .plan-count {
   color: #5a3886;
+}
+.btn-active {
+  color: #a06cd5;
+}
+.btn {
+  --bs-btn-focus-shadow-rgb: var(--bs-white);
+  --bs-btn-active-color: #a06cd5;
+  --bs-btn-active-bg: var(--bs-white);
+  --bs-btn-active-border-color: var(--bs-white);
 }
 </style>

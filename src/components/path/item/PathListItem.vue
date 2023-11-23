@@ -23,46 +23,31 @@ const calcDate = () => {
 
 <template>
   <div class="d-flex flex-column border">
-    <img class="path-list-img" src="@/assets/img/building.jpg" />
-    <div class="p-2">
-      <h5>{{ pathInfo.title }}</h5>
-
-      <p>
-        {{ pathInfo.startDate }} - {{ pathInfo.endDate }} | {{ period }} Days
-      </p>
-
-      <div class="icon-text">
-        <font-awesome-icon icon="fa-regular fa-user" style="height: 15px" />
-        <div>{{ pathInfo.memberNickname }}</div>
-        <div class="heart-icon">
-          <font-awesome-icon :icon="['far', 'eye']" style="height: 15px" />
-          <div>{{ pathInfo.hit }}</div>
+    <div class="py-2 px-5 d-flex align-items-center justify-content-between">
+      <div class="">
+        <div>
+          <p class="fs-4 mb-1">{{ pathInfo.title }}</p>
         </div>
+
+        <div class="d-flex flex-row" style="width: 150px">
+          <div class="d-flex align-items-center" style="width: 50%">
+            <font-awesome-icon icon="fa-regular fa-user" style="height: 15px" />
+            <div class="ps-2">{{ pathInfo.memberNickname }}</div>
+          </div>
+          <div class="d-flex align-items-center" style="width: 50%">
+            <font-awesome-icon :icon="['far', 'eye']" style="height: 15px" />
+            <div class="ps-2">{{ pathInfo.hit }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="p-0 m-0 d-flex flex-column" style="height: 100%">
+        <p class="m-0 mb-1">
+          {{ pathInfo.startDate }} - {{ pathInfo.endDate }}
+        </p>
+        <p class="m-0 text-end">{{ period }} Days</p>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.path-list-img {
-  width: 340px;
-  height: 255px;
-}
-
-.icon-text {
-  flex-direction: row;
-  display: flex;
-  align-items: center;
-}
-
-.icon-text > *,
-.heart-icon > * {
-  margin-left: 5px;
-}
-.heart-icon {
-  flex-direction: row;
-  display: flex;
-  align-items: center;
-  margin-left: auto; /* 아이콘을 오른쪽 끝으로 이동시킵니다. */
-}
-</style>
+<style scoped></style>
