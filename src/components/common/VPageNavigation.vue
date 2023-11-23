@@ -61,4 +61,30 @@ function onPageChange(pg) {
 a {
   cursor: pointer;
 }
+
+.pagination a {
+  cursor: pointer;
+  color: #dac3e8; /* 링크 기본 색상 */
+  background-color: transparent;
+  border-color: #dac3e8;
+}
+
+.pagination a:hover {
+  color: #c19ee0; /* 링크 호버 시 색상 */
+  background-color: transparent;
+  border-color: #c19ee0;
+}
+
+.pagination .active a {
+  color: white; /* 활성 페이지 링크 색상 */
+  background-color: #a06cd5;
+  border-color: #a06cd5;
+}
+
+.pagination .active a:hover {
+  color: white;
+  background-color: #a06cd5; /* 활성 페이지 링크 호버 시 색상 */
+  border-color: #a06cd5;
+}
+
 </style>

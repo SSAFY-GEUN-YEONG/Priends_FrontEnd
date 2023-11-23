@@ -1,14 +1,17 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import { useMemberStore } from "@/stores/memberStore";
-import { storeToRefs } from "pinia";
-import * as bootstrap from "bootstrap";
-import { memberInfoUpdateApi } from "@/api/memberApi";
-import { uploadApi } from "@/api/fileApi";
+import { storeToRefs } from 'pinia';
+import * as bootstrap from 'bootstrap';
+import { memberInfoUpdateApi } from '@/api/memberApi';
+import { uploadApi } from '@/api/fileApi';
+import { useRouter } from 'vue-router';
+
 
 const memberStore = useMemberStore();
 const { memberGet, memberPasswordUpdate } = memberStore;
 const { memberInfo } = storeToRefs(memberStore);
+const router = useRouter();
 
 // 비밀번호 데이터
 const nowPassword = ref("");
