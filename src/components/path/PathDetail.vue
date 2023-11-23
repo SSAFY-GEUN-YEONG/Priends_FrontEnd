@@ -92,8 +92,6 @@ const activeTab = ref(1);
 function changeTab(dayIndex) {
   console.log("Tab 변경: ", dayIndex);
   activeTab.value = dayIndex;
-  const attractionsForDay = filteredAttractions(dayIndex);
-  console.log("선택된 날짜의 관광지: ", attractionsForDay);
 }
 
 const displayedPathDetails = computed(() => {
@@ -126,7 +124,7 @@ const displayedPathDetails = computed(() => {
           <PathDetailItem
             v-for="day in period"
             :key="day"
-            :pathDetail="displayedPathDetails"
+            :pathDetail="filteredAttractions(day)"
             :dayNum="day"
             :startDate="pathInfo.startDate"
           ></PathDetailItem>
