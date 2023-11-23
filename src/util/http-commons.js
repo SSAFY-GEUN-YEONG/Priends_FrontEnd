@@ -44,7 +44,6 @@ function localAxios() {
     }
     // console.log(accessToken);
     console.log(config.headers);
-
     return config;
   }),
     (error) => {
