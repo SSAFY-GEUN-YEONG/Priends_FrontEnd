@@ -97,7 +97,8 @@ const fetchMemberInfoUpdate = async () => {
             // 확인 버튼 이벤트 리스너
             document.getElementById('updateModalConfirmButton').addEventListener('click', () => {
               updateModal.hide();
-              window.location.href = '/'; // 메인 화면으로 이동
+              // 메인 페이지로 이동합니다.
+              router.push({ name: 'main' });
             });
 
           }
