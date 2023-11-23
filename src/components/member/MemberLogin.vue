@@ -21,6 +21,14 @@ const loginMember = ref({
 const tempEmail = ref('');
 const tempPasswordModal = ref(null);
 
+const showAlertModal = (modalId, message) => {
+  const modalElement = document.getElementById(modalId);
+  const modalMessageElement = modalElement.querySelector('.modal-body p');
+  modalMessageElement.textContent = message;
+  const alertModal = new bootstrap.Modal(modalElement, {});
+  alertModal.show();
+};
+
 const login = async () => {
   await memberLogin(loginMember.value);
   if (isLogin.value) {
@@ -28,15 +36,14 @@ const login = async () => {
     router.push("/");   // 메인 페이지로 가기
   }
   else {
-    alert("아이디 또는 비밀번호를 잘못 입력했습니다. 다시 확인해주세요.");
+    showAlertModal('alertModal', "아이디 또는 비밀번호를 잘못 입력했습니다. 다시 확인해주세요.");
   }
 }
 
 
 const issueTempPassword = async () => {
-  console.log("좀 찍혀");
   if (!tempEmail.value) {
-    alert('이메일을 입력해주세요.');
+    showAlertModal('alertModal', '이메일을 입력해주세요.');
     return;
   }
   try {
@@ -48,7 +55,7 @@ const issueTempPassword = async () => {
     }
   } catch (error) {
     console.log(error);
-    alert('임시 비밀번호 발급에 실패했습니다. 다시 시도해주세요.');
+    showAlertModal('alertModal', '임시 비밀번호 발급에 실패했습니다. 해당 서비스에 문의해주세요.');
   }
 };
 
@@ -151,6 +158,24 @@ const issueTempPassword = async () => {
         </div>
     </div>
   </div>
+
+  <!-- Alert 모달 -->
+  <div class="modal" tabindex="-1" id="alertModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">알림</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>메시지 내용</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -179,5 +204,15 @@ const issueTempPassword = async () => {
 
 .btn-sign-up {
   --bs-btn-active-border-color: var(--bs-white);
+}
+
+#alertModal .btn-primary {
+  --bs-btn-bg: #dac3e8; /* 이 부분에 원하는 색상 코드를 입력하세요 */
+  --bs-btn-border-color: #dac3e8;
+  --bs-btn-hover-bg: #c19ee0;
+  --bs-btn-hover-border-color: #c19ee0;
+  --bs-btn-focus-shadow-rgb: #a06cd5;
+  --bs-btn-active-bg: #a06cd5;
+  --bs-btn-active-border-color: #a06cd5;
 }
 </style>
