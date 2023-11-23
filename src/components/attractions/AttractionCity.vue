@@ -28,6 +28,7 @@ const fetchAreaInfo = async () => {
     const response = await getAreaInfo({ city, category: "home" });
     // console.log(response);
     areainfo.value = response.data.dataBody;
+    console.log(areainfo.value);
     updateSelectedAttractions();
   } catch (error) {
     console.error("지역 정보를 가져오는 데 실패했습니다.", error);
@@ -36,19 +37,28 @@ const fetchAreaInfo = async () => {
 
 // 선택된 카테고리에 따라 관광지 목록을 업데이트하는 함수
 const updateSelectedAttractions = () => {
+  let attractions;
   switch (selectedCategory.value) {
     case "nature":
-      selectedAttractions.value = areainfo.value.natureAttractions;
+      attractions = areainfo.value.natureAttractions;
       break;
     case "restaurant":
-      selectedAttractions.value = areainfo.value.restaurantAttractions;
+      attractions = areainfo.value.restaurantAttractions;
       break;
     case "culture":
-      selectedAttractions.value = areainfo.value.cultureAttractions;
+      attractions = areainfo.value.cultureAttractions;
       break;
     default:
-      selectedAttractions.value = areainfo.value.natureAttractions;
+      attractions = areainfo.value.natureAttractions;
   }
+  
+  // 새로운 배열을 만들어 각 객체에 contentId를 추가합니다.
+  selectedAttractions.value = attractions.map(attraction => ({
+    ...attraction,
+    contentId: attraction.content_id // 가정: 원본 데이터에 content_id가 존재한다고 가정
+  }));
+
+  // console.log(selectedAttractions.value);
 };
 
 function selectCategory(category) {

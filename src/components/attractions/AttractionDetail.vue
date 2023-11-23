@@ -1,12 +1,15 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { watch, ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
-import { getAttractionDetailApi, getAreaName } from "@/api/attractionApi";
+import { getAttractionDetailApi, getAreaName, nearGetAttractionListApi } from "@/api/attractionApi";
+import AttractionCityItem from "./item/AttractionCityItem.vue";
 
 const route = useRoute();
+const router = useRouter();
 const attractionDetail = ref(null);
 const selectedStations = ref([]); // attractions을 배열로 변경
+const nearAttractions = ref([]); // 가까운 관광지 목록을 담을 배열
 
 const category = ref(0);
 const categoryMapping = {
@@ -78,9 +81,44 @@ function findMatchingKey(contentTypeId) {
   return null; // 매칭되는 키가 없는 경우
 }
 
+const fetchNearAttractions = async () => {
+  const attractionId = route.params.attractionid;
+  try {
+    const response = await nearGetAttractionListApi(attractionId);
+    nearAttractions.value = response.data.dataBody;
+  }
+  catch (error) {
+    console.error("가까운 관광지 정보 받아오기 실패: ", error);
+  }
+}
+
+function goToAttracitionDetail(contentId) {
+  router.push({
+    name: "attraction-area-detail",
+    params: { attractionid: contentId }
+  });
+}
+
+// 라우트 파라미터가 변경될 때마다 호출될 함수
+const fetchAttractionData = async () => {
+  await fetchAttractionDetail();
+  await fetchNearAttractions();
+};
+
 onMounted(() => {
-  fetchAttractionDetail(); // 괄호를 추가하여 함수
+  fetchAttractionData();
 });
+
+watch(
+  () => route.params.attractionid,
+  (newAttractionId, oldAttractionId) => {
+    if (newAttractionId !== oldAttractionId) {
+      fetchAttractionData(); // 라우트 파라미터가 변경될 때마다 데이터 새로 가져오기
+      // 페이지 상단으로 스크롤
+      window.scrollTo(0, 0);
+    }
+  }
+);
 </script>
 
 <template>
@@ -128,42 +166,15 @@ onMounted(() => {
         </div>
         <div class="mt-5 px-4">{{ attractionDetail.overview }}</div>
       </div>
-      <div class="mt-4 mx-4 p-3 d-flex flex-column border border-dark-subtle">
-        <div class="d-flex flex-column mt-3">
-          <div class="mx-4 align-self-start">
-            <p>전화번호 {{ attractionDetail.tel }}</p>
-          </div>
-          <div class="mx-4 align-self-start">
-            <p>웹사이트 www.sssss.com</p>
-          </div>
-        </div>
-        <button
-          type="button"
-          class="justify-content-end btn btn-outline-secondary ms-auto mb-3 me-3"
+      <div class="cityitem d-flex flex-row justify-content-center border mt-5 mb=5">
+        <AttractionCityItem
+          v-for="item in nearAttractions"
+          :key="item.content_id"
+          :attraction="item"
+          @click="goToAttracitionDetail(item.content_id)"
         >
-          정보 수정 업데이트
-        </button>
+        </AttractionCityItem>
       </div>
-      <div class="mx-4 p-3 d-flex flex-column border border-dark-subtle">
-        <div class="card" style="width: 18rem">
-          <img src="@/assets/img/building.jpg" class="card-img-top" />
-          <div class="card-body">
-            <h5 class="card-title">어쩌고 다리</h5>
-            <div class="d-flex flex-row justify-content-start">
-              <font-awesome-icon
-                :icon="['far', 'eye']"
-                style="height: 15px"
-                class="align-bottom pt-1"
-              />
-              <div class="ms-2 align-top">874</div>
-              <button type="button" class="btn btn-secondary ms-auto">
-                음식점
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- <div class="mx-4 p-3 d-flex flex-column border border-dark-subtle"> -->
       <div class="mx-4 d-flex flex-column border border-dark-subtle">
         <!--맵 부분 -->
         <!-- 여기에 VKakaoMap 컴포넌트 추가 -->

@@ -11,9 +11,11 @@ import {
   deletePath,
 } from "@/api/pathApi.js";
 
+import { ref, onMounted, computed } from "vue";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from "vue3-carousel"; //스크롤
 import PathDetailItem from "./item/PathDetailItem.vue";
+import VKakaoMap from "@/components/common/VKakaoMap.vue";
 const route = useRoute();
 const router = useRouter();
 
@@ -32,7 +34,10 @@ const path = ref({
   memberNickname: "",
   isDeleted: "",
 });
+
+// 기존의 pathDetails 변수는 모든 여행 경로 데이터를 저장하는 용도로 사용합니다.
 const pathDetails = ref([]);
+
 const period = ref(0);
 
 const pathParam = ref({
@@ -43,7 +48,7 @@ const pathParam = ref({
 });
 
 onMounted(() => {
-  // console.log(pathParam.value);
+  console.log("이거 한번 확인해보자 여러번 찍히는지");
   getPathInfo();
   getPathDetail();
   if (memberInfo != null) {
@@ -79,7 +84,7 @@ const getPathDetail = () => {
       console.log("pathDetails : ", pathDetails.value);
     },
     (error) => {
-      console.log(error);
+      console.error(error);
     }
   );
 };
@@ -97,14 +102,18 @@ const calcPeriod = () => {
 
 //pathDetail에서 해당 날짜별로만 가져오기
 const filteredAttractions = (dayIndex) => {
-  return pathDetails.value.filter((item) => item.day === dayIndex);
+  const attractions = pathDetails.value.filter((item) => item.day === dayIndex);
+  console.log(`필터링된 관광지 (Day ${dayIndex}):`, attractions);
+  return attractions;
 };
+
 
 //days nav활성화
 const activeTab = ref(1);
+
 function changeTab(dayIndex) {
+  console.log("Tab 변경: ", dayIndex);
   activeTab.value = dayIndex;
-  console.log("changeTab = activetab ", activeTab.value);
 }
 const modifyMyPath = () => {
   pathStore.reset();
@@ -133,6 +142,11 @@ const deleteMyPath = () => {
     }
   );
 };
+
+const displayedPathDetails = computed(() => {
+  return pathDetails.value.filter((item) => item.day === activeTab.value);
+});
+
 </script>
 
 <template>
@@ -202,7 +216,9 @@ const deleteMyPath = () => {
               </slide>
             </carousel>
           </div>
-          <div class="path-map">map</div>
+          <VKakaoMap style="height: 300px; width: 300px;"
+          :attractions="filteredAttractions(activeTab)"
+          ></VKakaoMap>
         </div>
       </div>
     </div>

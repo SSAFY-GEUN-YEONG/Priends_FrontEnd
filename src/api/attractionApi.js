@@ -8,10 +8,7 @@ function listArea(param, success, fail) {
 }
 
 function getAttractionDetailApi(attractionId, success, fail) {
-  return local
-    .get(`/attraction/${attractionId}/view`)
-    .then(success)
-    .catch(fail);
+  return local.get(`/attraction/${attractionId}/view`).then(success).catch(fail);
 }
 
 // 특정 지역 정보 home 가져오기
@@ -33,11 +30,8 @@ function getAreaListByCategory(param, success, fail) {
 }
 
 function getAreaName(param, success, fail) {
-  console.log("area : ", param);
-  local
-    .get(`/attraction/area/get/name`, { params: param })
-    .then(success)
-    .catch(fail);
+  // console.log("area : ", param);
+  local.get(`/attraction/area/get/name`, { params: param }).then(success).catch(fail);
 }
 
 // 조회수 기준 상위 4개 관광지 정보 가져오기
@@ -51,6 +45,11 @@ function recommendGetAttractionListApi(success, fail) {
   return local.get(`/attraction/recommend/get`).then(success).catch(fail);
 }
 
+// 해당 관광지 id를 통해 가장 가까운 3곳의 정보 가져오기
+function nearGetAttractionListApi(attractionId, success, fail) {
+  return local.get(`/attraction/${attractionId}/near/get`).then(success).catch(fail);
+}
+
 export {
   listArea,
   getAreaInfo,
@@ -59,4 +58,5 @@ export {
   getAreaName,
   topGetAttractionListApi,
   recommendGetAttractionListApi,
+  nearGetAttractionListApi,
 };
