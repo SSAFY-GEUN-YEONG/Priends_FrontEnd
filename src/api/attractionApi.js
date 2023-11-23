@@ -40,10 +40,23 @@ function getAreaName(param, success, fail) {
     .catch(fail);
 }
 
+// 조회수 기준 상위 4개 관광지 정보 가져오기
+function topGetAttractionListApi(success, fail) {
+  return local.get(`/attraction/top/get`).then(success).catch(fail);
+}
+
+// 무작위로 4개 관광지 정보 가져오기
+// 추후에 추천 알고리즘 적용한 관광지 정보 가져오기
+function recommendGetAttractionListApi(success, fail) {
+  return local.get(`/attraction/recommend/get`).then(success).catch(fail);
+}
+
 export {
   listArea,
   getAreaInfo,
   getAreaListByCategory,
   getAttractionDetailApi,
   getAreaName,
+  topGetAttractionListApi,
+  recommendGetAttractionListApi,
 };
