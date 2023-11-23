@@ -45,6 +45,11 @@ function recommendGetAttractionListApi(success, fail) {
   return local.get(`/attraction/recommend/get`).then(success).catch(fail);
 }
 
+// 해당 관광지 id를 통해 가장 가까운 3곳의 정보 가져오기
+function nearGetAttractionListApi(attractionId, success, fail) {
+  return local.get(`/attraction/${attractionId}/near/get`).then(success).catch(fail);
+}
+
 export {
   listArea,
   getAreaInfo,
@@ -53,4 +58,5 @@ export {
   getAreaName,
   topGetAttractionListApi,
   recommendGetAttractionListApi,
+  nearGetAttractionListApi,
 };

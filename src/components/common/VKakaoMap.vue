@@ -55,9 +55,9 @@ const loadKakaoMapScript = () => {
 const clearMarkersAndOverlays = () => {
   console.log("clearMarkersAndOverlays 호출됨");
   markers.value.forEach((marker, key) => {
-    console.log(`마커 제거 전: ${key}`, marker);
+    // console.log(`마커 제거 전: ${key}`, marker);
     marker.setMap(null);
-    console.log(`마커 제거 후: ${key}`, marker);
+    // console.log(`마커 제거 후: ${key}`, marker);
   });
   markers.value.clear();
   overlays.value.forEach((overlay, key) => {
