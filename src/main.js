@@ -32,6 +32,11 @@ app.use(pinia);
 const memberStore = useMemberStore();
 memberStore.memberCheckLoginStatus(); // 애플리케이션 시작 시 로그인 상태 확인
 
+// 필요한 경우, 별도의 회원 정보 가져오기 함수 호출
+// if (memberStore.isLogin) {
+//   memberStore.fetchMemberInfo();
+// }
+
 app.component("font-awesome-icon", FontAwesomeIcon);
 
 app.use(router);

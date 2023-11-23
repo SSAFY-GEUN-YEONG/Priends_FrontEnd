@@ -37,6 +37,10 @@ async function memberTempPasswordApi(email, success, fail) {
   await local.get(`/member/${email}/temp/password`).then(success).catch(fail);
 }
 
+function memberInfoUpdateApi(param, success, fail) {
+  return local.put(`/member/update`, param).then(success).catch(fail);
+}
+
 export {
   memberLoginApi,
   memberEmailCheckApi,
@@ -46,4 +50,5 @@ export {
   memberSignupApi,
   memberPasswordUpdateApi,
   memberTempPasswordApi,
+  memberInfoUpdateApi,
 };

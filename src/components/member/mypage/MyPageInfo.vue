@@ -3,6 +3,8 @@ import { ref, onBeforeMount } from 'vue';
 import { useMemberStore } from "@/stores/memberStore";
 import { storeToRefs } from 'pinia';
 import * as bootstrap from 'bootstrap';
+import { memberInfoUpdateApi } from '@/api/memberApi';
+import { uploadApi } from '@/api/fileApi';
 
 const memberStore = useMemberStore();
 const { memberGet, memberPasswordUpdate } = memberStore;
@@ -44,9 +46,87 @@ const updatePassword = async () => {
 
 
 // 이미지 프리뷰 함수
-const previewImage = event => {
-  const file = event.target.files[0];
-  memberInfo.image = URL.createObjectURL(file);
+const previewImage = async (event) => {
+  const fileInput = event.target;
+  const file = fileInput.files[0];
+  if (file) {
+    // 파일 형식 확인
+    if (!file.type.includes("jpeg") && !file.type.includes("png")) {
+      alert("JPG 또는 PNG 이미지만 업로드 가능합니다.");
+      fileInput.value = ''; // 입력 필드를 비웁니다.
+      return; // 지원하지 않는 형식이면 여기서 중단
+    }
+    // 이미지 프리뷰를 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      memberInfo.value.image = reader.result; // 이미지 파일을 미리 보여줌
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+const fetchMemberInfoUpdate = async () => {
+  try {
+    const fileInput = document.getElementById('profileImage');
+    const file = fileInput.files[0]; // 파일 객체 직접 참조
+
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file); // 이미지 데이터를 FormData에 추가
+      formData.append('nameFile', file.name);
+
+      const response = await uploadApi(formData);
+      if (response.data.dataHeader.successCode === 0) {
+        console.log("이미지가 이미지 서버에 업로드 되었습니다.");
+        memberInfo.value.image = response.data.dataBody;
+        console.log(memberInfo.value.image);
+
+        const updateData = {
+          nickname: memberInfo.value.nickname,
+          alarm: memberInfo.value.alarm,
+          image: memberInfo.value.image
+        };
+
+        try {
+          const response = await memberInfoUpdateApi(updateData);
+          // 업데이트 성공한 경우
+          if (response.data.dataHeader.successCode === 0) {
+            // 모달을 표시하고 확인 버튼을 클릭하면 메인 화면으로 리다이렉션
+            const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
+            updateModal.show();
+            // 확인 버튼 이벤트 리스너
+            document.getElementById('updateModalConfirmButton').addEventListener('click', () => {
+              updateModal.hide();
+              window.location.href = '/'; // 메인 화면으로 이동
+            });
+
+          }
+          else {
+            console.error("회원 정보 수정 실패: ", response.data.dataHeader.resultMessage);
+          }
+        }
+        catch (error) {
+          console.log("회원 수정 실패: ", error);
+        }
+      }
+      else {
+        console.error("이미지 업로드 실패: ", response.data.dataHeader.resultMessage);
+      }
+    }
+    else {
+      alert("프로필 사진에 쓰일 파일이 선택되지 않았습니다. 선택해주세요.");
+    }
+
+
+
+
+
+  }
+  catch (error) {
+    console.log("회원 수정 실패: ", error);
+  }
+
+
 };
 
 onBeforeMount(async () => {
@@ -77,6 +157,10 @@ onBeforeMount(async () => {
           <div class="mb-3">
             <label for="userNickname" class="form-label">닉네임</label>
             <input type="text" class="form-control" id="userNickname" v-model="memberInfo.nickname">
+          </div>
+          <div class="mb-3">
+            <label for="userAlarm" class="form-label">동행 알람 수신 정보</label>
+            <input type="checkbox" class="form-check-input" id="userAlarm" v-model="memberInfo.alarm">
           </div>
 
           <!-- 비밀번호 변경 -->
@@ -120,10 +204,28 @@ onBeforeMount(async () => {
           </div>
         </div>
 
+        <!-- 회원 정보 업데이트 성공 모달 -->
+        <div class="modal" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">회원 정보 업데이트</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                회원 정보가 업데이트 되었습니다.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="updateModalConfirmButton">확인</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
 
         <!-- 정보 수정 버튼 -->
         <div class="d-flex justify-content-center mt-3">
-          <button type="submit" class="btn btn-primary" style="width: 200px;">정보 수정</button>
+          <button type="submit" class="btn btn-primary" style="width: 200px;" @click="fetchMemberInfoUpdate">정보 수정</button>
         </div>
       </div>
     </div>
