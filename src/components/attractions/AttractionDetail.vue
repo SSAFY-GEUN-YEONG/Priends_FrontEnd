@@ -38,8 +38,6 @@ const fetchAttractionDetail = async () => {
         first_image: attractionDetail.value.first_image,
       },
     ];
-
-    console.log(area.value);
   } catch (error) {
     console.error("여행지 관광정보 상세 받아오기 실패: ", error);
   }
@@ -50,8 +48,10 @@ const fetchAttractionDetail = async () => {
       gugun: attractionDetail.value.gugun_code,
     },
     ({ data }) => {
-      // console.log(data.dataBody);
+      console.log(data.dataBody);
       area.value = data.dataBody;
+
+      console.log(area.value);
       // console.log("pathDetails : ", pathDetails.value);
     },
     (error) => {
@@ -110,13 +110,15 @@ onMounted(() => {
             :src="attractionDetail.first_image"
             class="px-4"
             alt="..."
-            style="width: 500px" />
+            style="width: 500px"
+          />
           <img
             v-else
             src="@/assets/img/defaultImg.png"
             class="px-4"
             alt="..."
-            style="width: 500px" />
+            style="width: 500px"
+          />
           <!-- <img
             src="@/assets/img/building.jpg"
             class="px-4"
@@ -137,7 +139,8 @@ onMounted(() => {
         </div>
         <button
           type="button"
-          class="justify-content-end btn btn-outline-secondary ms-auto mb-3 me-3">
+          class="justify-content-end btn btn-outline-secondary ms-auto mb-3 me-3"
+        >
           정보 수정 업데이트
         </button>
       </div>
@@ -150,7 +153,8 @@ onMounted(() => {
               <font-awesome-icon
                 :icon="['far', 'eye']"
                 style="height: 15px"
-                class="align-bottom pt-1" />
+                class="align-bottom pt-1"
+              />
               <div class="ms-2 align-top">874</div>
               <button type="button" class="btn btn-secondary ms-auto">
                 음식점
@@ -166,7 +170,8 @@ onMounted(() => {
         <!-- <div class="map-container"> -->
         <VKakaoMap
           :attractions="selectedStations"
-          style="height: 700px"></VKakaoMap>
+          style="height: 700px"
+        ></VKakaoMap>
         <!-- </div> -->
       </div>
     </div>

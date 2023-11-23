@@ -2,6 +2,9 @@
 import { ref, watch, onMounted, onUpdated } from "vue";
 import { useRouter } from "vue-router";
 
+import "vue3-carousel/dist/carousel.css";
+import { Carousel, Slide } from "vue3-carousel"; //스크롤
+
 import { usePathStore } from "@/stores/pathStore";
 import { storeToRefs } from "pinia";
 
@@ -16,7 +19,6 @@ import {
 import PathMakeListItem from "@/components/path/item/PathMakeListItem.vue";
 import VSelect from "@/components/common/VSelect.vue";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
-
 
 // const route = useRoute();
 const router = useRouter();
@@ -33,7 +35,6 @@ const attractionList = ref([]);
 const sidoList = ref([]);
 const gugunList = ref([{ text: "구군선택", value: "" }]);
 const gugunDisable = ref(false);
-
 
 const param = ref({
   // serviceKey: VITE_OPEN_API_SERVICE_KEY,
@@ -57,20 +58,19 @@ const days = ref(0);
 const myAttractionList = ref([]);
 const orders = ref([]); //여행 일자 별 여행지의 순서
 
-
 //PathMakeListIme 에서 받은 attraction으로 경로에 추가
 //PathMakeListIme 에서 받은 attraction으로 경로에 추가
 const addAttractionToPath = (attraction) => {
   // 중복 검사: 동일한 content_id를 가진 관광지가 이미 리스트에 있는지 확인
   const isDuplicate = myAttractionList.value.some(
-    (item) => item.content_id === attraction.content_id && item.day === activeTab.value
+    (item) =>
+      item.content_id === attraction.content_id && item.day === activeTab.value
   );
 
   if (isDuplicate) {
     // 중복이 있다면 알림을 표시하고 추가하지 않음
     alert("중복되는 여행지입니다!");
   } else {
- 
     const newAddAttraction = {
       title: attraction.title,
       addr1: attraction.addr1,
@@ -80,7 +80,7 @@ const addAttractionToPath = (attraction) => {
       gugun_code: attraction.gugun_code,
       sido_code: attraction.sido_code,
       latitude: attraction.latitude,
-      longitude: attraction.longitude
+      longitude: attraction.longitude,
     };
     // attraction;
     newAddAttraction.orders = orders.value[activeTab.value]++;
@@ -347,14 +347,12 @@ const initPathInfo = () => {
     id: "",
   };
 };
-
-
 </script>
 
 <template>
   <div class="container-fluid p-0" style="height: fit-content">
     <!--상단 네비-->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary px-0 py-1">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">{{ pathInfo.title }}</a>
 
@@ -383,7 +381,7 @@ const initPathInfo = () => {
     </nav>
     <div class="row">
       <div class="col-3 border">
-        <h3 class="my-3 ms-2">관광지 검색</h3>
+        <h3 class="my-3 ms-2">여행지 검색</h3>
         <div class=" ">
           <div class="d-flex m-auto">
             <VSelect
@@ -468,28 +466,40 @@ const initPathInfo = () => {
               @addAttractionToPath="addAttractionToPath"
             ></PathMakeListItem>
           </div>
-          <div v-else></div>
+          <div v-else class="p-3 border-top">여행지가 추가될 예정입니다.</div>
         </div>
       </div>
       <div class="border col-3">
         <h3 class="my-3 ms-2">내 여행 경로</h3>
-        <div class="scrollable-container overflow-auto-x">
-          <ul class="nav nav-tabs">
-            <li class="nav-item" v-for="dayIndex in days" :key="dayIndex">
+        <carousel class="p-0 m-0" :items-to-show="3.5" :snapAlign="'start'">
+          <slide
+            v-for="dayIndex in days"
+            :key="dayIndex"
+            class="rounded-top"
+            :class="{
+              'border-end-0': dayIndex === days ? false : true,
+              border: activeTab !== dayIndex,
+            }"
+            :style="{
+              color: activeTab === dayIndex ? 'white' : 'black',
+              backgroundColor: activeTab === dayIndex ? '#c19ee0' : '',
+            }"
+          >
+            <li
+              class="nav-item list-unstyled p-0 pt-2"
+              style="width: fit-content"
+            >
               <a
                 class="nav-link"
                 :class="{ active: activeTab === dayIndex }"
-                :style="{
-                  color: activeTab === dayIndex ? 'white' : 'black',
-                  backgroundColor: activeTab === dayIndex ? '#c19ee0' : '',
-                }"
                 href="#"
                 @click="changeTab(dayIndex)"
                 >Day{{ dayIndex }}</a
               >
             </li>
-          </ul>
-        </div>
+          </slide>
+        </carousel>
+
         <div v-for="dayIndex in days" :key="dayIndex" class="attraction-list">
           <div v-if="activeTab === dayIndex">
             <PathMakeListItem
@@ -504,7 +514,10 @@ const initPathInfo = () => {
       </div>
       <div class="col-6 border">
         <!-- 변경된 activeTab에 따라 attractions을 필터링하여 전달 -->
-        <VKakaoMap style="height: 1026px;" :attractions="filteredAttractions(activeTab)"></VKakaoMap>
+        <VKakaoMap
+          style="height: 1026px"
+          :attractions="filteredAttractions(activeTab)"
+        ></VKakaoMap>
       </div>
     </div>
   </div>

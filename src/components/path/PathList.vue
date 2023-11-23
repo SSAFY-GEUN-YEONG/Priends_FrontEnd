@@ -24,7 +24,7 @@ const getListPath = () => {
   getPathList(
     param.value,
     ({ data }) => {
-      console.log(data.dataBody);
+      // console.log(data.dataBody);
       pathList.value = data.dataBody;
       console.log("pathList : ", pathList.value);
     },

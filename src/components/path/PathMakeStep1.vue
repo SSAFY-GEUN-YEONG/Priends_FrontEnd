@@ -19,14 +19,6 @@ onBeforeMount(() => {
   pathStore.reset();
 });
 
-// const pathInfo = ref({
-//   title: "",
-//   content: "",
-//   startDate: "",
-//   endDate: "",
-//   id: "",
-// });
-
 const moveStep2 = () => {
   console.log(pathInfo.value);
   if (!pathInfo.value.title) {
@@ -60,8 +52,9 @@ const compareDates = (startDate, endDate) => {
 <template>
   <div
     class="container p-4 mb-5 border border-secondary-subtle d-flex flex-column align-items-center"
+    style="height: 627px"
   >
-    <h3 class="my-4">여행 계획 세우기</h3>
+    <h3 class="my-4 pb-3">여행 계획 세우기</h3>
 
     <div class="d-flex flex-column">
       <p class="me-auto mb-0">여행 이름</p>

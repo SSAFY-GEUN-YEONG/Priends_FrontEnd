@@ -9,8 +9,6 @@ watch(
   () => props.pathDetail,
   (newAreaSet, oldAreaSet) => {
     // 변경된 사항을 여기서 처리합니다.
-    console.log("Area set이 변경전 :", oldAreaSet);
-    console.log("Area set이 변경되었습니다:", newAreaSet);
     getAreaNameSet(newAreaSet);
     console.log("areaNameset", areaNameSet.value);
   }
@@ -21,7 +19,6 @@ watch(
 
 const areaNameSet = ref(new Set());
 const getAreaNameSet = (val) => {
-  console.log("get Area Name set ", val);
 
   // Set을 초기화합니다.
   areaNameSet.value = new Set();
@@ -33,9 +30,8 @@ const getAreaNameSet = (val) => {
         gugun: item.gugunCode,
       },
       ({ data }) => {
-        console.log("get Area naem data", data.dataBody);
+        // console.log("get Area naem data", data.dataBody);
         areaNameSet.value.add(data.dataBody);
-        // console.log("areaNameSet : ", [...areaNameSet]);
       },
       (error) => {
         console.log(error);
@@ -74,7 +70,8 @@ nowDate = calcDate();
     <PathDetailItemAttraction
       v-for="item in pathDetail"
       :key="item.orders"
-      :pathDetailInfo="item"></PathDetailItemAttraction>
+      :pathDetailInfo="item"
+    ></PathDetailItemAttraction>
   </div>
 </template>
 

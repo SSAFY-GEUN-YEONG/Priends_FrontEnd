@@ -27,7 +27,7 @@ const pathParam = ref({
 });
 
 onMounted(() => {
-  console.log(pathParam.value);
+  // console.log(pathParam.value);
   getPathInfo();
   getPathDetail();
 });
@@ -70,7 +70,7 @@ const calcPeriod = () => {
 
   // 두 날짜 간의 차이를 밀리초로 얻고 일로 변환
   const dayDifference = Math.abs(date2 - date1) / (1000 * 60 * 60 * 24) + 1;
-  console.log("day :::", dayDifference);
+  // console.log("day :::", dayDifference);
   return dayDifference;
 };
 
@@ -113,23 +113,30 @@ function changeTab(dayIndex) {
             :key="day"
             :pathDetail="filteredAttractions(day)"
             :dayNum="day"
-            :startDate="pathInfo.startDate"></PathDetailItem>
+            :startDate="pathInfo.startDate"
+          ></PathDetailItem>
         </div>
         <!-- 여행 계획 지도 부분-->
         <div class="path-map-content p-1 pb-0 mt-3">
           <div class="navbar-nav" style="width: 300px">
-            <carousel class="p-0 m-0" :items-to-show="4" :snap-align="start">
+            <carousel class="p-0 m-0" :items-to-show="3.5" :snapAlign="'start'">
               <slide
                 v-for="dayIndex in period"
                 :key="dayIndex"
-                class="border"
+                class="rounded-top"
+                :class="{
+                  'border-end-0': dayIndex === period ? false : true,
+                  border: activeTab !== dayIndex,
+                }"
                 :style="{
                   color: activeTab === dayIndex ? 'white' : 'black',
                   backgroundColor: activeTab === dayIndex ? '#c19ee0' : '',
-                }">
+                }"
+              >
                 <li
                   class="nav-item list-unstyled p-0 pt-2"
-                  style="width: fit-content">
+                  style="width: fit-content"
+                >
                   <a
                     class="nav-link"
                     :class="{ active: activeTab === dayIndex }"
@@ -162,7 +169,8 @@ function changeTab(dayIndex) {
   position: relative;
   width: 1092px;
   height: 350px;
-  background-image: url(@/assets/img/building.jpg);
+
+  background: url(@/assets/img/map.jpg) center/cover;
 }
 
 .text-container {

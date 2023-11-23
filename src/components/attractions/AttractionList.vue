@@ -5,12 +5,10 @@ import { storeToRefs } from "pinia";
 import { getAreaListByCategory } from "@/api/attractionApi.js";
 import { useRoute } from "vue-router";
 import AttractionListItem from "./item/AttractionListItem.vue";
-import VSelect from "@/components/common/VSelect.vue";
-const route = useRoute();
 
+const route = useRoute();
 const attractionStore = useAttractionStore();
 const { category } = storeToRefs(attractionStore);
-// const { category, attractionList } = storeToRefs(attractionStore);
 
 const param = ref({
   city: route.params.areaname,
@@ -24,11 +22,6 @@ const selectOption = ref([
 ]);
 
 const attractionList = ref([]);
-
-onMounted(() => {
-  console.log(param.value);
-  ListByCategory();
-});
 
 const ListByCategory = () => {
   console.log("카테고리별 리스트 얻어오자!!!", param.value);
@@ -45,25 +38,33 @@ const ListByCategory = () => {
   );
 };
 
-watch(
-  () => category.value,
-  () => {
-    ListByCategory();
-  }
-);
-
 function setCategory(value) {
   const newCategory = value;
   category.value = newCategory;
   console.log("category :", category.value);
   param.value.category = category.value;
-  console.log(param.value.category);
+  param.value.order = 2;
+
+  // console.log(param.value);
 }
 
-// const onChangeOrder = (val) => {
-//   param.value.order = val;
-//   console.log("onchange gugun ", param.value.order);
-// };
+function changeAttractionListOrder(val) {
+  const newOrder = val;
+  param.value.order = newOrder;
+  console.log("param order ", param.value.order);
+}
+
+onMounted(() => {
+  console.log(param.value);
+  ListByCategory();
+});
+
+watch(
+  () => [category.value, param.value.order],
+  () => {
+    ListByCategory();
+  }
+);
 </script>
 
 <template>
@@ -106,9 +107,6 @@ function setCategory(value) {
               @click="() => setCategory('culture')"
               >문화생활</router-link
             >
-            <!-- <a class="nav-link border border-secondary text-dark" href="#"
-              >문화생활</a
-            > -->
           </li>
           <li class="nav-item">
             <router-link
@@ -120,9 +118,6 @@ function setCategory(value) {
               @click="() => setCategory('restaurant')"
               >음식점</router-link
             >
-            <!-- <a class="nav-link border border-secondary text-dark" href="#"
-              >음식점</a
-            > -->
           </li>
           <li class="nav-item">
             <router-link
@@ -163,29 +158,54 @@ function setCategory(value) {
 
     <div
       class="d-flex flex-row justify-content-between pt-4 pb-2 px-2"
-      style="max-width: 1092px; width: 100%">
-      <p class="my-auto">총 {{ attractionList.length }}개</p>
-      <VSelect
-        class="mx-3"
-        :selectOption="selectOption"
-        @onKeySelect="onChangeOrder" />
+      style="max-width: 1092px; width: 100%"
+    >
+      <div class="">
+        <button
+          class="btn"
+          @click="changeAttractionListOrder(2)"
+          :class="{ 'btn-active': param.order === 2 }"
+        >
+          인기
+        </button>
+        |
+        <button
+          class="btn"
+          @click="changeAttractionListOrder(1)"
+          :class="{ 'btn-active': param.order === 1 }"
+        >
+          이름
+        </button>
+      </div>
 
-      <!-- <select
-        class="form-select"
+      <p class="my-auto">총 {{ attractionList.length }}개</p>
+      <!-- <VSelect
+        class="mx-3 border border-primary"
         style="width: fit-content"
-        aria-label="Default select example">
-        <option selected value="1">인기순</option>
-        <option value="2">이름순</option>
-      </select> -->
+        :selectOption="selectOption"
+        @onKeySelect="onChangeOrder"
+      /> -->
     </div>
 
     <div class="mb-5" style="max-width: 1092px; width: 100%">
       <AttractionListItem
         v-for="item in attractionList"
         :key="item.content_id"
-        :attraction="item" />
+        :attraction="item"
+      />
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.btn {
+  --bs-btn-focus-shadow-rgb: var(--bs-white);
+  --bs-btn-active-color: #a06cd5;
+  --bs-btn-active-bg: var(--bs-white);
+  --bs-btn-active-border-color: var(--bs-white);
+}
+
+.btn-active {
+  color: #a06cd5;
+}
+</style>

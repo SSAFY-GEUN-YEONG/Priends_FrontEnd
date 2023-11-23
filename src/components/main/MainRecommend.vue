@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import MainRecommendAttractionItem from "./item/MainRecommendAttractionItem.vue";
-import MainRecommendPathItem from "./item/MainRecommendPathItem.vue";
 import { topGetAttractionListApi } from "@/api/attractionApi";
 import { useRouter } from "vue-router";
 
@@ -36,26 +35,24 @@ onMounted(fetchTopAttractions);
     <div class="my-5">
       <p class="px-3 mb-0 fs-3 fw-bold">다음 휴가를 위한 인기 여행지</p>
       <div
-        class="recommend-attraction px-3 d-flex flex-row justify-content-between">
+        class="recommend-attraction px-3 d-flex flex-row justify-content-between"
+      >
         <!-- API로부터 가져온 인기 관광지 목록을 반복하여 표시 -->
         <MainRecommendAttractionItem
           v-for="attraction in attractions"
           :key="attraction.content_id"
           :title="attraction.title"
           :image="attraction.first_image"
-          @click="navigateToAttractionDetail(attraction.content_id)" />
+          @click="navigateToAttractionDetail(attraction.content_id)"
+        />
       </div>
     </div>
 
     <div class="my-5">
       <p class="px-3 mb-0 fs-3 fw-bold">이번 주말을 위한 무작위 여행지</p>
       <div
-        class="recommend-attraction px-3 d-flex flex-row justify-content-between mb-5">
-        <MainRecommendPathItem />
-        <MainRecommendPathItem />
-        <MainRecommendPathItem />
-        <MainRecommendPathItem />
-      </div>
+        class="recommend-attraction px-3 d-flex flex-row justify-content-between mb-5"
+      ></div>
     </div>
   </div>
 </template>

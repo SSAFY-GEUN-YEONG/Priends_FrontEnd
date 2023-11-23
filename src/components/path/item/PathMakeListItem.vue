@@ -11,6 +11,14 @@ const addToPath = () => {
 const removeToPath = () => {
   emits("removeAttractionToPath", props.attraction);
 };
+
+const moveToDetail = () => {
+  //새 창으로 열기
+  window.open(
+    `/attraction/area/detail/${props.attraction.content_id}`,
+    "_blank"
+  );
+};
 </script>
 
 <template>
@@ -68,20 +76,13 @@ const removeToPath = () => {
       </div>
 
       <div>
-        <router-link
-          class=""
-          :to="{
-            name: 'attraction-area-detail',
-            params: { attractionid: attraction.content_id },
-          }"
-        >
-          <button class="btn">
-            <font-awesome-icon
-              :icon="['fas', 'circle-info']"
-              class="icon icon-info"
-            />
-          </button>
-        </router-link>
+        <button class="btn">
+          <font-awesome-icon
+            :icon="['fas', 'circle-info']"
+            class="icon icon-info"
+            @click="moveToDetail"
+          />
+        </button>
       </div>
     </div>
   </div>
@@ -104,5 +105,11 @@ const removeToPath = () => {
   width: 25px;
   height: 25px;
   color: #492268;
+}
+
+.btn {
+  --bs-btn-focus-shadow-rgb: var(--bs-white);
+  --bs-btn-active-bg: var(--bs-white);
+  --bs-btn-active-border-color: var(--bs-white);
 }
 </style>

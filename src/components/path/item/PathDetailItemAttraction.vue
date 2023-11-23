@@ -5,13 +5,18 @@ import { useRouter } from "vue-router";
 const props = defineProps(["pathDetailInfo"]);
 const router = useRouter();
 
-console.log(props.pathDetailInfo);
+// console.log(props.pathDetailInfo);
 
 const goToDetail = () => {
-  router.push({
-    name: "attraction-area-detail",
-    params: { attractionid: props.pathDetailInfo.contentId },
-  });
+  //새 창으로 열기
+  window.open(
+    `/attraction/area/detail/${props.pathDetailInfo.contentId}`,
+    "_blank"
+  );
+  // router.push({
+  //   name: "attraction-area-detail",
+  //   params: { attractionid: props.pathDetailInfo.contentId },
+  // });
 };
 </script>
 
