@@ -2,6 +2,7 @@
 import { ref, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/memberStore";
+import * as bootstrap from 'bootstrap';
 
 
 const memberStore = useMemberStore();
@@ -20,6 +21,7 @@ const termsAgreement = ref({
   locationTerms: false
 });
 const allAgreed = ref(false);
+const isAvailable = ref(false);
 
 // 이메일 입력 비어있는지 확인
 const isEmailEmpty = computed(() => 
@@ -80,36 +82,49 @@ watch(allAgreed, (newValue) => {
   alarm.value = newValue; // 동행 알람 서비스 수신 동의도 포함
 });
 
+const showAlertModal = (modalId, message) => {
+  const modalElement = document.getElementById(modalId);
+  const modalMessageElement = modalElement.querySelector('.modal-body p');
+  modalMessageElement.textContent = message;
+  const alertModal = new bootstrap.Modal(modalElement, {});
+  alertModal.show();
+};
+
 // 이메일 중복체크 메서드 
 const emailDuplicateCheck = async () => {
   if (isEmailEmpty.value) {
-    alert("이메일을 입력해주세요.");
+    showAlertModal("alertModal", "이메일을 입력해주세요.");
     return;
   }
 
   if (!isEmailValid.value) {
-    alert("유효한 이메일 주소를 입력해주세요.");
+    showAlertModal("alertModal", "사용 가능한 이메일입니다.");
     return;
   }
 
-  const isAvailable = await memberEmailCheck(email.value);
-  if (isAvailable) {
-    alert("사용 가능한 이메일입니다.");
+  isAvailable.value = await memberEmailCheck(email.value);
+  if (isAvailable.value) {
+    showAlertModal("alertModal", "사용 가능한 이메일입니다.");
   }
   else {
-    alert("이미 사용 중인 이메일입니다.");
+    showAlertModal("alertModal", "이미 사용 중인 이메일입니다.");
   }
 };
 
 // 회원가입 메서드 
 const signup = async () => {
   if (!allTermsAgreed.value) {
-    alert("필수 약관에 동의해주세요.");
+    showAlertModal("alertModal", "필수 약관에 동의해주세요.");
     return;
   }
 
   if (!passwordsMatch.value) {
-    alert("비밀번호가 일치하지 않습니다.");
+    showAlertModal("alertModal", "비밀번호가 일치하지 않습니다.");
+    return;
+  }
+
+  if (!isAvailable.value) {
+    showAlertModal("alertModal", "이메일 중복체크를 확인해주세요.");
     return;
   }
 
@@ -123,7 +138,6 @@ const signup = async () => {
   await memberSignup(signupData);
   router.push("/"); // 메인 페이지로 이동
 }
-
 </script>
 
 <template>
@@ -144,7 +158,9 @@ const signup = async () => {
       <label for="floatingInput">Email address</label>
       <p v-if="isEmailEmpty" class="text-danger">이메일을 입력해주세요.</p>
       <p v-else-if="!isEmailValid" class="text-danger">이메일 형식이 아닙니다.</p>
-      <button @click="emailDuplicateCheck">이메일 중복 체크</button>
+      <button data-v-a2ab3df0="" type="button" class="btn btn-login my-1" @click="emailDuplicateCheck"> 
+        이메일 중복 체크 
+      </button>
     </div>
     
 
@@ -323,6 +339,25 @@ const signup = async () => {
     </div>
     <button type="button" class="btn btn-signup my-1" @click="signup" :disabled="!isSignupFormValid">회원가입</button>
   </div>
+
+
+  <!-- Alert 모달 -->
+  <div class="modal" tabindex="-1" id="alertModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">알림</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>메시지 내용</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -345,4 +380,14 @@ const signup = async () => {
   --bs-btn-active-bg: #a06cd5;
   --bs-btn-active-border-color: #a06cd5;
 }
+
+#alertModal .btn-primary {
+    --bs-btn-bg: #dac3e8; /* 원하는 색상 코드 */
+    --bs-btn-border-color: #dac3e8;
+    --bs-btn-hover-bg: #c19ee0;
+    --bs-btn-hover-border-color: #c19ee0;
+    --bs-btn-focus-shadow-rgb: #a06cd5;
+    --bs-btn-active-bg: #a06cd5;
+    --bs-btn-active-border-color: #a06cd5;
+  }
 </style>
