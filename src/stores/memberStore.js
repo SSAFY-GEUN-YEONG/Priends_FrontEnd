@@ -146,7 +146,7 @@ export const useMemberStore = defineStore("memberStore", () => {
     if (accessTokenFromCookie) {
       isLogin.value = true;
       accessToken.value = accessTokenFromCookie;
-      console.log("access token ", accessTokenFromCookie);
+      // console.log("access token ", accessTokenFromCookie);
     } else {
       isLogin.value = false;
     }
