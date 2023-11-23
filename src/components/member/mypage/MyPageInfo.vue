@@ -19,12 +19,12 @@ const passwordModal = ref(null);
 // 비밀번호 변경 함수
 const updatePassword = async () => {
   if (!nowPassword.value || !changePassword.value || !confirmChangePassword.value) {
-    alert("비밀번호들을 입력해주세요.");
+    showAlertModal('alertModal', "비밀번호들을 입력해주세요.");
     return;
   }
 
   if (changePassword.value !== confirmChangePassword.value) {
-    alert("변경하려는 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+    showAlertModal('alertModal', "변경하려는 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
     return;
   }
 
@@ -34,7 +34,7 @@ const updatePassword = async () => {
       changePassword: changePassword.value
     });
 
-    alert(result.message);
+    showAlertModal('alertModal', result.message);
     if (result.success && passwordModal.value) {
       const model = bootstrap.Modal.getInstance(passwordModal.value);
       model.hide();
@@ -44,6 +44,14 @@ const updatePassword = async () => {
   }
 }
 
+const showAlertModal = (modalId, message) => {
+  const modalElement = document.getElementById(modalId);
+  const modalMessageElement = modalElement.querySelector('.modal-body p');
+  modalMessageElement.textContent = message;
+  const alertModal = new bootstrap.Modal(modalElement, {});
+  alertModal.show();
+};
+
 
 // 이미지 프리뷰 함수
 const previewImage = async (event) => {
@@ -52,7 +60,7 @@ const previewImage = async (event) => {
   if (file) {
     // 파일 형식 확인
     if (!file.type.includes("jpeg") && !file.type.includes("png")) {
-      alert("JPG 또는 PNG 이미지만 업로드 가능합니다.");
+      showAlertModal('alertModal', "JPG 또는 PNG 이미지만 업로드 가능합니다.");
       fileInput.value = ''; // 입력 필드를 비웁니다.
       return; // 지원하지 않는 형식이면 여기서 중단
     }
@@ -115,7 +123,7 @@ const fetchMemberInfoUpdate = async () => {
       }
     }
     else {
-      alert("프로필 사진에 쓰일 파일이 선택되지 않았습니다. 선택해주세요.");
+      showAlertModal('alertModal', "프로필 사진에 쓰일 파일이 선택되지 않았습니다. 선택해주세요.");
     }
 
 
@@ -230,6 +238,45 @@ onBeforeMount(async () => {
         </div>
       </div>
     </div>
+
+    <!-- Alert 모달 -->
+  <div class="modal" tabindex="-1" id="alertModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">알림</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>메시지 내용</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.btn-primary {
+    --bs-btn-bg: #dac3e8; /* 원하는 색상 코드 */
+    --bs-btn-border-color: #dac3e8;
+    --bs-btn-hover-bg: #c19ee0;
+    --bs-btn-hover-border-color: #c19ee0;
+    --bs-btn-focus-shadow-rgb: #a06cd5;
+    --bs-btn-active-bg: #a06cd5;
+    --bs-btn-active-border-color: #a06cd5;
+  }
+
+  
+#alertModal .btn-primary {
+  --bs-btn-bg: #dac3e8; /* 이 부분에 원하는 색상 코드를 입력하세요 */
+  --bs-btn-border-color: #dac3e8;
+  --bs-btn-hover-bg: #c19ee0;
+  --bs-btn-hover-border-color: #c19ee0;
+  --bs-btn-focus-shadow-rgb: #a06cd5;
+  --bs-btn-active-bg: #a06cd5;
+  --bs-btn-active-border-color: #a06cd5;
+}
+</style>

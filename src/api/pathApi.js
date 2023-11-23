@@ -18,20 +18,14 @@ function createPath(param, success, fail) {
 function createAndUpdatePathDetails(param, success, fail) {
   console.log("param", param);
   local
-    .post(
-      `/path/detail/create/${param.id}`,
-      JSON.stringify(param.myAttractionList)
-    )
+    .post(`/path/detail/create/${param.id}`, JSON.stringify(param.myAttractionList))
     .then(success)
     .catch(fail);
 }
 
 function getPathList(param, success, fail) {
   console.log("getPathList param", param);
-  return local
-    .get(`/path/get/list`, { params: param })
-    .then(success)
-    .catch(fail);
+  return local.get(`/path/get/list`, { params: param }).then(success).catch(fail);
 }
 
 function getMyPathList(success, fail) {
@@ -39,7 +33,7 @@ function getMyPathList(success, fail) {
 }
 
 function getPathDetailsWithAttraction(pathId, success, fail) {
-  console.log("getPathDetailsWithAttraction param", pathId);
+  // console.log("getPathDetailsWithAttraction param", pathId);
   return local.get(`/path/detail/get/list/${pathId}`).then(success).catch(fail);
 }
 

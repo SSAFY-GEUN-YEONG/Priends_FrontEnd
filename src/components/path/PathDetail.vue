@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { getPathList, getPathDetailsWithAttraction } from "@/api/pathApi.js";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from "vue3-carousel"; //스크롤
 import PathDetailItem from "./item/PathDetailItem.vue";
+import VKakaoMap from "@/components/common/VKakaoMap.vue";
 const route = useRoute();
 
 const pathInfo = ref({
@@ -16,7 +17,10 @@ const pathInfo = ref({
   memberNickname: "",
   isDeleted: "",
 });
+
+// 기존의 pathDetails 변수는 모든 여행 경로 데이터를 저장하는 용도로 사용합니다.
 const pathDetails = ref([]);
+
 const period = ref(0);
 
 const pathParam = ref({
@@ -27,7 +31,7 @@ const pathParam = ref({
 });
 
 onMounted(() => {
-  // console.log(pathParam.value);
+  console.log("이거 한번 확인해보자 여러번 찍히는지");
   getPathInfo();
   getPathDetail();
 });
@@ -39,7 +43,7 @@ const getPathInfo = () => {
     ({ data }) => {
       // console.log(data.dataBody[0]);
       pathInfo.value = data.dataBody[0];
-      console.log("pathInfo : ", pathInfo.value);
+      // console.log("pathInfo : ", pathInfo.value);
       period.value = calcPeriod();
     },
     (error) => {
@@ -58,7 +62,7 @@ const getPathDetail = () => {
       console.log("pathDetails : ", pathDetails.value);
     },
     (error) => {
-      console.log(error);
+      console.error(error);
     }
   );
 };
@@ -76,15 +80,26 @@ const calcPeriod = () => {
 
 //pathDetail에서 해당 날짜별로만 가져오기
 const filteredAttractions = (dayIndex) => {
-  return pathDetails.value.filter((item) => item.day === dayIndex);
+  const attractions = pathDetails.value.filter((item) => item.day === dayIndex);
+  console.log(`필터링된 관광지 (Day ${dayIndex}):`, attractions);
+  return attractions;
 };
+
 
 //days nav활성화
 const activeTab = ref(1);
+
 function changeTab(dayIndex) {
+  console.log("Tab 변경: ", dayIndex);
   activeTab.value = dayIndex;
-  console.log("changeTab = activetab ", activeTab.value);
+  const attractionsForDay = filteredAttractions(dayIndex);
+  console.log("선택된 날짜의 관광지: ", attractionsForDay);
 }
+
+const displayedPathDetails = computed(() => {
+  return pathDetails.value.filter((item) => item.day === activeTab.value);
+});
+
 </script>
 
 <template>
@@ -111,7 +126,7 @@ function changeTab(dayIndex) {
           <PathDetailItem
             v-for="day in period"
             :key="day"
-            :pathDetail="filteredAttractions(day)"
+            :pathDetail="displayedPathDetails"
             :dayNum="day"
             :startDate="pathInfo.startDate"
           ></PathDetailItem>
@@ -148,7 +163,9 @@ function changeTab(dayIndex) {
               </slide>
             </carousel>
           </div>
-          <div class="path-map">map</div>
+          <VKakaoMap style="height: 300px; width: 300px;"
+          :attractions="filteredAttractions(activeTab)"
+          ></VKakaoMap>
         </div>
       </div>
     </div>
