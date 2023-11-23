@@ -48,7 +48,7 @@ const issueTempPassword = async () => {
   }
   try {
     const result = await memberTempPassword(tempEmail.value);
-    alert(result.message);
+    showAlertModal('alertModal', result.message);
     if (result.success && tempPasswordModal.value) {
       const modal = bootstrap.Modal.getInstance(tempPasswordModal.value);
       modal.hide();
@@ -136,28 +136,30 @@ const issueTempPassword = async () => {
     </div>
 
 
-    <!-- 임시 비밀번호 발급 모달 -->
+    
+  </div>
+
+  <!-- 임시 비밀번호 발급 모달 -->
     <div class="modal fade" id="tempPasswordModal" tabindex="-1" ref="tempPasswordModal" aria-labelledby="tempPasswordModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="tempPasswordModalLabel">임시 비밀번호 발급</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="mb-3">
-                <label for="tempPasswordEmail" class="form-label">이메일</label>
-                <input type="email" class="form-control" id="tempPasswordEmail" v-model="tempEmail">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="tempPasswordModalLabel">임시 비밀번호 발급</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="tempPasswordEmail" class="form-label">이메일</label>
+                  <input type="email" class="form-control" id="tempPasswordEmail" v-model="tempEmail">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" @click="issueTempPassword">발급</button>
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-              <button type="button" class="btn btn-primary" @click="issueTempPassword">발급</button>
-            </div>
           </div>
-        </div>
-    </div>
-  </div>
+      </div>
 
   <!-- Alert 모달 -->
   <div class="modal" tabindex="-1" id="alertModal">
@@ -205,6 +207,16 @@ const issueTempPassword = async () => {
 .btn-sign-up {
   --bs-btn-active-border-color: var(--bs-white);
 }
+
+.btn-primary {
+    --bs-btn-bg: #dac3e8; /* 원하는 색상 코드 */
+    --bs-btn-border-color: #dac3e8;
+    --bs-btn-hover-bg: #c19ee0;
+    --bs-btn-hover-border-color: #c19ee0;
+    --bs-btn-focus-shadow-rgb: #a06cd5;
+    --bs-btn-active-bg: #a06cd5;
+    --bs-btn-active-border-color: #a06cd5;
+  }
 
 #alertModal .btn-primary {
   --bs-btn-bg: #dac3e8; /* 이 부분에 원하는 색상 코드를 입력하세요 */
