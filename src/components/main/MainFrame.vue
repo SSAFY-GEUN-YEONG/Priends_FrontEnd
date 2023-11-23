@@ -42,12 +42,14 @@ const getListPath = async () => {
       console.log("pathList : ", pathList.value);
 
       pathList.value.forEach(async (item) => {
+        console.log("item id ", item.id);
         await getPathDetailsWithAttraction(
           item.id,
 
           ({ data }) => {
             console.log("GETpATH + attraction", data.dataBody);
             pathDetailList.value.push(data.dataBody);
+            console.log(pathDetailList.value);
           },
           (error) => {
             console.log(error);
@@ -103,26 +105,31 @@ const moveToPathDetail = (id) => {
           class="main-recommand-path-item m-4"
           @click="moveToPathDetail(item.id)"
         >
-          <carousel
-            class="p-0"
-            :items-to-show="1"
-            :snapAlign="'center'"
-            :wrapAround="true"
-            :transition="3000"
-            :autoplay="3"
-          >
-            <slide
-              v-for="attraction in pathDetailList[index]"
-              :key="attraction.id"
+          <div class="image-container">
+            <carousel
+              class="p-0"
+              :items-to-show="1"
+              :snapAlign="'center'"
+              :wrapAround="true"
+              :transition="3000"
+              :autoplay="3"
             >
-              <img
-                class="recommand-path-map object-fit-fill"
-                v-if="attraction.image1"
-                :src="attraction.image1"
-              />
-            </slide>
-          </carousel>
+              <slide
+                v-for="attraction in pathDetailList[index]"
+                :key="attraction.id"
+              >
+                <img
+                  class="recommand-path-map object-fit-fill"
+                  v-if="attraction.image1"
+                  :src="attraction.image1"
+                />
+              </slide>
+            </carousel>
 
+            <h5 class="image-title text-white fw-bolder ps-3 pb-1 fs-4">
+              {{ item.title }}
+            </h5>
+          </div>
           <div class="px-3 py-2 mt-2 border">
             <div class="recommand-path-info-text mt-1">
               <p>{{ item.startDate }} 출발</p>
@@ -191,5 +198,15 @@ const moveToPathDetail = (id) => {
 .recommand-path-info-text {
   display: flex;
   justify-content: space-between;
+}
+.image-container {
+  position: relative;
+}
+
+.image-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
 }
 </style>

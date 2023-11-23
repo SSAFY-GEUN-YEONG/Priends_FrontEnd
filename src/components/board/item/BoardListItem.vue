@@ -8,7 +8,8 @@ defineProps({ article: Object });
     <td class="text-start">
       <router-link
         :to="{ name: 'article-view', params: { id: article.id } }"
-        class="article-title link-dark">
+        class="article-title link-dark"
+      >
         {{ article.title }}
       </router-link>
     </td>
