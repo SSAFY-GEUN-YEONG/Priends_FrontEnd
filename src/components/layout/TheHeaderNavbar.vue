@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { useMenuStore } from "@/stores/menuStore";
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/memberStore";
+import * as bootstrap from 'bootstrap';
 
 const menuStore = useMenuStore();
 const memberStore = useMemberStore();
@@ -25,6 +26,19 @@ const logout = async () => {
   await memberLogout(); // 로그아웃 처리
   router.push("/");
 };
+
+
+const requireLogin = () => {
+  // 로그인이 필요하다는 모달을 표시합니다.
+  const loginModal = new bootstrap.Modal(document.getElementById('loginRequiredModal'), {});
+  loginModal.show();
+  // 확인 버튼 이벤트 리스너
+  document.getElementById('loginModalConfirmButton').addEventListener('click', () => {
+    loginModal.hide();
+    // 로그인 페이지로 이동합니다.
+    router.push({ name: 'member-login' });
+  });
+}
 </script>
 
 <template>
@@ -65,7 +79,15 @@ const logout = async () => {
                 <router-link
                   :to="{ name: 'make-step1' }"
                   class="nav-link px-1 mx-0 text-start"
+                  v-if="isLogin"
                   >여행계획 세우기</router-link
+                >
+                <a
+                  href="#"
+                  class="nav-link px-1 mx-0 text-start"
+                  v-if="!isLogin"
+                  @click.prevent="requireLogin"
+                  >여행계획 세우기</a
                 >
               </li>
               <li>
@@ -77,8 +99,18 @@ const logout = async () => {
               </li>
             </ul>
           </li>
-          <router-link :to="{ name: 'board' }" class="nav-link"
+          <router-link 
+            :to="{ name: 'board' }" 
+            class="nav-link"
+            v-if="isLogin"
             >커뮤니티</router-link
+          >
+          <a
+            href="#"
+            class="nav-link"
+            v-if="!isLogin"
+            @click.prevent="requireLogin"
+            >커뮤니티</a
           >
           <li class="nav-item dropdown">
             <a
@@ -130,10 +162,38 @@ const logout = async () => {
       </div>
     </div>
   </nav>
+
+  <!-- 로그인 요구 모달 -->
+  <div class="modal" tabindex="-1" id="loginRequiredModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">알림</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>로그인이 필요한 기능입니다.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="loginModalConfirmButton">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
 .nav-link {
   margin-right: 20px; /* 오른쪽 여백 */
+}
+
+#loginModalConfirmButton {
+  --bs-btn-bg: #dac3e8; /* 이 부분에 원하는 색상 코드를 입력하세요 */
+  --bs-btn-border-color: #dac3e8;
+  --bs-btn-hover-bg: #c19ee0;
+  --bs-btn-hover-border-color: #c19ee0;
+  --bs-btn-focus-shadow-rgb: #a06cd5;
+  --bs-btn-active-bg: #a06cd5;
+  --bs-btn-active-border-color: #a06cd5;
 }
 </style>

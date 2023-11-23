@@ -8,7 +8,7 @@ const props = defineProps(["attraction"]);
 const emit = defineEmits(["click"]);
 
 function emitClickEvent() {
-  emit("click");
+  emit('click');
 }
 </script>
 
@@ -34,6 +34,7 @@ function emitClickEvent() {
   border: 1px solid #696969;
   margin: 30px;
 }
+
 .path-list-item:hover {
   cursor: pointer; /* 마우스 오버 시 커서를 포인터로 변경 */
   border: 1px solid #d0d0d0; /* 테두리 추가 */
