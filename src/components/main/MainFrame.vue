@@ -103,8 +103,7 @@ const moveToPathDetail = (id) => {
           v-for="(item, index) in pathList"
           :key="item.id"
           class="main-recommand-path-item m-4"
-          @click="moveToPathDetail(item.id)"
-        >
+          @click="moveToPathDetail(item.id)">
           <div class="image-container">
             <carousel
               class="p-0"
@@ -112,17 +111,14 @@ const moveToPathDetail = (id) => {
               :snapAlign="'center'"
               :wrapAround="true"
               :transition="3000"
-              :autoplay="3"
-            >
+              :autoplay="3">
               <slide
                 v-for="attraction in pathDetailList[index]"
-                :key="attraction.id"
-              >
+                :key="attraction.id">
                 <img
                   class="recommand-path-map object-fit-fill"
                   v-if="attraction.image1"
-                  :src="attraction.image1"
-                />
+                  :src="attraction.image1" />
               </slide>
             </carousel>
 
@@ -130,24 +126,26 @@ const moveToPathDetail = (id) => {
               {{ item.title }}
             </h5>
           </div>
-          <div class="px-3 py-2 mt-2 border">
+          <div class="px-3 py-2 border">
             <div class="recommand-path-info-text mt-1">
-              <p>{{ item.startDate }} 출발</p>
-              <p>{{ calcPeriod(item) }}일간</p>
+              <p class="m-0">{{ item.startDate }} 출발</p>
+              <p class="m-0">{{ calcPeriod(item) }}일간</p>
             </div>
             <div class="d-flex flex-row justify-content-between">
               <div class="d-flex align-items-center">
-                <font-awesome-icon
+                <img
+                  class="border rounded-circle"
+                  :src="item.memberImage"
+                  style="width: 40px; height: 40px" />
+                <!-- <font-awesome-icon
                   :icon="['far', 'heart']"
-                  style="height: 15px"
-                />
+                  style="height: 15px" /> -->
                 <div class="ps-1 pt-1">{{ item.memberNickname }}</div>
               </div>
               <div class="d-flex align-items-center">
                 <font-awesome-icon
                   :icon="['far', 'eye']"
-                  style="height: 15px"
-                />
+                  style="height: 15px" />
                 <div class="ps-1 pt-1">{{ item.hit }}</div>
               </div>
             </div>

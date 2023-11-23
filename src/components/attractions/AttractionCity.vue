@@ -232,8 +232,7 @@ onBeforeMount(() => {
         <img :src="areainfo.img" style="max-height: 362px" />
         <VKakaoMap
           :attractions="selectedAttractions"
-          style="height: 362px"
-        ></VKakaoMap>
+          style="height: 362px"></VKakaoMap>
       </div>
     </div>
 
@@ -274,24 +273,21 @@ onBeforeMount(() => {
           v-for="item in selectedAttractions"
           :key="item.content_id"
           :attraction="item"
-          @click="goToAttracitionDetail(item.content_id)"
-        >
+          @click="goToAttracitionDetail(item.content_id)">
         </AttractionCityItem>
       </div>
     </div>
 
     <div
       class="my-5 d-flex flex-column align-items-center"
-      style="max-width: 1092px; width: 100%"
-    >
+      style="max-width: 1092px; width: 100%">
       <h4 class="text-center mb-2">추천 여행 계획</h4>
       <div v-if="pathList.length > 0" class="d-flex my-2">
         <div
           v-for="(item, index) in pathList"
           :key="item.id"
           class="main-recommand-path-item m-4"
-          @click="moveToPathDetail(item.id)"
-        >
+          @click="moveToPathDetail(item.id)">
           <div class="image-container">
             <carousel
               class="p-0"
@@ -299,17 +295,14 @@ onBeforeMount(() => {
               :snapAlign="'center'"
               :wrapAround="true"
               :transition="3000"
-              :autoplay="3"
-            >
+              :autoplay="3">
               <slide
                 v-for="attraction in pathDetailList[index]"
-                :key="attraction.id"
-              >
+                :key="attraction.id">
                 <img
                   class="recommand-path-map object-fit-fill"
                   v-if="attraction.image1"
-                  :src="attraction.image1"
-                />
+                  :src="attraction.image1" />
               </slide>
             </carousel>
 
@@ -318,24 +311,23 @@ onBeforeMount(() => {
             </h5>
           </div>
 
-          <div class="px-3 py-2 mt-2 border">
+          <div class="px-3 py-2 border">
             <div class="recommand-path-info-text mt-1">
-              <p>{{ item.startDate }} 출발</p>
-              <p>{{ calcPeriod(item) }}일간</p>
+              <p class="m-0">{{ item.startDate }} 출발</p>
+              <p class="m-0">{{ calcPeriod(item) }}일간</p>
             </div>
             <div class="d-flex flex-row justify-content-between">
               <div class="d-flex align-items-center">
-                <font-awesome-icon
-                  :icon="['far', 'heart']"
-                  style="height: 15px"
-                />
+                <img
+                  class="border rounded-circle"
+                  :src="item.memberImage"
+                  style="width: 40px; height: 40px" />
                 <div class="ps-1 pt-1">{{ item.memberNickname }}</div>
               </div>
               <div class="d-flex align-items-center">
                 <font-awesome-icon
                   :icon="['far', 'eye']"
-                  style="height: 15px"
-                />
+                  style="height: 15px" />
                 <div class="ps-1 pt-1">{{ item.hit }}</div>
               </div>
             </div>
@@ -348,8 +340,7 @@ onBeforeMount(() => {
       <button
         type="button"
         class="btn btn-outline-secondary my-5 py-2"
-        @click="moveToPathList"
-      >
+        @click="moveToPathList">
         여행 계획 모두보기
       </button>
     </div>
@@ -365,6 +356,10 @@ onBeforeMount(() => {
   width: 100%;
   height: 260px;
   top: 0;
+}
+.recommand-path-info-text {
+  display: flex;
+  justify-content: space-between;
 }
 .image-container {
   position: relative;

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useAttractionStore } from "@/stores/attractionStore";
 import "@/assets/css/mainAreaNavbar.css";
@@ -15,32 +15,31 @@ function setCityName(area) {
   cityname.value = area;
 }
 
-function clickDoEvent(value) {
-  param.value.word = value;
-  getListArea();
-  setCityName(value);
-}
+// function clickDoEvent(value) {
+//   param.value.word = value;
+//   getListArea();
+//   setCityName(value);
+// }
 
-const getListArea = () => {
-  console.log("서버에서 시도 목록 얻어오자!!!", param.value);
-  listArea(
-    param.value,
-    ({ data }) => {
-      areas.value = data.dataBody.map((value) => value.gugun_name);
-      console.log(areas.value);
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
-};
+// const getListArea = () => {
+//   console.log("서버에서 시도 목록 얻어오자!!!", param.value);
+//   listArea(
+//     param.value,
+//     ({ data }) => {
+//       areas.value = data.dataBody.map((value) => value.gugun_name);
+//       console.log(areas.value);
+//     },
+//     (error) => {
+//       console.log(error);
+//     }
+//   );
+// };
 </script>
 
 <template>
   <div class="container">
     <nav
-      class="container d-flex flex-column align-items-center navbar navbar-expand-lg"
-    >
+      class="container d-flex flex-column align-items-center navbar navbar-expand-lg">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav p-3 ul-border">
           <li class="nav-item mx-2 rounded-pill li-back">
