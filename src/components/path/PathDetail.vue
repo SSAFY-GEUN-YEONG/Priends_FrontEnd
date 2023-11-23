@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/memberStore";
 import { usePathStore } from "@/stores/pathStore";
@@ -11,7 +11,6 @@ import {
   deletePath,
 } from "@/api/pathApi.js";
 
-import { ref, onMounted, computed } from "vue";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from "vue3-carousel"; //스크롤
 import PathDetailItem from "./item/PathDetailItem.vue";
@@ -107,7 +106,6 @@ const filteredAttractions = (dayIndex) => {
   return attractions;
 };
 
-
 //days nav활성화
 const activeTab = ref(1);
 
@@ -146,7 +144,6 @@ const deleteMyPath = () => {
 const displayedPathDetails = computed(() => {
   return pathDetails.value.filter((item) => item.day === activeTab.value);
 });
-
 </script>
 
 <template>
@@ -216,9 +213,9 @@ const displayedPathDetails = computed(() => {
               </slide>
             </carousel>
           </div>
-          <VKakaoMap style="height: 300px; width: 300px;"
-          :attractions="filteredAttractions(activeTab)"
-          ></VKakaoMap>
+          <VKakaoMap
+            style="height: 300px; width: 300px"
+            :attractions="filteredAttractions(activeTab)"></VKakaoMap>
         </div>
       </div>
     </div>
