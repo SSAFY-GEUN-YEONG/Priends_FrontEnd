@@ -43,7 +43,7 @@ function localAxios() {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
     // console.log(accessToken);
-    console.log(config.headers);
+    // console.log(config.headers);
     return config;
   }),
     (error) => {

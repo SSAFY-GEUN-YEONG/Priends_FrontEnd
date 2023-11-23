@@ -53,17 +53,28 @@ const loadKakaoMapScript = () => {
 };
 
 const clearMarkersAndOverlays = () => {
-  markers.value.forEach((marker) => marker.setMap(null));
+  console.log("clearMarkersAndOverlays 호출됨");
+  markers.value.forEach((marker, key) => {
+    console.log(`마커 제거 전: ${key}`, marker);
+    marker.setMap(null);
+    console.log(`마커 제거 후: ${key}`, marker);
+  });
   markers.value.clear();
-  overlays.value.forEach((overlay) => overlay.setMap(null));
+  overlays.value.forEach((overlay, key) => {
+    overlay.setMap(null);
+  });
   overlays.value.clear();
   if (polyline.value) {
-    polyline.value.setMap(null); // 폴리라인도 제거
+    console.log("폴리라인 제거");
+    polyline.value.setMap(null);
+    polyline.value = null;
   }
 };
 
 // 마커, 오버레이, 폴리라인을 표시하는 함수
 const displayMarkersAndPolyline = () => {
+  // console.log("마커랑 폴리라인 맵에 표시하기 (displayMarkersAndPolyline 메서드 호출)", props.attractions);
+
   if (!window.kakao || !window.kakao.maps) {
     console.error("카카오맵 API 아직 호출 안됨!!!");
     return;
@@ -113,8 +124,8 @@ const displayMarkersAndPolyline = () => {
       zIndex: index, // 순서대로 표시하기 위해 z-index 설정
     });
 
-    markers.value.set(attraction.content_id, marker);
-    overlays.value.set(attraction.content_id, markerLabel);
+    markers.value.set(attraction.contentId, marker);
+    overlays.value.set(attraction.contentId, markerLabel);
     map.value.setCenter(position);
 
     path.push(position);
@@ -134,6 +145,7 @@ const displayMarkersAndPolyline = () => {
 watch(
   () => props.attractions,
   (newAttractions) => {
+    console.log("새로운 여행지 상세경로 리스트들 바뀜, 마커 업데이트", newAttractions);
     displayMarkersAndPolyline();
   },
   { deep: true }
@@ -143,7 +155,8 @@ watch(
 onMounted(() => {
   if (!window.kakao || !window.kakao.maps) {
     loadKakaoMapScript();
-  } else {
+  }
+  else {
     initMap();
   }
 });

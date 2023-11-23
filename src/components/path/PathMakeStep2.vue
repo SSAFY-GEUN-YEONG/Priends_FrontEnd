@@ -75,7 +75,7 @@ const addAttractionToPath = (attraction) => {
       title: attraction.title,
       addr1: attraction.addr1,
       addr2: attraction.addr2,
-      content_id: attraction.content_id,
+      contentId: attraction.content_id,
       first_image: attraction.first_image,
       gugun_code: attraction.gugun_code,
       sido_code: attraction.sido_code,
@@ -85,7 +85,6 @@ const addAttractionToPath = (attraction) => {
     // attraction;
     newAddAttraction.orders = orders.value[activeTab.value]++;
     newAddAttraction.day = activeTab.value;
-    newAddAttraction.contentId = attraction.content_id;
     newAddAttraction.id = null;
 
     // 중복이 없다면 리스트에 관광지 추가

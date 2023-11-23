@@ -10,7 +10,7 @@ watch(
   (newAreaSet, oldAreaSet) => {
     // 변경된 사항을 여기서 처리합니다.
     getAreaNameSet(newAreaSet);
-    console.log("areaNameset", areaNameSet.value);
+    // console.log("areaNameset", areaNameSet.value);
   }
 );
 // console.log(props.dayNum);
