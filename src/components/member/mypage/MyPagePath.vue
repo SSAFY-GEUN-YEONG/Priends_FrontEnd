@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount, onUpdated } from "vue";
+import { ref, onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 import { getMyPathList, getPathDetailsWithAttraction } from "@/api/pathApi.js";
 
@@ -8,8 +8,8 @@ import { Carousel, Slide } from "vue3-carousel"; //스크롤
 
 const router = useRouter();
 
-onBeforeMount(() => {
-  getListPath();
+onBeforeMount(async () => {
+  await getListPath();
 
   console.log("pathDetailList : ", pathDetailList.value);
 });
@@ -64,13 +64,12 @@ const moveToPathDetail = (id) => {
 </script>
 
 <template>
-  <div class="d-flex flex-wrap">
+  <div v-if="pathList.length > 0" class="d-flex flex-wrap">
     <div
       v-for="(item, index) in pathList"
       :key="item.id"
       class="main-recommand-path-item m-4"
-      @click="moveToPathDetail(item.id)"
-    >
+      @click="moveToPathDetail(item.id)">
       <div class="image-container">
         <carousel
           class="p-0"
@@ -78,17 +77,14 @@ const moveToPathDetail = (id) => {
           :snapAlign="'center'"
           :wrapAround="true"
           :transition="3000"
-          :autoplay="3"
-        >
+          :autoplay="3">
           <slide
             v-for="attraction in pathDetailList[index]"
-            :key="attraction.id"
-          >
+            :key="attraction.id">
             <img
               class="recommand-path-map object-fit-fill"
               v-if="attraction.image1"
-              :src="attraction.image1"
-            />
+              :src="attraction.image1" />
           </slide>
         </carousel>
         <h5 class="image-title text-white fw-bolder ps-3 pb-1 fs-4">
@@ -103,10 +99,6 @@ const moveToPathDetail = (id) => {
         </div>
         <div class="d-flex flex-row justify-content-between">
           <div class="d-flex align-items-center">
-            <font-awesome-icon :icon="['far', 'heart']" style="height: 15px" />
-            <div class="ps-1 pt-1">{{ item.memberNickname }}</div>
-          </div>
-          <div class="d-flex align-items-center">
             <font-awesome-icon :icon="['far', 'eye']" style="height: 15px" />
             <div class="ps-1 pt-1">{{ item.hit }}</div>
           </div>
@@ -114,6 +106,7 @@ const moveToPathDetail = (id) => {
       </div>
     </div>
   </div>
+  <div v-else>작성한 여행 계획이 없습니다.</div>
 </template>
 
 <style scoped>

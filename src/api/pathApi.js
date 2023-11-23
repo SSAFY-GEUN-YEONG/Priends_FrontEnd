@@ -15,6 +15,10 @@ function createPath(param, success, fail) {
   local.post(`/path/create`, JSON.stringify(param)).then(success).catch(fail);
 }
 
+function deletePath(pathId, success, fail) {
+  local.put(`/path/delete/${pathId}`, pathId).then(success).catch(fail);
+}
+
 function createAndUpdatePathDetails(param, success, fail) {
   console.log("param", param);
   local
@@ -50,6 +54,7 @@ export {
   listSido,
   listGugun,
   createPath,
+  deletePath,
   createAndUpdatePathDetails,
   getPathList,
   getMyPathList,

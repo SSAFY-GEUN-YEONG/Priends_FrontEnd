@@ -3,14 +3,27 @@ import { ref, defineProps, watch } from "vue";
 import PathDetailItemAttraction from "./PathDetailItemAttraction.vue";
 import { getAreaName } from "@/api/attractionApi";
 
-const props = defineProps(["pathDetail", "dayNum", "startDate", "areaSet"]);
+const props = defineProps(["pathDetail", "dayNum", "startDate"]);
 
 watch(
   () => props.pathDetail,
   (newAreaSet, oldAreaSet) => {
+    if (oldAreaSet === undefined) {
+      // 첫 실행 때는 실행하지 않음
+      return;
+    }
     // 변경된 사항을 여기서 처리합니다.
     getAreaNameSet(newAreaSet);
-    console.log("areaNameset", areaNameSet.value);
+    console.log(
+      "new",
+      newAreaSet,
+      "old",
+      oldAreaSet,
+      "areaNameset",
+      areaNameSet.value,
+      "path detail ,",
+      props.pathDetail
+    );
   }
 );
 // console.log(props.dayNum);
@@ -19,7 +32,6 @@ watch(
 
 const areaNameSet = ref(new Set());
 const getAreaNameSet = (val) => {
-
   // Set을 초기화합니다.
   areaNameSet.value = new Set();
 
@@ -70,8 +82,7 @@ nowDate = calcDate();
     <PathDetailItemAttraction
       v-for="item in pathDetail"
       :key="item.orders"
-      :pathDetailInfo="item"
-    ></PathDetailItemAttraction>
+      :pathDetailInfo="item"></PathDetailItemAttraction>
   </div>
 </template>
 

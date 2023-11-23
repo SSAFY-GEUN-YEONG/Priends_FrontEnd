@@ -26,25 +26,30 @@ const calcDate = () => {
     <div class="py-2 px-5 d-flex align-items-center justify-content-between">
       <div class="">
         <div>
-          <p class="fs-4 mb-1">{{ pathInfo.title }}</p>
+          <p class="fs-4 my-1">{{ pathInfo.title }}</p>
         </div>
 
-        <div class="d-flex flex-row" style="width: 150px">
-          <div class="d-flex align-items-center" style="width: 50%">
-            <font-awesome-icon icon="fa-regular fa-user" style="height: 15px" />
-            <div class="ps-2">{{ pathInfo.memberNickname }}</div>
+        <div class="p-0 m-0 d-flex" style="height: 100%">
+          <div class="d-flex align-items-center me-3">
+            <font-awesome-icon
+              class="pb-1"
+              :icon="['far', 'eye']"
+              style="height: 15px" />
+            <div class="mx-2">{{ pathInfo.hit }}</div>
           </div>
-          <div class="d-flex align-items-center" style="width: 50%">
-            <font-awesome-icon :icon="['far', 'eye']" style="height: 15px" />
-            <div class="ps-2">{{ pathInfo.hit }}</div>
-          </div>
+          <p class="my-1">
+            {{ pathInfo.startDate }} ~ {{ pathInfo.endDate }} |
+            {{ period }} Days
+          </p>
         </div>
       </div>
-      <div class="p-0 m-0 d-flex flex-column" style="height: 100%">
-        <p class="m-0 mb-1">
-          {{ pathInfo.startDate }} - {{ pathInfo.endDate }}
-        </p>
-        <p class="m-0 text-end">{{ period }} Days</p>
+
+      <div class="d-flex align-items-center">
+        <div class="pe-2">{{ pathInfo.memberNickname }}</div>
+        <img
+          class="border rounded-circle"
+          :src="pathInfo.memberImage"
+          style="width: 50px; height: 50px" />
       </div>
     </div>
   </div>

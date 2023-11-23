@@ -1,13 +1,29 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { getPathList, getPathDetailsWithAttraction } from "@/api/pathApi.js";
+import { useRoute, useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/memberStore";
+import { usePathStore } from "@/stores/pathStore";
+import { storeToRefs } from "pinia";
+
+import {
+  getPathList,
+  getPathDetailsWithAttraction,
+  deletePath,
+} from "@/api/pathApi.js";
+
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from "vue3-carousel"; //스크롤
 import PathDetailItem from "./item/PathDetailItem.vue";
 const route = useRoute();
+const router = useRouter();
 
-const pathInfo = ref({
+const memberStore = useMemberStore();
+const { memberInfo } = memberStore;
+
+const pathStore = usePathStore();
+const { pathInfo } = storeToRefs(pathStore);
+
+const path = ref({
   title: "",
   content: "",
   startDate: "",
@@ -30,6 +46,11 @@ onMounted(() => {
   // console.log(pathParam.value);
   getPathInfo();
   getPathDetail();
+  if (memberInfo != null) {
+    console.log("member info ", memberInfo.value);
+  } else {
+    console.log("멤버 인포 없음");
+  }
 });
 
 const getPathInfo = () => {
@@ -38,8 +59,8 @@ const getPathInfo = () => {
     pathParam.value,
     ({ data }) => {
       // console.log(data.dataBody[0]);
-      pathInfo.value = data.dataBody[0];
-      console.log("pathInfo : ", pathInfo.value);
+      path.value = data.dataBody[0];
+      console.log("path : ", path.value);
       period.value = calcPeriod();
     },
     (error) => {
@@ -65,8 +86,8 @@ const getPathDetail = () => {
 
 const calcPeriod = () => {
   // 문자열을 Date 객체로 변환
-  const date1 = new Date(pathInfo.value.startDate);
-  const date2 = new Date(pathInfo.value.endDate);
+  const date1 = new Date(path.value.startDate);
+  const date2 = new Date(path.value.endDate);
 
   // 두 날짜 간의 차이를 밀리초로 얻고 일로 변환
   const dayDifference = Math.abs(date2 - date1) / (1000 * 60 * 60 * 24) + 1;
@@ -85,6 +106,33 @@ function changeTab(dayIndex) {
   activeTab.value = dayIndex;
   console.log("changeTab = activetab ", activeTab.value);
 }
+const modifyMyPath = () => {
+  pathStore.reset();
+  pathInfo.value.id = path.value.id;
+  pathInfo.value.title = path.value.title;
+  pathInfo.value.startDate = path.value.startDate;
+  pathInfo.value.endDate = path.value.endDate;
+  pathInfo.value.isNew = false;
+  console.log("pathInfo pinia ", pathInfo.value);
+  router.push({ name: "make-step2" });
+};
+
+const deleteMyPath = () => {
+  deletePath(
+    route.params.pathId,
+    ({ data }) => {
+      console.log(data.dataBody);
+      alert("여행계획이 삭제되었습니다.");
+      router.push({ name: "path-list" });
+
+      // pathDetails.value = data.dataBody;
+      // console.log("pathDetails : ", pathDetails.value);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
 </script>
 
 <template>
@@ -92,17 +140,26 @@ function changeTab(dayIndex) {
     <div class="content justify-content-center">
       <div class="main-img">
         <div class="text-container">
-          <h3>{{ pathInfo.title }}</h3>
-          <p>
-            {{ pathInfo.startDate }} ~ {{ pathInfo.endDate }} ({{ period }}일)
-          </p>
+          <h3>{{ path.title }}</h3>
+          <p>{{ path.startDate }} ~ {{ path.endDate }} ({{ period }}일)</p>
 
           <div class="icon-text">
             <font-awesome-icon :icon="['fas', 'location-pin']" />
             <div>{{ pathDetails.length }}</div>
             <font-awesome-icon :icon="['far', 'eye']" />
-            <div>{{ pathInfo.hit }}</div>
+            <div>{{ path.hit }}</div>
           </div>
+        </div>
+        <div
+          v-if="memberInfo != null && path.memberId === memberInfo.id"
+          class="d-flex btn-container">
+          <button
+            type="button"
+            class="btn btn-modify me-3"
+            @click="modifyMyPath">
+            수정
+          </button>
+          <button class="btn btn-secondary" @click="deleteMyPath">삭제</button>
         </div>
       </div>
       <div class="plan-content">
@@ -113,8 +170,7 @@ function changeTab(dayIndex) {
             :key="day"
             :pathDetail="filteredAttractions(day)"
             :dayNum="day"
-            :startDate="pathInfo.startDate"
-          ></PathDetailItem>
+            :startDate="path.startDate"></PathDetailItem>
         </div>
         <!-- 여행 계획 지도 부분-->
         <div class="path-map-content p-1 pb-0 mt-3">
@@ -131,12 +187,10 @@ function changeTab(dayIndex) {
                 :style="{
                   color: activeTab === dayIndex ? 'white' : 'black',
                   backgroundColor: activeTab === dayIndex ? '#c19ee0' : '',
-                }"
-              >
+                }">
                 <li
                   class="nav-item list-unstyled p-0 pt-2"
-                  style="width: fit-content"
-                >
+                  style="width: fit-content">
                   <a
                     class="nav-link"
                     :class="{ active: activeTab === dayIndex }"
@@ -180,7 +234,12 @@ function changeTab(dayIndex) {
   padding: 20px;
   color: white;
 }
-
+.btn-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 20px;
+}
 .icon-text {
   flex-direction: row;
   display: flex;
@@ -209,5 +268,20 @@ function changeTab(dayIndex) {
   background-color: aquamarine;
   width: 300px;
   height: 300px;
+}
+
+.btn-modify {
+  --bs-btn-color: var(--bs-white);
+  --bs-btn-bg: #c19ee0;
+  --bs-btn-border-color: #c19ee0;
+
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg: #a06cd5;
+  --bs-btn-hover-border-color: #a06cd5;
+
+  --bs-btn-focus-shadow-rgb: #a06cd5;
+  --bs-btn-active-color: var(--bs-white);
+  --bs-btn-active-bg: #a06cd5;
+  --bs-btn-active-border-color: #a06cd5;
 }
 </style>

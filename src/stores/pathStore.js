@@ -8,6 +8,7 @@ export const usePathStore = defineStore("pathStore", () => {
     startDate: "",
     endDate: "",
     id: "",
+    isNew: true,
   });
 
   const reset = () => {
@@ -16,6 +17,7 @@ export const usePathStore = defineStore("pathStore", () => {
     pathInfo.value.startDate = "";
     pathInfo.value.endDate = "";
     pathInfo.value.id = "";
+    pathInfo.value.isNew = true;
   };
 
   return { pathInfo, reset };

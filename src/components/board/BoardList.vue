@@ -26,6 +26,7 @@ const param = ref({
   key: "",
   word: "",
   category: "FREE",
+  isMyPost: "false",
 });
 
 onMounted(() => {
