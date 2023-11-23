@@ -1,12 +1,15 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import MainRecommendAttractionItem from "./item/MainRecommendAttractionItem.vue";
-import { topGetAttractionListApi, recommendGetAttractionListApi } from "@/api/attractionApi";
+import {
+  topGetAttractionListApi,
+  recommendGetAttractionListApi,
+} from "@/api/attractionApi";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const popularAttracions = ref([]); // 인기 관광지 목록을 담을 반응형 변수
-const recommendAttracions = ref([]);  // 랜덤한 관광지 목록을 담을 반응형 변수
+const recommendAttracions = ref([]); // 랜덤한 관광지 목록을 담을 반응형 변수
 
 // API로부터 인기 관광지 목록을 가져오는 함수
 const fetchTopAttractions = () => {
@@ -29,11 +32,14 @@ const fetchRecommendAttractions = () => {
     (error) => {
       console.error(error);
     }
-  )
-}
+  );
+};
 
 const navigateToAttractionDetail = (contentId) => {
-  router.push({ name: 'attraction-area-detail', params: { attractionid: contentId } });
+  router.push({
+    name: "attraction-area-detail",
+    params: { attractionid: contentId },
+  });
 };
 
 // 컴포넌트가 마운트될 때 인기 관광지 목록과 랜덤한 관광지 목록을 가져옴
@@ -44,9 +50,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container d-flex flex-column align-items-center">
+  <div class="container d-flex flex-column align-items-center my-5">
     <div class="my-5">
-      <p class="px-3 mb-24 fs-3 fw-bold">다음 휴가를 위한 인기 여행지</p>
+      <p class="px-3 mb-5 fs-3 fw-bold">다음 휴가를 위한 인기 여행지</p>
       <div
         class="recommend-attraction px-3 d-flex flex-row justify-content-between"
       >
@@ -62,7 +68,7 @@ onMounted(() => {
     </div>
 
     <div class="my-5">
-      <p class="px-3 mb-24 fs-3 fw-bold">이번 주말을 위한 무작위 여행지</p>
+      <p class="px-3 my-5 fs-3 fw-bold">이번 주말을 위한 무작위 여행지</p>
       <div
         class="recommend-attraction px-3 d-flex flex-row justify-content-between mb-5"
       >
@@ -83,6 +89,4 @@ onMounted(() => {
 .recommend-attraction {
   width: 1092px;
 }
-
-
 </style>

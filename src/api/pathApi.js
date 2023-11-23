@@ -38,9 +38,12 @@ function getMyPathList(success, fail) {
   local.get(`/path/get/mylist`).then(success).catch(fail);
 }
 
-function getPathDetailsWithAttraction(pathId, success, fail) {
+async function getPathDetailsWithAttraction(pathId, success, fail) {
   console.log("getPathDetailsWithAttraction param", pathId);
-  return local.get(`/path/detail/get/list/${pathId}`).then(success).catch(fail);
+  return await local
+    .get(`/path/detail/get/list/${pathId}`)
+    .then(success)
+    .catch(fail);
 }
 
 export {

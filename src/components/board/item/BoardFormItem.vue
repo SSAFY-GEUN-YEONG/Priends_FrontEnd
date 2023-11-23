@@ -124,9 +124,10 @@ function moveList() {
       <input
         type="text"
         class="form-control"
-        :disabled="isUseId"
+        disabled
         v-model="memberInfo.nickname"
-        placeholder="작성자..." />
+        placeholder="작성자..."
+      />
     </div>
     <div class="mb-3">
       <label for="title" class="form-label">제목 : </label>
@@ -134,20 +135,23 @@ function moveList() {
         type="text"
         class="form-control"
         v-model="article.title"
-        placeholder="제목..." />
+        placeholder="제목..."
+      />
     </div>
     <div class="mb-3">
       <label for="content" class="form-label">내용 : </label>
       <textarea
         class="form-control"
         v-model="article.content"
-        rows="10"></textarea>
+        rows="10"
+      ></textarea>
     </div>
     <div class="col-auto text-center">
       <button
         type="submit"
         class="btn btn-outline-primary mb-3"
-        v-if="type === 'regist'">
+        v-if="type === 'regist'"
+      >
         글작성
       </button>
       <button type="submit" class="btn btn-outline-success mb-3" v-else>
@@ -156,7 +160,8 @@ function moveList() {
       <button
         type="button"
         class="btn btn-outline-danger mb-3 ms-1"
-        @click="moveList">
+        @click="moveList"
+      >
         목록으로이동...
       </button>
     </div>
