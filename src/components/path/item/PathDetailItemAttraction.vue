@@ -79,6 +79,15 @@ const goToDetail = () => {
   color: #492268;
 }
 
+/* 아이콘에 마우스를 올렸을 때 스타일 */
+.icon-info:hover {
+  cursor: pointer; /* 마우스 커서를 손가락 모양으로 변경 */
+  color: #735c8e; /* 아이콘 색상 변경 */
+  transform: scale(1.1); /* 아이콘을 약간 확대 */
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out; /* 부드러운 전환 효과 */
+}
+
+
 .distance {
   margin-left: 50px;
   width: 5px;
