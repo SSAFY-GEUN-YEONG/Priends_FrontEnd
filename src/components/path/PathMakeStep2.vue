@@ -20,6 +20,7 @@ import {
 import PathMakeListItem from "@/components/path/item/PathMakeListItem.vue";
 import VSelect from "@/components/common/VSelect.vue";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
+import * as bootstrap from 'bootstrap';
 
 // const route = useRoute();
 const router = useRouter();
@@ -241,7 +242,7 @@ const filteredAttractions = (dayIndex) => {
 const registMyPath = () => {
   console.log("path 저장하기!!!", pathInfo.value);
   if (myAttractionList.value.length < 1) {
-    alert("경로를 추가해주세요!");
+    showAlertModal('alertModal', "경로를 추가해주세요!");
     return;
   }
 
@@ -252,11 +253,18 @@ const registMyPath = () => {
       detailParam.value,
       ({ data }) => {
         console.log(data.dataBody);
-        alert("계획 생성이 완료되었습니다.");
-        pathStore.reset();
-        router.push({
-          name: "path-detail",
-          params: { pathId: detailParam.value.id },
+        // showAlertModal('alertModal', "계획 생성이 완료되었습니다.");
+        // 모달을 표시하고 확인 버튼을 클릭하면 메인 화면으로 리다이렉션
+        const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
+        updateModal.show();
+        // 확인 버튼 이벤트 리스너
+        document.getElementById('updateModalConfirmButton').addEventListener('click', () => {
+          updateModal.hide();
+          pathStore.reset();
+          router.push({
+            name: "path-detail",
+            params: { pathId: detailParam.value.id },
+          });
         });
       },
       (error) => {
@@ -279,12 +287,20 @@ const registMyPath = () => {
           detailParam.value,
           ({ data }) => {
             console.log(data.dataBody);
-            alert("계획 생성이 완료되었습니다.");
-            pathStore.reset();
-            router.push({
-              name: "path-detail",
-              params: { pathId: detailParam.value.id },
+            // showAlertModal('alertModal', "계획 생성이 완료되었습니다.");
+            // 모달을 표시하고 확인 버튼을 클릭하면 메인 화면으로 리다이렉션
+            const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
+            updateModal.show();
+            // 확인 버튼 이벤트 리스너
+            document.getElementById('updateModalConfirmButton').addEventListener('click', () => {
+              updateModal.hide();
+              pathStore.reset();
+              router.push({
+                name: "path-detail",
+                params: { pathId: detailParam.value.id },
+              });
             });
+            
           },
           (error) => {
             console.log(error);
@@ -321,6 +337,15 @@ const getDetailList = async () => {
     item.first_image = item.image1;
   });
   console.log("myAttraction List : ", myAttractionList.value);
+};
+
+// 공통 모달
+const showAlertModal = (modalId, message) => {
+  const modalElement = document.getElementById(modalId);
+  const modalMessageElement = modalElement.querySelector('.modal-body p');
+  modalMessageElement.textContent = message;
+  const alertModal = new bootstrap.Modal(modalElement, {});
+  alertModal.show();
 };
 
 onMounted(() => {
@@ -545,6 +570,42 @@ watch(
       </div>
     </div>
   </div>
+
+  <!-- Alert 모달 -->
+  <div class="modal" tabindex="-1" id="alertModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">알림</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>메시지 내용</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 회원 정보 업데이트 성공 모달 -->
+  <div class="modal" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">여행 계획 세우기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                계획이 생성되었습니다.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="updateModalConfirmButton">확인</button>
+              </div>
+            </div>
+          </div>
+        </div>
 </template>
 
 <style scoped>
@@ -558,4 +619,24 @@ watch(
   max-height: 800px; /* 스크롤이 나타날 최대 높이 */
   overflow-y: auto; /* 세로 스크롤 활성화 */
 }
+
+#alertModal .btn-primary {
+  --bs-btn-bg: #dac3e8; /* 이 부분에 원하는 색상 코드를 입력하세요 */
+  --bs-btn-border-color: #dac3e8;
+  --bs-btn-hover-bg: #c19ee0;
+  --bs-btn-hover-border-color: #c19ee0;
+  --bs-btn-focus-shadow-rgb: #a06cd5;
+  --bs-btn-active-bg: #a06cd5;
+  --bs-btn-active-border-color: #a06cd5;
+}
+
+.btn-primary {
+    --bs-btn-bg: #dac3e8; /* 원하는 색상 코드 */
+    --bs-btn-border-color: #dac3e8;
+    --bs-btn-hover-bg: #c19ee0;
+    --bs-btn-hover-border-color: #c19ee0;
+    --bs-btn-focus-shadow-rgb: #a06cd5;
+    --bs-btn-active-bg: #a06cd5;
+    --bs-btn-active-border-color: #a06cd5;
+  }
 </style>

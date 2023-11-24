@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/memberStore";
 import { usePathStore } from "@/stores/pathStore";
 import { storeToRefs } from "pinia";
+import * as bootstrap from 'bootstrap';
 
 import {
   getPathList,
@@ -128,9 +129,15 @@ const deleteMyPath = () => {
   deletePath(
     route.params.pathId,
     ({ data }) => {
-      console.log(data.dataBody);
-      alert("여행계획이 삭제되었습니다.");
-      router.push({ name: "path-list" });
+      // console.log(data.dataBody);
+      const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      deleteModal.show();
+      // 확인 버튼 이벤트 리스너
+      document.getElementById('deleteModalConfirmButton').addEventListener('click', () => {
+        deleteModal.hide();
+        router.push({ name: "path-list" });
+      });
+      
 
       // pathDetails.value = data.dataBody;
       // console.log("pathDetails : ", pathDetails.value);
@@ -144,6 +151,14 @@ const deleteMyPath = () => {
 const displayedPathDetails = computed(() => {
   return pathDetails.value.filter((item) => item.day === activeTab.value);
 });
+
+const showAlertModal = (modalId, message) => {
+  const modalElement = document.getElementById(modalId);
+  const modalMessageElement = modalElement.querySelector('.modal-body p');
+  modalMessageElement.textContent = message;
+  const alertModal = new bootstrap.Modal(modalElement, {});
+  alertModal.show();
+};
 </script>
 
 <template>
@@ -220,6 +235,24 @@ const displayedPathDetails = computed(() => {
       </div>
     </div>
   </div>
+
+  <!-- 회원 정보 업데이트 성공 모달 -->
+  <div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">여행 계획 삭제</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                해당 여행 계획이 삭제되었습니다.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="deleteModalConfirmButton">확인</button>
+              </div>
+            </div>
+          </div>
+        </div>
 </template>
 
 <style scoped>
@@ -297,4 +330,14 @@ const displayedPathDetails = computed(() => {
   --bs-btn-active-bg: #a06cd5;
   --bs-btn-active-border-color: #a06cd5;
 }
+
+.btn-primary {
+    --bs-btn-bg: #dac3e8; /* 원하는 색상 코드 */
+    --bs-btn-border-color: #dac3e8;
+    --bs-btn-hover-bg: #c19ee0;
+    --bs-btn-hover-border-color: #c19ee0;
+    --bs-btn-focus-shadow-rgb: #a06cd5;
+    --bs-btn-active-bg: #a06cd5;
+    --bs-btn-active-border-color: #a06cd5;
+  }
 </style>

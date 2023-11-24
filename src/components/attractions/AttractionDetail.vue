@@ -126,8 +126,8 @@ watch(
     <!-- attractionDetail이 있는 경우에 렌더링 -->
     <div class="detail-info" v-if="attractionDetail">
       <div class="detail-category">여행지 > {{ area }} > {{ category }}</div>
-      <div class="detail-info-title">
-        <h3>{{ attractionDetail.title }}</h3>
+      <div class="detail-info-title ">
+        <h3 class="pt-3">{{ attractionDetail.title }}</h3>
         <div class="icon-text">
           <div>
             <font-awesome-icon :icon="['fas', 'location-dot']" />
@@ -166,14 +166,17 @@ watch(
         </div>
         <div class="mt-5 px-4">{{ attractionDetail.overview }}</div>
       </div>
-      <div class="cityitem d-flex flex-row justify-content-center border mt-5 mb=5">
-        <AttractionCityItem
+      <div class="d-flex flex-column mt-5 mb-5">
+        <div class="fs-4 fw-border ms-4">인근 여행지</div>
+        <div class="cityitem d-flex flex-row justify-content-center  ">
+          <AttractionCityItem
           v-for="item in nearAttractions"
           :key="item.content_id"
           :attraction="item"
           @click="goToAttracitionDetail(item.content_id)"
-        >
+          >
         </AttractionCityItem>
+      </div>
       </div>
       <div class="mx-4 d-flex flex-column border border-dark-subtle">
         <!--맵 부분 -->
