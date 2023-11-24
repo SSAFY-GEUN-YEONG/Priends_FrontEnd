@@ -7,6 +7,7 @@ import VSelect from "@/components/common/VSelect.vue";
 import BoardListItem from "@/components/board/item/BoardListItem.vue";
 import VPageNavigation from "@/components/common/VPageNavigation.vue";
 
+
 const router = useRouter();
 
 const selectOption = ref([
@@ -69,18 +70,19 @@ const moveWrite = () => {
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-10">
+      <!-- <div class="col-lg-10">
         <h2 class="my-3 py-3 shadow-sm bg-light text-center">
           <mark class="sky">글목록</mark>
         </h2>
-      </div>
+      </div> -->
       <div class="col-lg-10">
         <div class="row align-self-center mb-2">
           <div class="col-md-2 text-start">
             <button
               type="button"
               class="btn btn-outline-primary btn-sm"
-              @click="moveWrite">
+              @click="moveWrite"
+            >
               글쓰기
             </button>
           </div>
@@ -92,11 +94,13 @@ const moveWrite = () => {
                   type="text"
                   class="form-control"
                   v-model="param.word"
-                  placeholder="검색어..." />
+                  placeholder="검색어..."
+                />
                 <button
                   class="btn btn-dark"
                   type="button"
-                  @click="getArticleList">
+                  @click="getArticleList"
+                >
                   검색
                 </button>
               </div>
@@ -117,14 +121,16 @@ const moveWrite = () => {
             <BoardListItem
               v-for="article in articles"
               :key="article.id"
-              :article="article"></BoardListItem>
+              :article="article"
+            ></BoardListItem>
           </tbody>
         </table>
       </div>
       <VPageNavigation
         :current-page="currentPage"
         :total-page="totalPage"
-        @pageChange="onPageChange"></VPageNavigation>
+        @pageChange="onPageChange"
+      ></VPageNavigation>
     </div>
   </div>
 </template>

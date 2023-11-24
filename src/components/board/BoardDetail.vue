@@ -37,7 +37,7 @@ const isAuthor = computed(() => {
   console.log(memberStore.memberInfo);
   console.log(article.value.member_id);
   return memberStore.memberInfo?.id === article.value.member_id;
-})
+});
 
 function moveList() {
   router.push({ name: "article-list" });
@@ -69,11 +69,11 @@ function onDeleteArticle() {
 <template>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-lg-10">
+      <!-- <div class="col-lg-10">
         <h2 class="my-3 py-3 shadow-sm bg-light text-center">
           <mark class="sky">글보기</mark>
         </h2>
-      </div>
+      </div> -->
       <div class="col-lg-10 text-start">
         <div class="row my-2">
           <h2 class="text-secondary px-5">
@@ -85,7 +85,8 @@ function onDeleteArticle() {
             <div class="clearfix align-content-center">
               <img
                 class="avatar me-2 float-md-start bg-light p-2"
-                src="https://raw.githubusercontent.com/twbs/icons/main/icons/person-fill.svg" />
+                src="https://raw.githubusercontent.com/twbs/icons/main/icons/person-fill.svg"
+              />
               <p>
                 <span class="fw-bold">{{ article.member_nickname }}</span>
                 <br />
@@ -111,21 +112,24 @@ function onDeleteArticle() {
             <button
               type="button"
               class="btn btn-outline-primary mb-3"
-              @click="moveList">
+              @click="moveList"
+            >
               글목록
             </button>
             <button
               v-if="!isAuthor"
               type="button"
               class="btn btn-outline-success mb-3 ms-1"
-              @click="moveModify">
+              @click="moveModify"
+            >
               글수정
             </button>
             <button
               v-if="!isAuthor"
               type="button"
               class="btn btn-outline-danger mb-3 ms-1"
-              @click="onDeleteArticle">
+              @click="onDeleteArticle"
+            >
               글삭제
             </button>
           </div>
