@@ -115,14 +115,14 @@ function onDeleteArticle() {
               글목록
             </button>
             <button
-              v-if="!isAuthor"
+              v-if="isAuthor"
               type="button"
               class="btn btn-outline-success mb-3 ms-1"
               @click="moveModify">
               글수정
             </button>
             <button
-              v-if="!isAuthor"
+              v-if="isAuthor"
               type="button"
               class="btn btn-outline-danger mb-3 ms-1"
               @click="onDeleteArticle">
